@@ -83,7 +83,8 @@ for i in range(0, dims[0]) :
         output.append(newstr)
 
 with open("IMGVR_sample.tsv", "w") as outfile:
-        outfile.write("\n".join(output))
+    outfile.write("subject\trelation\tobject")
+    outfile.write("\n".join(output))
 
 #compression_opts = dict(method='zip', archive_name='out.csv')
 #df.to_csv('IMGVR_sample.tsv', sep = "\t")# index=False,compression=compression_opts)
