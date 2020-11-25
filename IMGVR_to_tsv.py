@@ -79,11 +79,11 @@ for i in range(0, dims[0]) :
                 addval = np.NAN
             else:
                 addval = math.log10(addval)
-        newstr = str(imgvr_df.iloc[i, primary_index]) +"\thas_quality\t"+str(addval)
+        newstr = str(imgvr_df.iloc[i, primary_index]) +"\thas_quality\t"+str(addval)+"\tGOLD"
         output.append(newstr)
 
 with open("IMGVR_sample.tsv", "w") as outfile:
-    outfile.write("subject\trelation\tobject")
+    outfile.write("subject\teedge_label\tobject\tprovided_by")
     outfile.write("\n".join(output))
 
 #compression_opts = dict(method='zip', archive_name='out.csv')
