@@ -10,6 +10,7 @@ print(type(columns))
 print(columns)
 
 
+###Available columns
 #'TaxonOID', 'Domain', 'Sequencing Status', 'Study Name',
 #       'Genome Name / Sample Name', 'Sequencing Center', 'IMG Genome ID',
 #       'GOLD Analysis Project ID', 'GOLD Analysis Project Type',
@@ -22,7 +23,7 @@ print(columns)
 #       'Gene Count   * assembled'
 
 
-primary_field = "GOLD Analysis Project ID"#"GOLD Sequencing Project ID"
+primary_field = "GOLD Analysis Project ID"
 linked_fields = ["TaxonOID",
 "IMG Genome ID",
 "GOLD Sequencing Project ID",
@@ -83,7 +84,7 @@ for i in range(0, dims[0]) :
         output.append(newstr)
 
 with open("IMGVR_sample.tsv", "w") as outfile:
-    outfile.write("subject\teedge_label\tobject\tprovided_by")
+    outfile.write("subject\tedge_label\tobject\tprovided_by")
     outfile.write("\n".join(output))
 
 #compression_opts = dict(method='zip', archive_name='out.csv')
