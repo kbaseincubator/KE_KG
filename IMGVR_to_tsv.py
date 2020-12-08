@@ -2,14 +2,6 @@ import pandas as pd
 import math
 import numpy as np
 
-imgvr_df = pd.read_csv('/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples.tsv', sep='\t')
-
-
-columns = imgvr_df.columns.str
-print(type(columns))
-print(columns)
-
-
 ###Available columns
 #'TaxonOID', 'Domain', 'Sequencing Status', 'Study Name',
 #       'Genome Name / Sample Name', 'Sequencing Center', 'IMG Genome ID',
@@ -23,8 +15,10 @@ print(columns)
 #       'Gene Count   * assembled'
 
 
-primary_field = "GOLD Analysis Project ID"
-linked_fields = ["TaxonOID",
+subject_field = "GOLD Analysis Project ID"
+
+object_fields = [
+"TaxonOID",
 "IMG Genome ID",
 "GOLD Sequencing Project ID",
 #"GOLD Analysis Project ID",
@@ -59,33 +53,68 @@ linked_fields = ["TaxonOID",
 #Genome Size   * assembled
 #Gene Count   * assembled
 
+exclude_list = ["GOLD Analysis Project Type", ]
 
-dims = imgvr_df.shape
+kgx_header = "Subject\tEdge_label\tObject\tSource"
 
-print("dims "+str(dims))
-primary_index = imgvr_df.columns.get_loc(primary_field)#columns.str.find(primary_field)
-print("primary_index "+str(primary_index))
 
-output = []
-for i in range(0, dims[0]) :
-    for j in range(0, len(linked_fields)):
-        #secondary_index = columns.str.find(linked_fields[j])
-        secondary_index = imgvr_df.columns.get_loc(linked_fields[j])
-        print("secondary_index " + str(secondary_index))
-        addval = imgvr_df.iloc[i, secondary_index]
-        print("addval "+str(addval))
 
-        if("Genome Size   * assembled" == linked_fields[j] or "Gene Count   * assembled" == linked_fields[j]):
-            if (addval == 0):
+def load(source_path):
+    df = pd.read_csv(source_path, sep='\t')
+
+    columns = df.columns.str
+    print(type(columns))
+    print(columns)
+
+    dims = df.shape
+
+    print("dims "+str(dims))
+    subject_index = df.columns.get_loc(subject_field)#columns.str.find(primary_field)
+    print("subject_index "+str(subject_index))
+
+    return (subject_index, df)
+
+
+def parse(subject_index, df):
+    output = []
+    for i in range(0, dims[0]) :
+        for j in range(0, len(object_fields)):
+            #secondary_index = columns.str.find(object_fields[j])
+            secondary_index = df.columns.get_loc(object_fields[j])
+            print("secondary_index " + str(secondary_index))
+            addval = df.iloc[i, secondary_index]
+            print("addval "+str(addval))
+
+            if "Genome Size   * assembled" == object_fields[j] or "Gene Count   * assembled" == object_fields[j] :
+                if (addval == 0):
+                    addval = np.NAN
+                else:
+                    addval = math.log10(addval)
+            elif "GOLD Ecosystem Subtype" == object_fields[j] and addval in ["Unclassified"]:
                 addval = np.NAN
-            else:
-                addval = math.log10(addval)
-        newstr = str(imgvr_df.iloc[i, primary_index]) +"\thas_quality\t"+str(addval)+"\tGOLD"
-        output.append(newstr)
 
-with open("IMGVR_sample.tsv", "w") as outfile:
-    outfile.write("subject\tedge_label\tobject\tprovided_by")
-    outfile.write("\n".join(output))
+            if np.isnan(addval):
+                newstr = str(df.iloc[i, subject_index]) +"\thas_quality\t"+str(addval)+"\tGOLD"
+                if newstr not in output:
+                    output.append(newstr)
+    return output
 
-#compression_opts = dict(method='zip', archive_name='out.csv')
-#df.to_csv('IMGVR_sample.tsv', sep = "\t")# index=False,compression=compression_opts)
+def write(output, outfile):
+    with open(outfile, "w") as outfile:
+        outfile.write(kgx_header)
+        outfile.write("\n".join(output))
+
+
+
+
+source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
+
+tuple = load(source_path)
+subject_index = tuple[1]
+df = tuple[2]
+
+output = parse(subject_index, df)
+
+outfile = "IMGVR_sample.tsv"
+
+write(output, outfile)
