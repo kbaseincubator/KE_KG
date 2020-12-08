@@ -55,7 +55,7 @@ object_fields = [
 
 exclude_list = ["GOLD Analysis Project Type", ]
 
-kgx_header = "Subject\tEdge_label\tObject\tSource"
+kgx_header = "Subject\tEdge_label\tObject\tSource\n"
 
 
 
@@ -77,6 +77,7 @@ def load(source_path):
 
 def parse(subject_index, df):
     output = []
+    dims = df.shape
     for i in range(0, dims[0]) :
         for j in range(0, len(object_fields)):
             #secondary_index = columns.str.find(object_fields[j])
@@ -85,15 +86,21 @@ def parse(subject_index, df):
             addval = df.iloc[i, secondary_index]
             print("addval "+str(addval))
 
-            if "Genome Size   * assembled" == object_fields[j] or "Gene Count   * assembled" == object_fields[j] :
+            if "Genome Size   * assembled" == object_fields[j] or "Gene Count   * assembled" == object_fields[j]:
+                addval_orig = addval
+
                 if (addval == 0):
                     addval = np.NAN
                 else:
                     addval = math.log10(addval)
+
+                print("addval "+str(addval_orig)+"\t"+str(addval))
             elif "GOLD Ecosystem Subtype" == object_fields[j] and addval in ["Unclassified"]:
                 addval = np.NAN
+            elif "Latitude" == object_fields[j] or "Longitude" == object_fields[j]:
+                addval = np.NAN
 
-            if np.isnan(addval):
+            if not pd.isnull(addval):
                 newstr = str(df.iloc[i, subject_index]) +"\thas_quality\t"+str(addval)+"\tGOLD"
                 if newstr not in output:
                     output.append(newstr)
@@ -110,8 +117,8 @@ def write(output, outfile):
 source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
 
 tuple = load(source_path)
-subject_index = tuple[1]
-df = tuple[2]
+subject_index = tuple[0]
+df = tuple[1]
 
 output = parse(subject_index, df)
 
