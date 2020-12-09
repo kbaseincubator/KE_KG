@@ -16,10 +16,11 @@ import numpy as np
 
 
 subject_field = "GOLD Analysis Project ID"
+subject_field_prefix = "Analysis_project_ID"
 
 object_fields = [
 "TaxonOID",
-"IMG Genome ID",
+#"IMG Genome ID",
 "GOLD Sequencing Project ID",
 #"GOLD Analysis Project ID",
 "GOLD Analysis Project Type",
@@ -32,9 +33,34 @@ object_fields = [
 "GOLD Sequencing Depth",
 "GOLD Sequencing Strategy",
 "GOLD Specific Ecosystem",
+"Latitude",
+"Longitude",
 "Habitat",
 "Genome Size   * assembled",
-"Gene Count   * assembled"]
+"Gene Count   * assembled"
+]
+
+object_field_prefixes = [
+"NCBItaxon",
+#"IMG_genome_ID",
+"Sequencing_project_ID",
+#"Analysis Project ID",
+"Analysis_project_type",
+"Study_ID",
+"Geographic_location",
+"GOLD",
+"GOLD",
+"GOLD",
+"GOLD",
+"Depth",
+"Sequencing_strategy",
+"GOLD",
+"Latitude",
+"Longitude",
+"Habitat",
+"Assembly_size",
+"Gene_count"
+]
 
 #TaxonOID
 #IMG Genome ID
@@ -53,7 +79,6 @@ object_fields = [
 #Genome Size   * assembled
 #Gene Count   * assembled
 
-exclude_list = ["GOLD Analysis Project Type", ]
 
 kgx_header = "Subject\tEdge_label\tObject\tSource\n"
 
@@ -93,15 +118,23 @@ def parse(subject_index, df):
                     addval = np.NAN
                 else:
                     addval = math.log10(addval)
+                    addval = round(addval, 0)
 
                 print("addval "+str(addval_orig)+"\t"+str(addval))
             elif "GOLD Ecosystem Subtype" == object_fields[j] and addval in ["Unclassified"]:
                 addval = np.NAN
             elif "Latitude" == object_fields[j] or "Longitude" == object_fields[j]:
+                ###load pairwise distance file and ingest as sample-sample in separate code block
                 addval = np.NAN
 
+            ###write the edge
             if not pd.isnull(addval):
-                newstr = str(df.iloc[i, subject_index]) +"\thas_quality\t"+str(addval)+"\tGOLD"
+                #convert chars to underscore
+                addval = str(addval).replace(" ","_")
+                addval = str(addval).replace(",", "_")
+                #lower case for case variation
+                addval = addval.lower()
+                newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\thas_quality\t"+object_field_prefixes[j]+":"+str(addval)+"\tGOLD"
                 if newstr not in output:
                     output.append(newstr)
     return output
@@ -113,7 +146,7 @@ def write(output, outfile):
 
 
 
-
+###
 source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
 
 tuple = load(source_path)
@@ -122,6 +155,5 @@ df = tuple[1]
 
 output = parse(subject_index, df)
 
-outfile = "IMGVR_sample.tsv"
-
+outfile = "IMGVR_sample_KGX.tsv"
 write(output, outfile)
