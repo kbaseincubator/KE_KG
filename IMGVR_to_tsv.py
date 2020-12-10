@@ -2,7 +2,7 @@ import pandas as pd
 import math
 import numpy as np
 
-###Available columns
+###Available columns copied from source file
 #'TaxonOID', 'Domain', 'Sequencing Status', 'Study Name',
 #       'Genome Name / Sample Name', 'Sequencing Center', 'IMG Genome ID',
 #       'GOLD Analysis Project ID', 'GOLD Analysis Project Type',
@@ -16,7 +16,8 @@ import numpy as np
 
 
 subject_field = "GOLD Analysis Project ID"
-subject_field_prefix = "Analysis_project_ID"
+subject_field_prefix = "GOLD"
+subject_field_category = "biolink:Attribute"
 
 object_fields = [
 "TaxonOID",
@@ -30,7 +31,8 @@ object_fields = [
 "GOLD Ecosystem Category",
 "GOLD Ecosystem Subtype",
 "GOLD Ecosystem Type",
-"GOLD Sequencing Depth",
+#"GOLD Sequencing Depth",
+"GOLD Sequencing Status",
 "GOLD Sequencing Strategy",
 "GOLD Specific Ecosystem",
 "Latitude",
@@ -43,23 +45,72 @@ object_fields = [
 object_field_prefixes = [
 "NCBItaxon",
 #"IMG_genome_ID",
-"Sequencing_project_ID",
-#"Analysis Project ID",
-"Analysis_project_type",
-"Study_ID",
-"Geographic_location",
+"GOLD",#"Sequencing_project_ID",
+#"GOLD",
+"GOLD",#"Analysis_project_type",
+"GOLD",#"Study_ID",
+"GOLD",#"Geographic_location",
 "GOLD",
 "GOLD",
 "GOLD",
 "GOLD",
-"Depth",
-"Sequencing_strategy",
+"GOLD",
+#"Depth",
+"GOLD",#"Sequencing_strategy",
 "GOLD",
 "Latitude",
 "Longitude",
-"Habitat",
+"GOLD",#"Habitat",
 "Assembly_size",
 "Gene_count"
+]
+
+object_field_categories = [
+"biolink:OrganismTaxon",
+#"IMG_genome_ID",
+"biolink:Attribute",
+#"biolink:Attribute",
+"biolink:Attribute",
+"biolink:Attribute",
+"biolink:NamedThing",
+"biolink:Attribute",
+"biolink:Attribute",
+"biolink:Attribute",
+"biolink:Attribute",
+"biolink:Attribute",
+#"biolink:QuantityValue",
+"biolink:Attribute",
+"biolink:Attribute",
+"biolink:QuantityValue",
+"biolink:QuantityValue",
+"biolink:Attribute",
+"biolink:NamedThing",
+"biolink:NamedThing"
+]
+
+
+### TBD
+object_edge_labels = [
+"biolink:has taxonomic rank",
+#"IMG_genome_ID",
+"biolink:has_attribute",
+#"Analysis Project ID",
+"biolink:has_attribute",
+"biolink:has_attribute",
+"biolink:located_in",
+"biolink:occurs_in",
+"biolink:occurs_in",
+"biolink:occurs_in",
+"biolink:occurs_in",
+#"biolink:QuantityValue",
+"biolink:has_attribute",
+"biolink:has_attribute",
+"biolink:has_attribute",
+"biolink:located_in",
+"biolink:located_in",
+"biolink:occurs_in",
+"biolink:has_quantitative_value",
+"biolink:has_quantitative_value"
 ]
 
 #TaxonOID
@@ -80,7 +131,8 @@ object_field_prefixes = [
 #Gene Count   * assembled
 
 
-kgx_header = "Subject\tEdge_label\tObject\tSource\n"
+kgx_header_edges = "subject\tedge_label\tobject\trelation\tsource\n"
+kgx_header_nodes = "id\tname\tcategory\n"
 
 
 
@@ -101,15 +153,25 @@ def load(source_path):
 
 
 def parse(subject_index, df):
-    output = []
+    edges = []
+    nodes = []
     dims = df.shape
-    for i in range(0, dims[0]) :
+
+    # convert chars to underscore
+    #
+    df = df.replace(',', '_', regex=True)
+    df = df.replace(' ', '_', regex=True)
+    # convert to lower case for variation
+    df = df.applymap(lambda s:s.lower() if type(s) == str else s)
+
+    for i in range(0, dims[0]):#100):#
+        print(".")
         for j in range(0, len(object_fields)):
             #secondary_index = columns.str.find(object_fields[j])
             secondary_index = df.columns.get_loc(object_fields[j])
-            print("secondary_index " + str(secondary_index))
+            #print("secondary_index " + str(secondary_index))
             addval = df.iloc[i, secondary_index]
-            print("addval "+str(addval))
+           #print("addval "+str(addval))
 
             if "Genome Size   * assembled" == object_fields[j] or "Gene Count   * assembled" == object_fields[j]:
                 addval_orig = addval
@@ -118,9 +180,12 @@ def parse(subject_index, df):
                     addval = np.NAN
                 else:
                     addval = math.log10(addval)
-                    addval = round(addval, 0)
+                    if math.isnan(addval):
+                        addval = np.NAN
+                    else:
+                        addval = int(round(addval, 0))
 
-                print("addval "+str(addval_orig)+"\t"+str(addval))
+                #print("addval "+str(addval_orig)+"\t"+str(addval))
             elif "GOLD Ecosystem Subtype" == object_fields[j] and addval in ["Unclassified"]:
                 addval = np.NAN
             elif "Latitude" == object_fields[j] or "Longitude" == object_fields[j]:
@@ -129,19 +194,58 @@ def parse(subject_index, df):
 
             ###write the edge
             if not pd.isnull(addval):
-                #convert chars to underscore
-                addval = str(addval).replace(" ","_")
-                addval = str(addval).replace(",", "_")
-                #lower case for case variation
-                addval = addval.lower()
-                newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\thas_quality\t"+object_field_prefixes[j]+":"+str(addval)+"\tGOLD"
-                if newstr not in output:
-                    output.append(newstr)
-    return output
 
-def write(output, outfile):
+                ##special case to link study -> project and skip analysis -> project (analysis -> study happens independently)
+                if "GOLD Sequencing Project ID" == object_fields[j]:
+                    print("making study -> project")
+
+                    subject_index_now = object_fields.index("GOLD Study ID")
+
+                    newstr = object_field_prefixes[subject_index_now] + ":" + str(df.iloc[i, subject_index_now]) + "\tbiolink:has_attribute\t" + \
+                             object_field_prefixes[j] + ":" + str(addval) + "\tbiolink:has_attribute\t" + "GOLD"
+                    print("adding " + newstr)
+                    if newstr not in edges:
+                        edges.append(newstr)
+
+                    node1str = object_field_prefixes[subject_index_now]  + ":" + str(df.iloc[i, subject_index_now]) + "\t" + str(
+                        df.iloc[i, subject_index]) + "\t" + object_field_categories[subject_index_now]
+                    print("adding " + node1str)
+                    if node1str not in nodes:
+                        nodes.append(node1str)
+
+                    node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                               object_field_categories[j]
+                    print("adding " + node2str)
+                    if node2str not in nodes:
+                        nodes.append(node2str)
+                else:
+                    #print(i)
+                    #print(j)
+                    #print(subject_index)
+                    #print(addval)
+                    #print(df.iloc[i, subject_index])
+                    #print(subject_field_prefix)
+
+                    newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+str(addval)+"\t"+object_edge_labels[j]+"\t"+"GOLD"
+                    print("adding "+newstr)
+                    if newstr not in edges:
+                        edges.append(newstr)
+
+                    node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category
+                    print("adding " + node1str)
+                    if node1str not in nodes:
+                        nodes.append(node1str)
+
+                    node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j]
+                    print("adding " + node2str)
+                    if node2str not in nodes:
+                        nodes.append(node2str)
+
+    return (edges, nodes)
+
+def write(output, outfile, header):
     with open(outfile, "w") as outfile:
-        outfile.write(kgx_header)
+        outfile.write(header)
         outfile.write("\n".join(output))
 
 
@@ -149,11 +253,17 @@ def write(output, outfile):
 ###
 source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
 
-tuple = load(source_path)
-subject_index = tuple[0]
-df = tuple[1]
+tuple1 = load(source_path)
+subject_index = tuple1[0]
+df = tuple1[1]
 
-output = parse(subject_index, df)
+tuple2 = parse(subject_index, df)
+edge_output = tuple2[0]
+edge_outfile = "IMGVR_sample_KGX_edges.tsv"
+print("writing "+edge_outfile)
+write(edge_output, edge_outfile, kgx_header_edges)
 
-outfile = "IMGVR_sample_KGX.tsv"
-write(output, outfile)
+node_output = tuple2[1]
+node_outfile = "IMGVR_sample_KGX_nodes.tsv"
+print("writing "+node_outfile)
+write(node_output, node_outfile, kgx_header_nodes)
