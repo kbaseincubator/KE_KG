@@ -1,0 +1,57 @@
+---
+configuration:
+  output_directory: data/merged
+  checkpoint: false
+  property_types:
+    # define the type for non-canonical node/edge properties
+    combined_score: 'xsd:float'
+    confidence_score: 'xsd:float'
+    neighborhood: 'xsd:float'
+    neighborhood_transferred: 'xsd:float'
+    fusion: 'xsd:float'
+    cooccurence: 'xsd:float'
+    homology: 'xsd:float'
+    coexpression: 'xsd:float'
+    coexpression_transferred: 'xsd:float'
+    experiments: 'xsd:float'
+    experiments_transferred: 'xsd:float'
+    database: 'xsd:float'
+    database_transferred: 'xsd:float'
+    textmining: 'xsd:float'
+    textmining_transferred: 'xsd:float'
+
+merged_graph:
+  name: KG-KBase
+  targets:
+    imgvr:
+      type: tsv
+      filename:
+        - data/transform/imgvr/nodes.tsv
+        - data/transform/imgvr/edges.tsv
+    envo:
+      type: json
+      filename:
+        - data/transformed/envo/envo.json
+  operations:
+    - name: kgx.operations.summarize_graph.generate_graph_stats
+      args:
+        graph_name: KG-KBase Graph
+        filename: merged_graph_stats.yaml
+        node_facet_properties:
+          - provided_by
+        edge_facet_properties:
+          - provided_by
+  destination:
+    merged-kg-tsv:
+      type: tsv
+      compression: tar.gz
+      filename: merged-kg
+    merged-kg-nt:
+      type: nt
+      compression: gz
+      filename: merged-kg.nt.gz
+#    merged-kg-neo4j:
+#      type: neo4j
+#      uri: http://localhost:8484
+#      username: neo4j
+#      password: admin
