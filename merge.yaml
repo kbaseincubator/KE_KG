@@ -26,12 +26,12 @@ merged_graph:
     imgvr:
       type: tsv
       filename:
-        - data/transform/imgvr/nodes.tsv
-        - data/transform/imgvr/edges.tsv
+        - data/transform/imgvr/IMGVR_sample_KGX_nodes.tsv
+        - data/transform/imgvr/IMGVR_sample_KGX_edges.tsv
     envo:
       type: json
       filename:
-        - data/transformed/envo/envo.json
+        - data/transform/envo/envo.json
   operations:
     - name: kgx.operations.summarize_graph.generate_graph_stats
       args:
