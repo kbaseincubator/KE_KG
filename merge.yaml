@@ -22,16 +22,18 @@ configuration:
 
 merged_graph:
   name: KG-KBase
-  targets:
+  source:
     imgvr:
-      type: tsv
-      filename:
-        - data/transform/imgvr/IMGVR_sample_KGX_nodes.tsv
-        - data/transform/imgvr/IMGVR_sample_KGX_edges.tsv
+      input:
+        format: tsv
+        filename:
+          - data/transform/imgvr/IMGVR_sample_KGX_nodes.tsv
+          - data/transform/imgvr/IMGVR_sample_KGX_edges.tsv
     envo:
-      type: json
-      filename:
-        - data/transform/envo/envo.json
+      input:
+        format: json
+        filename:
+          - data/transform/envo/envo.json
   operations:
     - name: kgx.operations.summarize_graph.generate_graph_stats
       args:

@@ -43,7 +43,7 @@ object_fields = [
 ]
 
 object_field_prefixes = [
-"NCBItaxon",
+"GOLD",
 #"IMG_genome_ID",
 "GOLD",#"Sequencing_project_ID",
 #"GOLD",
