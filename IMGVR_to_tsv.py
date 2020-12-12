@@ -131,7 +131,7 @@ object_edge_labels = [
 #Gene Count   * assembled
 
 
-kgx_header_edges = "subject\tedge_label\tobject\trelation\tsource\n"
+kgx_header_edges = "subject\tpredicate\tobject\trelation\tsource\n"
 kgx_header_nodes = "id\tname\tcategory\n"
 
 

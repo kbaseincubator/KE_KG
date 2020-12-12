@@ -31,7 +31,7 @@ merged_graph:
           - data/transform/imgvr/IMGVR_sample_KGX_edges.tsv
     envo:
       input:
-        format: json
+        format: obojson
         filename:
           - data/transform/envo/envo.json
   operations:
@@ -45,13 +45,13 @@ merged_graph:
           - provided_by
   destination:
     merged-kg-tsv:
-      type: tsv
+      format: tsv
       compression: tar.gz
       filename: merged_kg
-    merged-kg-nt:
-      type: nt
-      compression: gz
-      filename: merged_kg.nt.gz
+    #merged-kg-nt:
+    #  format: nt
+    #  compression: gz
+    #  filename: merged_kg.nt.gz
 #    merged-kg-neo4j:
 #      type: neo4j
 #      uri: http://localhost:8484
