@@ -131,8 +131,8 @@ object_edge_labels = [
 #Gene Count   * assembled
 
 
-kgx_header_edges = "subject\tpredicate\tobject\trelation\tsource\n"
-kgx_header_nodes = "id\tname\tcategory\n"
+kgx_header_edges = "subject\tedge_label\tobject\trelation\tprovided_by\n"
+kgx_header_nodes = "id\tname\tcategory\tprovided_by\\n"
 
 
 
@@ -208,13 +208,13 @@ def parse(subject_index, df):
                         edges.append(newstr)
 
                     node1str = object_field_prefixes[subject_index_now]  + ":" + str(df.iloc[i, subject_index_now]) + "\t" + str(
-                        df.iloc[i, subject_index]) + "\t" + object_field_categories[subject_index_now]
+                        df.iloc[i, subject_index]) + "\t" + object_field_categories[subject_index_now]+"\tGOLD"
                     print("adding " + node1str)
                     if node1str not in nodes:
                         nodes.append(node1str)
 
                     node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
-                               object_field_categories[j]
+                               object_field_categories[j]+"\tGOLD"
                     print("adding " + node2str)
                     if node2str not in nodes:
                         nodes.append(node2str)
@@ -231,12 +231,12 @@ def parse(subject_index, df):
                     if newstr not in edges:
                         edges.append(newstr)
 
-                    node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category
+                    node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category +"\tGOLD"
                     print("adding " + node1str)
                     if node1str not in nodes:
                         nodes.append(node1str)
 
-                    node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j]
+                    node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j] +"\tGOLD"
                     print("adding " + node2str)
                     if node2str not in nodes:
                         nodes.append(node2str)
