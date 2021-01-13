@@ -3,19 +3,21 @@ import math
 import numpy as np
 
 ###Available columns copied from source file
-#IMG_TaxonOID    UViG_Taxon_oid  Scaffold_oid_unclear_field_do_not_use   Scaffold_ID
-# Coordinates_(whole_if_the_UViG_is_the_entire_contig)    Ecosystem_classification        vOTU
-# Length  Topology        Estimated_completeness  MIUViG_quality  Gene_content_(total_genes;cds;tRNA;VPF_percentage)
-# Taxonomic_classification        Taxonomic_classification_method Host_taxonomy_prediction
-# Host_prediction_method  Sequence_origin_(doi)   In_IMG  Gene_content_Pfam;VOG;VPF
+#IMG_taxon_oid	GOLD_Analysis_Project_ID	UViG_Taxon_oid	Scaffold_oid_unclear_field_do_not_use
+# Scaffold_ID	Coordinates_.whole_if_the_UViG_is_the_entire_contig.	Ecosystem_classification
+# vOTU	Length	Topology	Estimated_completeness	MIUViG_quality
+# Gene_content_.total_genes.cds.tRNA.VPF_percentage.	Taxonomic_classification
+# Taxonomic_classification_method	Host_taxonomy_prediction	Host_prediction_method
+# Sequence_origin_.doi.	In_IMG	Gene_content_Pfam.VOG.VPF
 
 
-subject_field = "IMG_TaxonOID"
+subject_field = "GOLD_Analysis_Project_ID"
 subject_field_prefix = "GOLD"
 subject_field_category = "biolink:Attribute"
 
 object_fields = [
-'IMG_TaxonOID',
+#'IMG_TaxonOID',
+    'GOLD_Analysis_Project_ID',
 ## UViG_Taxon_oid
 # 'Scaffold_oid_unclear_field_do_not_use',
     # Scaffold_oid
@@ -38,6 +40,7 @@ object_fields = [
 ]
 
 object_field_prefixes = [
+#'IMG_TaxonOID',
 'GOLD',
 ## UViG_Taxon_oid
 # 'Scaffold_oid_unclear_field_do_not_use',
@@ -60,6 +63,7 @@ object_field_prefixes = [
 ]
 
 object_field_categories = [
+#'IMG_TaxonOID',
 'biolink:Attribute',
 ## UViG_Taxon_oid
 # 'Scaffold_oid_unclear_field_do_not_use',
@@ -83,6 +87,7 @@ object_field_categories = [
 
 
 object_edge_labels = [
+#'IMG_TaxonOID',
 'biolink:has_attribute',
 ## UViG_Taxon_oid
     # Scaffold_oid
@@ -139,7 +144,9 @@ def parse(subject_index, df, taxdf):
     df = df.applymap(lambda s:s.lower() if type(s) == str else s)
 
     for i in range(0, dims[0]):#100):#
-        print(".")
+
+        if(i % 1000 == 0):
+            print("."+str(i))
         for j in range(0, len(object_fields)):
             #secondary_index = columns.str.find(object_fields[j])
             secondary_index = df.columns.get_loc(object_fields[j])
@@ -158,27 +165,27 @@ def parse(subject_index, df, taxdf):
                         addval = np.NAN
                     else:
                         addval = int(round(addval, 0))
-            elif "Taxonomic classification" == object_fields[j]:
-                print("Virus "+addval)
+            #elif "Taxonomic classification" == object_fields[j]:
+            #    print("Virus "+addval)
 
-            elif "Taxonomic classification" == object_fields[j]:
-                print("Host " + addval)
+            #elif "Taxonomic classification" == object_fields[j]:
+            #    print("Host " + addval)
 
             ###write the edge
             if not pd.isnull(addval):
 
                 newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+str(addval)+"\t"+object_edge_labels[j]+"\t"+"GOLD"
-                print("adding "+newstr)
+                #print("adding "+newstr)
                 if newstr not in edges:
                     edges.append(newstr)
 
                 node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category +"\tGOLD"
-                print("adding " + node1str)
+                #print("adding " + node1str)
                 if node1str not in nodes:
                     nodes.append(node1str)
 
                 node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j] +"\tGOLD"
-                print("adding " + node2str)
+                #print("adding " + node2str)
                 if node2str not in nodes:
                     nodes.append(node2str)
 
@@ -192,8 +199,7 @@ def write(output, outfile, header):
 
 
 ###
-#source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v1.tsv'
-source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v1__1000.tsv'
+source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2.tsv'
 tax_map_path = '/Users/marcin/Documents/KBase/KE/NCBItaxonomy/new_taxdump/nodes.tsv'
 
 tuple1 = load(source_path, tax_map_path)
