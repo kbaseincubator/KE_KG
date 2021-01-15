@@ -171,23 +171,190 @@ def parse(subject_index, df, taxdf):
             #elif "Taxonomic classification" == object_fields[j]:
             #    print("Host " + addval)
 
-            ###write the edge
+            ###write the nodes and edges
+
+
             if not pd.isnull(addval):
 
-                newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+str(addval)+"\t"+object_edge_labels[j]+"\t"+"GOLD"
-                #print("adding "+newstr)
-                if newstr not in edges:
-                    edges.append(newstr)
+                #vOTU to host, length, topology
+                if "vOTU" == object_fields[j]:
+                    object_index_now = object_fields.index('Host_taxonomy_prediction')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #print("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
 
-                node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category +"\tGOLD"
-                #print("adding " + node1str)
-                if node1str not in nodes:
-                    nodes.append(node1str)
 
-                node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j] +"\tGOLD"
-                #print("adding " + node2str)
-                if node2str not in nodes:
-                    nodes.append(node2str)
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" +addvalnow + "\t" + object_field_categories[object_index_now] + "\tGOLD"
+                        #print("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+
+                    object_index_now = object_fields.index('Length')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(
+                            addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #print("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
+
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" + addvalnow + "\t" + \
+                                   object_field_categories[object_index_now] + "\tGOLD"
+                        #print("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+
+                    object_index_now = object_fields.index('Topology')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(
+                            addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #print("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
+
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" + addvalnow + "\t" + \
+                                   object_field_categories[object_index_now] + "\tGOLD"
+                        #("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+                # taxa to host, length, topology, vOTU
+                elif "Taxonomic_classification" == object_fields[j]:
+
+                    object_index_now = object_fields.index('Host_taxonomy_prediction')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #print("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
+
+
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" +addvalnow + "\t" + object_field_categories[object_index_now] + "\tGOLD"
+                        #print("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+
+                    object_index_now = object_fields.index('Length')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(
+                            addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
+
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" + addvalnow + "\t" + \
+                                   object_field_categories[object_index_now] + "\tGOLD"
+                        #print("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+
+                    object_index_now = object_fields.index('Topology')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(
+                            addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #print("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
+
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" + addvalnow + "\t" + \
+                                   object_field_categories[object_index_now] + "\tGOLD"
+                        #print("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+
+                    object_index_now = object_fields.index('vOTU')
+                    addvalnow = df.iloc[i, secondary_index]
+                    if not pd.isnull(addvalnow):
+                        newstr = object_field_prefixes[j] + ":" + str(
+                            df.iloc[i, j]) + "\tbiolink:has_attribute\t" + \
+                                 object_field_prefixes[object_index_now] + ":" + str(
+                            addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                        #print("adding " + newstr)
+                        if newstr not in edges:
+                            edges.append(newstr)
+
+                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                                   object_field_categories[j] + "\tGOLD"
+                        #print("adding " + node1str)
+                        if node1str not in nodes:
+                            nodes.append(node2str)
+
+                        node2str = object_field_prefixes[object_index_now] + ":" + addvalnow + "\t" + addvalnow + "\t" + \
+                                   object_field_categories[object_index_now] + "\tGOLD"
+                        #print("adding " + node2str)
+                        if node2str not in nodes:
+                            nodes.append(node2str)
+
+                if object_fields[j] not in ['Length','Topology']:
+                    ###add default to sample - X link
+                    newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+str(addval)+"\t"+object_edge_labels[j]+"\t"+"GOLD"
+                    #print("adding "+newstr)
+                    if newstr not in edges:
+                        edges.append(newstr)
+
+                    node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category +"\tGOLD"
+                    #print("adding " + node1str)
+                    if node1str not in nodes:
+                        nodes.append(node1str)
+
+                    node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j] +"\tGOLD"
+                    #print("adding " + node2str)
+                    if node2str not in nodes:
+                        nodes.append(node2str)
 
     return (edges, nodes)
 
@@ -199,7 +366,7 @@ def write(output, outfile, header):
 
 
 ###
-source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2.tsv'
+source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv'
 tax_map_path = '/Users/marcin/Documents/KBase/KE/NCBItaxonomy/new_taxdump/nodes.tsv'
 
 tuple1 = load(source_path, tax_map_path)

@@ -3,16 +3,11 @@ import math
 import numpy as np
 
 ###Available columns copied from source file
-#'TaxonOID', 'Domain', 'Sequencing Status', 'Study Name',
-#       'Genome Name / Sample Name', 'Sequencing Center', 'IMG Genome ID',
-#       'GOLD Analysis Project ID', 'GOLD Analysis Project Type',
-#       'GOLD Sequencing Project ID', 'GOLD Study ID', 'Geographic Location',
-#       'GOLD Ecosystem', 'GOLD Ecosystem Category', 'GOLD Ecosystem Subtype',
-#       'GOLD Ecosystem Type', 'GOLD Sequencing Depth',
-#       'GOLD Sequencing Quality', 'GOLD Sequencing Status',
-#       'GOLD Sequencing Strategy', 'GOLD Specific Ecosystem', 'Habitat',
-#       'Latitude', 'Longitude', 'Genome Size   * assembled',
-#       'Gene Count   * assembled'
+## UViG	Taxon_oid	Scaffold_oid	Coordinates ('whole' if the UViG is the entire contig)
+# Ecosystem classification	vOTU	Length	Topology	Estimated completeness	MIUV
+#iG quality	Gene content (total genes;cds;tRNA;VPF percentage)	Taxonomic classification
+# Taxonomic classification method	Host taxonomy prediction	Host prediction meth
+#od	Sequence origin (doi)	In_IMG	Gene content Pfam;VOG;VPF
 
 
 subject_field = "GOLD Analysis Project ID"
@@ -20,7 +15,7 @@ subject_field_prefix = "GOLD"
 subject_field_category = "biolink:Attribute"
 
 object_fields = [
-"TaxonOID",
+#"TaxonOID",
 #"IMG Genome ID",
 "GOLD Sequencing Project ID",
 #"GOLD Analysis Project ID",
@@ -43,7 +38,7 @@ object_fields = [
 ]
 
 object_field_prefixes = [
-"GOLD",
+#"GOLD",
 #"IMG_genome_ID",
 "GOLD",#"Sequencing_project_ID",
 #"GOLD",
@@ -66,7 +61,7 @@ object_field_prefixes = [
 ]
 
 object_field_categories = [
-"biolink:OrganismTaxon",
+#"biolink:OrganismTaxon",
 #"IMG_genome_ID",
 "biolink:Attribute",
 #"biolink:Attribute",
@@ -91,7 +86,7 @@ object_field_categories = [
 
 ### TBD
 object_edge_labels = [
-"biolink:has taxonomic rank",
+#"biolink:has taxonomic rank",
 #"IMG_genome_ID",
 "biolink:has_attribute",
 #"Analysis Project ID",
