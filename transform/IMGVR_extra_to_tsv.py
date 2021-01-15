@@ -113,7 +113,7 @@ kgx_header_nodes = "id\tname\tcategory\tprovided_by\\n"
 
 
 
-def load(source_path, tax_map_path):
+def load(source_path):#, tax_map_path):
     df = pd.read_csv(source_path, sep='\t')
 
     columns = df.columns.str
@@ -126,12 +126,12 @@ def load(source_path, tax_map_path):
     subject_index = df.columns.get_loc(subject_field)#columns.str.find(primary_field)
     print("subject_index "+str(subject_index))
 
-    taxdf = pd.read_csv(tax_map_path, sep='\t')
+    #taxdf = pd.read_csv(tax_map_path, sep='\t')
 
-    return (subject_index, df, taxdf)
+    return (subject_index, df)#, taxdf)
 
 
-def parse(subject_index, df, taxdf):
+def parse(subject_index, df):#, taxdf):
     edges = []
     nodes = []
     dims = df.shape
@@ -367,14 +367,14 @@ def write(output, outfile, header):
 
 ###
 source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv'
-tax_map_path = '/Users/marcin/Documents/KBase/KE/NCBItaxonomy/new_taxdump/nodes.tsv'
+#tax_map_path = '/Users/marcin/Documents/KBase/KE/NCBItaxonomy/new_taxdump/nodes.tsv'
 
-tuple1 = load(source_path, tax_map_path)
+tuple1 = load(source_path)#, tax_map_path)
 subject_index = tuple1[0]
 df = tuple1[1]
-taxdf = tuple1[2]
+#taxdf = tuple1[2]
 
-tuple2 = parse(subject_index, df, taxdf)
+tuple2 = parse(subject_index, df)#, taxdf)
 edge_output = tuple2[0]
 edge_outfile = "IMGVR_extra_KGX_edges.tsv"
 print("writing "+edge_outfile)
