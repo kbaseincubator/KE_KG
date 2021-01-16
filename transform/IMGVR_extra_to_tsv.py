@@ -157,7 +157,7 @@ def parse(subject_index, df):#, taxdf):
             object_index = df.columns.get_loc(object_fields[j])
             #print("object_index " + str(object_index))
             addval = df.iloc[i, object_index]
-           #print("addval "+str(addval))
+            #print("addval "+str(addval))
 
             if "Length" == object_fields[j]:
                 addval_orig = addval
@@ -180,21 +180,21 @@ def parse(subject_index, df):#, taxdf):
 
             print("addval "+str(addval))
             if not pd.isnull(addval) and addval != 'nan':
-
+                addval = str(addval)
                 #vOTU to host, length, topology
                 if "vOTU" == object_fields[j]:
                     object_index_now = object_fields.index('Host_taxonomy_prediction')
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
-                        newstr =  object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tkbase:is_host_for\t" + object_field_prefixes[j] + ":" + str(addval) \
+                        newstr =  object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tkbase:is_host_for\t" + object_field_prefixes[j] + ":" + addval \
                                   + "\tkbase:is_host_for\t" + "GOLD"
                         print("adding O " + newstr)
                         if newstr not in edges:
                             edges.append(newstr)
 
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding O " + node1str)
                         if node1str not in nodes:
@@ -209,6 +209,7 @@ def parse(subject_index, df):#, taxdf):
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
+                        addvalnow = str(addvalnow)
                         newstr = object_field_prefixes[j] + ":" + str(
                             addval) + "\tbiolink:has_attribute\t" + \
                                  object_field_prefixes[object_index_now] + ":" + str(
@@ -217,7 +218,7 @@ def parse(subject_index, df):#, taxdf):
                         if newstr not in edges:
                             edges.append(newstr)
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding O " + node1str)
                         if node1str not in nodes:
@@ -233,6 +234,7 @@ def parse(subject_index, df):#, taxdf):
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
+                        addvalnow = str(addvalnow)
                         newstr = object_field_prefixes[j] + ":" + str(
                             addval) + "\tbiolink:has_attribute\t" + \
                                  object_field_prefixes[object_index_now] + ":" + str(
@@ -241,7 +243,7 @@ def parse(subject_index, df):#, taxdf):
                         if newstr not in edges:
                             edges.append(newstr)
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding O  " + node1str)
                         if node1str not in nodes:
@@ -259,6 +261,7 @@ def parse(subject_index, df):#, taxdf):
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
+                        addvalnow = str(addvalnow)
                         newstr = object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tbiolink:is_host_for\t" +\
                                  object_field_prefixes[j] + ":" + str(
                                  addval) + "\tbiolink:is_host_for\t" + "GOLD"
@@ -267,7 +270,7 @@ def parse(subject_index, df):#, taxdf):
                             edges.append(newstr)
 
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding V " + node1str)
                         if node1str not in nodes:
@@ -282,6 +285,7 @@ def parse(subject_index, df):#, taxdf):
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
+                        addvalnow = str(addvalnow)
                         newstr = object_field_prefixes[j] + ":" + str(
                             addval) + "\tbiolink:has_attribute\t" + \
                                  object_field_prefixes[object_index_now] + ":" + str(
@@ -290,7 +294,7 @@ def parse(subject_index, df):#, taxdf):
                         if newstr not in edges:
                             edges.append(newstr)
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding V " + node1str)
                         if node1str not in nodes:
@@ -306,6 +310,7 @@ def parse(subject_index, df):#, taxdf):
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
+                        addvalnow = str(addvalnow)
                         newstr = object_field_prefixes[j] + ":" + str(
                             addval) + "\tbiolink:has_attribute\t" + \
                                  object_field_prefixes[object_index_now] + ":" + str(
@@ -314,7 +319,7 @@ def parse(subject_index, df):#, taxdf):
                         if newstr not in edges:
                             edges.append(newstr)
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding V " + node1str)
                         if node1str not in nodes:
@@ -330,6 +335,7 @@ def parse(subject_index, df):#, taxdf):
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
+                        addvalnow = str(addvalnow)
                         newstr = object_field_prefixes[j] + ":" + str(
                             addval) + "\tbiolink:has_attribute\t" + \
                                  object_field_prefixes[object_index_now] + ":" + str(
@@ -338,7 +344,7 @@ def parse(subject_index, df):#, taxdf):
                         if newstr not in edges:
                             edges.append(newstr)
 
-                        node1str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
+                        node1str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + \
                                    object_field_categories[j] + "\tGOLD"
                         print("adding V " + node1str)
                         if node1str not in nodes:
@@ -353,7 +359,7 @@ def parse(subject_index, df):#, taxdf):
                 if object_fields[j] not in ['Length','Topology'] and subject_val != 'nan':
                     ###add default to sample - X link
                     if(addval not in ['na;na;na;na;na;na']):
-                        newstr = subject_field_prefix+":"+subject_val +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+str(addval)+"\t"+object_edge_labels[j]+"\t"+"GOLD"
+                        newstr = subject_field_prefix+":"+subject_val +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+addval+"\t"+object_edge_labels[j]+"\t"+"GOLD"
                         print("adding S "+newstr)
                         if newstr not in edges:
                             edges.append(newstr)
@@ -363,7 +369,7 @@ def parse(subject_index, df):#, taxdf):
                         if node1str not in nodes:
                             nodes.append(node1str)
 
-                        node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j] +"\tGOLD"
+                        node2str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + object_field_categories[j] +"\tGOLD"
                         print("adding S " + node2str)
                         if node2str not in nodes:
                             nodes.append(node2str)
