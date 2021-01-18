@@ -156,6 +156,8 @@ def parse(subject_index, df):
     #
     df = df.replace(',', '_', regex=True)
     df = df.replace(' ', '_', regex=True)
+    df = df.replace(':', '_', regex=True)
+    df = df.replace('__', '_', regex=True)
     # convert to lower case for variation
     df = df.applymap(lambda s:s.lower() if type(s) == str else s)
 

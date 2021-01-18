@@ -382,7 +382,34 @@ def parse(subject_index, df, debug=False):#, taxdf):
                         if node2str not in nodes:
                             nodes.append(node2str)
 
-                if object_fields[j] not in ['Length','Topology'] and subject_val != 'nan':
+                            # taxa to host, length, topology, vOTU
+                elif "Ecosystem_classification" == object_fields[j]:
+                    if (addval not in ['na;na;na;na;na;na']):
+                        if (debug):
+                            print("Ecosystem " + addval)
+                        terms = addval.split(";")
+                        for k in range(0, len(terms)):
+                                newstr = subject_field_prefix + ":" + subject_val + "\t" + object_edge_labels[j] + "\t" + \
+                                         object_field_prefixes[j] + ":" + terms[k] + "\t" + object_edge_labels[
+                                             j] + "\t" + "GOLD"
+                                if (debug):
+                                    print("adding E " + newstr)
+                                if newstr not in edges:
+                                    edges.append(newstr)
+
+                                node1str = subject_field_prefix + ":" + subject_val + "\t" + subject_val + "\t" + subject_field_category + "\tGOLD"
+                                if (debug):
+                                    print("adding E " + node1str)
+                                if node1str not in nodes:
+                                    nodes.append(node1str)
+
+                                node2str = object_field_prefixes[j] + ":" +  terms[k] + "\t" +  terms[k] + "\t" + \
+                                           object_field_categories[j] + "\tGOLD"
+                                if (debug):
+                                    print("adding E " + node2str)
+                                if node2str not in nodes:
+                                    nodes.append(node2str)
+                elif object_fields[j] not in ['Length','Topology', 'Ecosystem_classification'] and subject_val != 'nan':
                     ###add default to sample - X link
                     if(addval not in ['na;na;na;na;na;na']):
                         newstr = subject_field_prefix+":"+subject_val +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+addval+"\t"+object_edge_labels[j]+"\t"+"GOLD"
@@ -421,7 +448,7 @@ subject_index = tuple1[0]
 df = tuple1[1]
 #taxdf = tuple1[2]
 
-tuple2 = parse(subject_index, df, False)#, taxdf)
+tuple2 = parse(subject_index, df, True)#False)#, taxdf)
 edge_output = tuple2[0]
 edge_outfile = "IMGVR_extra_KGX_edges.tsv"
 print("writing "+edge_outfile)
