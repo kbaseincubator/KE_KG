@@ -194,25 +194,29 @@ def parse(subject_index, df):
 
                 ##special case to link study -> project and skip analysis -> project (analysis -> study happens independently)
                 if "GOLD Sequencing Project ID" == object_fields[j]:
-                    print("making study -> project")
+                    if (debug):
+                        print("making study -> project")
 
                     subject_index_now = object_fields.index("GOLD Study ID")
 
                     newstr = object_field_prefixes[subject_index_now] + ":" + str(df.iloc[i, subject_index_now]) + "\tbiolink:has_attribute\t" + \
                              object_field_prefixes[j] + ":" + str(addval) + "\tbiolink:has_attribute\t" + "GOLD"
-                    print("adding " + newstr)
+                    if (debug):
+                        print("adding " + newstr)
                     if newstr not in edges:
                         edges.append(newstr)
 
                     node1str = object_field_prefixes[subject_index_now]  + ":" + str(df.iloc[i, subject_index_now]) + "\t" + str(
                         df.iloc[i, subject_index]) + "\t" + object_field_categories[subject_index_now]+"\tGOLD"
-                    print("adding " + node1str)
+                    if (debug):
+                        print("adding " + node1str)
                     if node1str not in nodes:
                         nodes.append(node1str)
 
                     node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + \
                                object_field_categories[j]+"\tGOLD"
-                    print("adding " + node2str)
+                    if (debug):
+                        print("adding " + node2str)
                     if node2str not in nodes:
                         nodes.append(node2str)
                 else:
@@ -224,17 +228,20 @@ def parse(subject_index, df):
                     #print(subject_field_prefix)
 
                     newstr = subject_field_prefix+":"+str(df.iloc[i, subject_index]) +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+str(addval)+"\t"+object_edge_labels[j]+"\t"+"GOLD"
-                    print("adding "+newstr)
+                    if (debug):
+                        print("adding "+newstr)
                     if newstr not in edges:
                         edges.append(newstr)
 
                     node1str = subject_field_prefix + ":" + str(df.iloc[i, subject_index]) + "\t" + str(df.iloc[i, subject_index]) +"\t"+subject_field_category +"\tGOLD"
-                    print("adding " + node1str)
+                    if (debug):
+                        print("adding " + node1str)
                     if node1str not in nodes:
                         nodes.append(node1str)
 
                     node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[j] +"\tGOLD"
-                    print("adding " + node2str)
+                    if (debug):
+                        print("adding " + node2str)
                     if node2str not in nodes:
                         nodes.append(node2str)
 
@@ -254,7 +261,7 @@ tuple1 = load(source_path)
 subject_index = tuple1[0]
 df = tuple1[1]
 
-tuple2 = parse(subject_index, df)
+tuple2 = parse(subject_index, df,  debug)
 edge_output = tuple2[0]
 edge_outfile = "IMGVR_sample_KGX_edges.tsv"
 print("writing "+edge_outfile)
