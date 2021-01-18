@@ -127,7 +127,7 @@ object_edge_labels = [
 
 
 kgx_header_edges = "subject\tedge_label\tobject\trelation\tprovided_by\n"
-kgx_header_nodes = "id\tname\tcategory\tprovided_by\\n"
+kgx_header_nodes = "id\tname\tcategory\tprovided_by\n"
 
 
 
