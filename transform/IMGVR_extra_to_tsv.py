@@ -440,7 +440,8 @@ def write(output, outfile, header):
 
 
 ###
-source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1_1000.tsv'
+source_path = '/kbase/ke/data/IMG_VR/IMG_VR_2020-09-10_5/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv'
+#source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1_1000.tsv'
 #tax_map_path = '/Users/marcin/Documents/KBase/KE/NCBItaxonomy/new_taxdump/nodes.tsv'
 
 tuple1 = load(source_path)#, tax_map_path)
@@ -448,7 +449,7 @@ subject_index = tuple1[0]
 df = tuple1[1]
 #taxdf = tuple1[2]
 
-tuple2 = parse(subject_index, df, True)#False)#, taxdf)
+tuple2 = parse(subject_index, df, False)#, taxdf)
 edge_output = tuple2[0]
 edge_outfile = "IMGVR_extra_KGX_edges.tsv"
 print("writing "+edge_outfile)
