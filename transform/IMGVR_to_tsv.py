@@ -248,7 +248,8 @@ def write(output, outfile, header):
 
 
 ###
-source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
+source_path ='/kbase/ke/data/IMG_VR/IMG_VR_2020-09-10_5/IMG_VR_In-IMG-Only_Unique-IMG-IDs_Unique-Non-Isolate-Only_v1.tsv'
+#source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
 
 tuple1 = load(source_path)
 subject_index = tuple1[0]
