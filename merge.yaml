@@ -29,11 +29,12 @@ merged_graph:
         filename:
           - data/transform/imgvr/IMGVR_sample_KGX_nodes.tsv
           - data/transform/imgvr/IMGVR_sample_KGX_edges.tsv
-    envo:
+    imgvr_extra:
       input:
-        format: obojson
+        format: tsv
         filename:
-          - data/transform/envo/envo.json
+          - data/transform/imgvr_extra/IMGVR_extra_KGX_nodes.tsv
+          - data/transform/imgvr_extra/IMGVR_extra_KGX_edges.tsv
   operations:
     - name: kgx.operations.summarize_graph.generate_graph_stats
       args:
