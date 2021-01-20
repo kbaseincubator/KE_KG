@@ -80,7 +80,7 @@ def task_generator(
     seed:int=42
 
     """
-    for path in tqdm(glob("*embedding.npy"), desc="Embedding"):
+    for path in tqdm(glob("./IMGVR/extra/*embedding.npy"), desc="Embedding"):
         model_name = path.split("_")[0]
         embedding = np.load(path)
         for method in tqdm(EdgeTransformer.methods, desc="Methods", leave=False):
