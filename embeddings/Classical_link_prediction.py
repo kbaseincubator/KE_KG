@@ -45,8 +45,8 @@ train_size = 0.8
 pos_training, pos_validation = graph.connected_holdout(random_state=seed, train_size=train_size)
 neg_training, neg_validation = graph.sample_negatives(
     random_state=seed,
-    negatives_number=graph.get_edges_number(),
-    allow_selfloops=False
+    negatives_number=graph.get_edges_number()
+    #allow_selfloops=False
 ).random_holdout(random_state=seed, train_size=train_size)
 
 from tqdm.auto import tqdm
