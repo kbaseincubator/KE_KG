@@ -32,7 +32,7 @@ def build_link_prediction_model(input_shape:int):
 
 from ensmallen_graph import EnsmallenGraph
 
-graph = EnsmallenGraph.from_csv(
+graph = EnsmallenGraph.from_unsorted_csv(
     edge_path="./IMGVR/IMGVR_sample_KGX_edges.tsv",
     sources_column="subject",
     destinations_column="object",
