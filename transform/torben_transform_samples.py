@@ -5,12 +5,14 @@ formatted node and edge TSV files.
 Every column is parsed into a node/vertex.
 There is an edge from the first column (the Torben ID) to (most) every other
 column. For now, there are no other edges between columns.
+
+This should be run with the current working directory as the project/repo root
+path.
 """
-# import math
-# import numpy as np
 import csv
-import sys
 import os
+
+_SOURCE_PATH = 'data/source/torben/Torben_IMG-data_linked_to-GOLD_v2.tsv'
 
 # Configuration for every header from the source file.
 # - "edges_out" is a mapping from other column names to edge categories
@@ -151,8 +153,12 @@ _OUT_NODE_HEADERS = [
 ]
 
 
-def load(source_path):
-    with open(source_path) as fd:
+def load():
+    """
+    Load the source data and transform into data structures we can use to
+    easily generate a biolink formatted TSV
+    """
+    with open(_SOURCE_PATH) as fd:
         reader = csv.reader(fd, delimiter='\t')
         headers = next(reader)
         # Output data
@@ -206,21 +212,21 @@ def _col_blank(col) -> bool:
     return not isinstance(col, str) or len(col.strip()) == 0 or "data not in IMG" in col
 
 
-def write(nodes, edges, source_path):
+def write(nodes, edges):
     """
     Write nodes and edges to TSV output files based on the _OUT_NODE_HEADERS
     and _OUT_EDGE_HEADERS.
     """
-    basename = os.path.splitext(os.path.basename(source_path))[0]
-    node_path = basename + '.biolink-nodes.tsv'
-    edge_path = basename + '.biolink-edges.tsv'
-    with open(basename + '.nodes.tsv', 'w', newline='') as fd:
+    noext = os.path.splitext(_SOURCE_PATH)[0].replace('/source/', '/out/')
+    node_path = noext + '.biolink-nodes.tsv'
+    edge_path = noext + '.biolink-edges.tsv'
+    with open(node_path, 'w', newline='') as fd:
         writer = csv.writer(fd, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for node in nodes:
             row = [node[h] for h in _OUT_NODE_HEADERS]
             writer.writerow(row)
     print(f"Wrote {node_path}")
-    with open(basename + '.edges.tsv', 'w', newline='') as fd:
+    with open(edge_path, 'w', newline='') as fd:
         writer = csv.writer(fd, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for edge in edges:
             row = [edge[h] for h in _OUT_EDGE_HEADERS]
@@ -229,9 +235,5 @@ def write(nodes, edges, source_path):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        sys.stderr.write("Pass in the source file path as the first argument\n")
-        sys.exit(1)
-    source_path = sys.argv[1]
-    (nodes, edges) = load(source_path)
-    write(nodes, edges, source_path)
+    (nodes, edges) = load()
+    write(nodes, edges)
