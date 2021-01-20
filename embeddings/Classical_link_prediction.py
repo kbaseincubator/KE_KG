@@ -32,7 +32,7 @@ def build_link_prediction_model(input_shape:int):
 
 from ensmallen_graph import EnsmallenGraph
 
-graph = EnsmallenGraph.from_csv(
+graph = EnsmallenGraph.from_unsorted_csv(
     edge_path="./IMGVR/IMGVR_sample_KGX_edges.tsv",
     sources_column="subject",
     destinations_column="object",
@@ -40,14 +40,14 @@ graph = EnsmallenGraph.from_csv(
 )
 
 seed = 42
-train_percentage = 0.8
+train_size = 0.8
 
-pos_training, pos_validation = graph.connected_holdout(random_state=seed, train_percentage=train_percentage)
+pos_training, pos_validation = graph.connected_holdout(random_state=seed, train_size=train_size)
 neg_training, neg_validation = graph.sample_negatives(
     random_state=seed,
     negatives_number=graph.get_edges_number(),
     allow_selfloops=False
-).random_holdout(random_state=seed, train_percentage=train_percentage)
+).random_holdout(random_state=seed, train_size=train_size)
 
 from tqdm.auto import tqdm
 from glob import glob
@@ -61,7 +61,7 @@ def task_generator(
         pos_validation: EnsmallenGraph,
         neg_training: EnsmallenGraph,
         neg_validation: EnsmallenGraph,
-        train_percentage: float = 0.8,
+        train_size: float = 0.8,
         seed: int = 42
 ):
     """Create new generator of tasks.
