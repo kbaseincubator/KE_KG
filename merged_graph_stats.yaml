@@ -1,0 +1,169 @@
+edge_stats:
+  count_by_edge_label:
+    biolink:has_attribute:
+      count: 543212
+      provided_by:
+        GOLD:
+          count: 543212
+    biolink:has_quantitative_value:
+      count: 30948
+      provided_by:
+        GOLD:
+          count: 30948
+    biolink:has_taxonomic_rank:
+      count: 26794
+      provided_by:
+        GOLD:
+          count: 26794
+    biolink:is_host_for:
+      count: 3177
+      provided_by:
+        GOLD:
+          count: 3177
+    biolink:located_in:
+      count: 14984
+      provided_by:
+        GOLD:
+          count: 14984
+    biolink:occurs_in:
+      count: 71662
+      provided_by:
+        GOLD:
+          count: 71662
+    kbase:has_function:
+      count: 774852
+      provided_by:
+        imgvr_ko:
+          count: 774852
+    kbase:is_host_for:
+      count: 20851
+      provided_by:
+        GOLD:
+          count: 20851
+    unknown:
+      count: 0
+  count_by_spo:
+    biolink:Attribute-biolink:has_attribute-biolink:Attribute:
+      count: 170801
+      provided_by:
+        GOLD:
+          count: 170801
+    biolink:Attribute-biolink:has_quantitative_value-biolink:NamedThing:
+      count: 30948
+      provided_by:
+        GOLD:
+          count: 30948
+    biolink:Attribute-biolink:has_taxonomic_rank-biolink:OrganismTaxon:
+      count: 26794
+      provided_by:
+        GOLD:
+          count: 26794
+    biolink:Attribute-biolink:located_in-biolink:NamedThing:
+      count: 14984
+      provided_by:
+        GOLD:
+          count: 14984
+    biolink:Attribute-biolink:occurs_in-biolink:Attribute:
+      count: 71662
+      provided_by:
+        GOLD:
+          count: 71662
+    biolink:OrganismTaxon-biolink:has_attribute-biolink:Attribute:
+      count: 544
+      provided_by:
+        GOLD:
+          count: 544
+    biolink:OrganismTaxon-biolink:has_attribute-biolink:QuantityValue:
+      count: 424
+      provided_by:
+        GOLD:
+          count: 424
+    biolink:OrganismTaxon-biolink:has_attribute-kbase:otu:
+      count: 89540
+      provided_by:
+        GOLD:
+          count: 89540
+    biolink:OrganismTaxon-biolink:is_host_for-biolink:OrganismTaxon:
+      count: 3177
+      provided_by:
+        GOLD:
+          count: 3177
+    biolink:OrganismTaxon-kbase:is_host_for-kbase:otu:
+      count: 20851
+      provided_by:
+        GOLD:
+          count: 20851
+    kbase:otu-biolink:has_attribute-biolink:Attribute:
+      count: 142848
+      provided_by:
+        GOLD:
+          count: 142848
+    kbase:otu-biolink:has_attribute-biolink:QuantityValue:
+      count: 139055
+      provided_by:
+        GOLD:
+          count: 139055
+    kbase:otu-kbase:has_function-biolink:Function:
+      count: 774852
+      provided_by:
+        imgvr_ko:
+          count: 774852
+  edge_labels:
+  - biolink:has_attribute
+  - biolink:has_quantitative_value
+  - biolink:has_taxonomic_rank
+  - biolink:is_host_for
+  - biolink:located_in
+  - biolink:occurs_in
+  - kbase:has_function
+  - kbase:is_host_for
+  provided_by:
+  - GOLD
+  - imgvr_ko
+  total_edges: 1486480
+graph_name: KG-KBase Graph
+node_stats:
+  count_by_category:
+    biolink:Attribute:
+      count: 29125
+      provided_by:
+        GOLD:
+          count: 29125
+    biolink:Function:
+      count: 5698
+      provided_by:
+        EggNog:
+          count: 5698
+    biolink:NamedThing:
+      count: 1197
+      provided_by:
+        GOLD:
+          count: 1197
+    biolink:OrganismTaxon:
+      count: 2383
+      provided_by:
+        GOLD:
+          count: 2383
+    biolink:QuantityValue:
+      count: 4
+      provided_by:
+        GOLD:
+          count: 4
+    kbase:otu:
+      count: 128575
+      provided_by:
+        GOLD:
+          count: 128575
+    unknown:
+      count: 0
+  node_categories:
+  - biolink:Attribute
+  - biolink:Function
+  - biolink:NamedThing
+  - biolink:OrganismTaxon
+  - biolink:QuantityValue
+  - kbase:otu
+  provided_by:
+  - EggNog
+  - GOLD
+  total_nodes: 166982

@@ -35,6 +35,12 @@ merged_graph:
         filename:
           - data/transform/imgvr_extra/IMGVR_extra_KGX_nodes.tsv
           - data/transform/imgvr_extra/IMGVR_extra_KGX_edges.tsv
+    imgvr_ko:
+      input:
+        format: tsv
+        filename:
+          - data/transform/imgvr_ko/ko_virus_nodes.tsv
+          - data/transform/imgvr_ko/ko_virus_edges.tsv
   operations:
     - name: kgx.operations.summarize_graph.generate_graph_stats
       args:
