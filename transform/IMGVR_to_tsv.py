@@ -130,10 +130,8 @@ kgx_header_edges = "subject\tedge_label\tobject\trelation\tprovided_by\n"
 kgx_header_nodes = "id\tname\tcategory\tprovided_by\n"
 
 
-
 def load(source_path):
     df = pd.read_csv(source_path, sep='\t')
-
     columns = df.columns.str
     print(type(columns))
     print(columns)
