@@ -120,7 +120,7 @@ angle <- function(x,y){
   as.numeric(theta)
 }
 
-run_search <- function(query, query_data, data, distance, cutoff, hits) {
+run_search <- function(query, query_data, data, distance, cutoff, hits, search_string) {
 
   qindex <- which(row.names(query_data) == query)
 
@@ -188,7 +188,7 @@ run_search <- function(query, query_data, data, distance, cutoff, hits) {
 
     # need next line only if output file name cannot have colon ':' symbol
     #query_output_name<-gsub(":", "_", query_output_name)
-    query_output_name<-node_data[as.integer(output_data$V1[1])+1,]$id
+    query_output_name<-search_string
 
     for(i in 1:nrow(output_data)) {
       output_data$V1[i]<-node_data[as.integer(output_data$V1[i])+1,]$id
@@ -214,6 +214,6 @@ print(row.names(data)[queries])
 for(i in 1:length(queries)) {
   print(paste("running", row.names(data)[queries[i]]))
   #run_search( row.names(data)[queries[i]], data[queries[i],], data, distance="cosine", cutoff=0.85, hits = 1000)
-  run_search( row.names(data)[queries[i]], data[queries[i],], data, distance, cutoff, hits)
+  run_search( row.names(data)[queries[i]], data[queries[i],], data, distance, cutoff, hits, search_string)
 }
 
