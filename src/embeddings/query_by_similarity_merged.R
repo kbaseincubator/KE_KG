@@ -20,11 +20,12 @@ head(node_data)
 
 #GOLD:bulk_soil
 
+row.names(data) <- node_data$id
+
 grep("GOLD:anaerobic$", node_data$id)
 index <- grep("GOLD:anaerobic$", node_data$id)
 node_data[index,]
 
-#row.names(data) <- node_data$V2
 #write.table(data, file="../IMGVR/SkipGram_embedding_IMGVR_extra_wids.tsv",sep="\t", row.names = F)
 
 

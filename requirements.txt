@@ -3,4 +3,5 @@ numpy
 pandas
 seaborn
 matplotlib
-
+wget
+plotly
