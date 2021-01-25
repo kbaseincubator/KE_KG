@@ -188,6 +188,7 @@ def parse(subject_index, df, debug=False):#, taxdf):
                 addval = str(addval)
                 #vOTU to host, length, topology
                 if "vOTU" == object_fields[j]:
+
                     object_index_now = object_fields.index('Host_taxonomy_prediction')
                     j_second = df.columns.get_loc(object_fields[object_index_now])
                     addvalnow = df.iloc[i, j_second]
@@ -276,9 +277,9 @@ def parse(subject_index, df, debug=False):#, taxdf):
                     addvalnow = df.iloc[i, j_second]
                     if not pd.isnull(addvalnow):
                         addvalnow = str(addvalnow)
-                        newstr = object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tbiolink:is_host_for\t" +\
+                        newstr = object_field_prefixes[object_index_now] + ":" + str(addvalnow) + "\tkbase:is_host_for\t" +\
                                  object_field_prefixes[j] + ":" + str(
-                                 addval) + "\tbiolink:is_host_for\t" + "GOLD"
+                                 addval) + "\tkbase:is_host_for\t" + "GOLD"
                         if(debug):
                             print("adding V " + newstr)
                         if newstr not in edges:
@@ -381,10 +382,26 @@ def parse(subject_index, df, debug=False):#, taxdf):
                             print("adding V " + node2str)
                         if node2str not in nodes:
                             nodes.append(node2str)
+                #adding just edge for host -> virus topology (in host genome)
+                elif "Host_taxonomy_prediction  " == object_fields[j]:
 
-                            # taxa to host, length, topology, vOTU
+                    object_index_now = object_fields.index('Topology')
+                        j_second = df.columns.get_loc(object_fields[object_index_now])
+                        addvalnow = df.iloc[i, j_second]
+                        if not pd.isnull(addvalnow):
+                            addvalnow = str(addvalnow)
+                            newstr = object_field_prefixes[j] + ":" + str(
+                                addval) + "\tbiolink:has_attribute\t" + \
+                                     object_field_prefixes[object_index_now] + ":" + str(
+                                addvalnow) + "\tbiolink:has_attribute\t" + "GOLD"
+                            if (debug):
+                                print("adding V " + newstr)
+                            if newstr not in edges:
+                                edges.append(newstr)
+
                 elif "Ecosystem_classification" == object_fields[j]:
                     if (addval not in ['na;na;na;na;na;na']):
+                        addval_orig = addval
                         if (debug):
                             print("Ecosystem " + addval)
                         terms = addval.split(";")
@@ -409,7 +426,23 @@ def parse(subject_index, df, debug=False):#, taxdf):
                                     print("adding E " + node2str)
                                 if node2str not in nodes:
                                     nodes.append(node2str)
-                elif object_fields[j] not in ['Length','Topology', 'Ecosystem_classification'] and subject_val != 'nan':
+
+                                ###link individual terms to quintiplet
+                                newstr = object_field_prefixes[j] + ":" + terms[k] + "\t" + object_edge_labels[j] + \
+                                         "\t" + subject_field_prefix + ":" + addval_orig + "\t" + object_edge_labels[j] + "\t" + "GOLD"
+                                if (debug):
+                                    print("adding E " + newstr)
+                                if newstr not in edges:
+                                    edges.append(newstr)
+
+                                node1str = subject_field_prefix + ":" + addval_orig + "\t" + addval_orig + "\t" + subject_field_category + "\tGOLD"
+                                if (debug):
+                                    print("adding E " + node1str)
+                                if node1str not in nodes:
+                                    nodes.append(node1str)
+
+                #Add final excluding viral metadata
+                if object_fields[j] not in ['Length','Topology', 'Ecosystem_classification'] and subject_val != 'nan':
                     ###add default to sample - X link
                     if(addval not in ['na;na;na;na;na;na']):
                         newstr = subject_field_prefix+":"+subject_val +"\t"+object_edge_labels[j]+"\t"+object_field_prefixes[j]+":"+addval+"\t"+object_edge_labels[j]+"\t"+"GOLD"

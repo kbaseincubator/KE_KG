@@ -262,7 +262,7 @@ tuple1 = load(source_path)
 subject_index = tuple1[0]
 df = tuple1[1]
 
-tuple2 = parse(subject_index, df,  True)
+tuple2 = parse(subject_index, df,  False)
 edge_output = tuple2[0]
 edge_outfile = "IMGVR_sample_KGX_edges.tsv"
 print("writing "+edge_outfile)
