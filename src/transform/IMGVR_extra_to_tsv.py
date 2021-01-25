@@ -408,7 +408,7 @@ def parse(subject_index, df, debug=False):  # , taxdf):
                 if (addval not in ['na;na;na;na;na;na']):
                     addval_orig = addval
                     if (debug):
-                        print("Ecosystem " + addval)
+                        print("Ecosystem " + str(addval))
                     terms = addval.split(";")
                     for k in range(0, len(terms)):
                         newstr = subject_field_prefix + ":" + subject_val + "\t" + object_edge_labels[j] + "\t" + \
@@ -434,14 +434,14 @@ def parse(subject_index, df, debug=False):  # , taxdf):
 
                         ###link individual terms to quintiplet
                         newstr = object_field_prefixes[j] + ":" + terms[k] + "\t" + object_edge_labels[j] + \
-                                 "\t" + subject_field_prefix + ":" + addval_orig + "\t" + object_edge_labels[
+                                 "\t" + subject_field_prefix + ":" + str(addval_orig) + "\t" + object_edge_labels[
                                      j] + "\t" + "GOLD"
                         if (debug):
                             print("adding E " + newstr)
                         if newstr not in edges:
                             edges.append(newstr)
 
-                        node1str = subject_field_prefix + ":" + addval_orig + "\t" + addval_orig + "\t" + subject_field_category + "\tGOLD"
+                        node1str = subject_field_prefix + ":" + str(addval_orig) + "\t" + str(addval_orig) + "\t" + subject_field_category + "\tGOLD"
                         if (debug):
                             print("adding E " + node1str)
                         if node1str not in nodes:
@@ -452,7 +452,7 @@ def parse(subject_index, df, debug=False):  # , taxdf):
                 ###add default to sample - X link
                 if (addval not in ['na;na;na;na;na;na']):
                     newstr = subject_field_prefix + ":" + subject_val + "\t" + object_edge_labels[j] + "\t" + \
-                             object_field_prefixes[j] + ":" + addval + "\t" + object_edge_labels[j] + "\t" + "GOLD"
+                             object_field_prefixes[j] + ":" + str(addval) + "\t" + object_edge_labels[j] + "\t" + "GOLD"
                     if (debug):
                         print("adding S " + newstr)
                     if newstr not in edges:
@@ -464,7 +464,7 @@ def parse(subject_index, df, debug=False):  # , taxdf):
                     if node1str not in nodes:
                         nodes.append(node1str)
 
-                    node2str = object_field_prefixes[j] + ":" + addval + "\t" + addval + "\t" + object_field_categories[
+                    node2str = object_field_prefixes[j] + ":" + str(addval) + "\t" + str(addval) + "\t" + object_field_categories[
                         j] + "\tGOLD"
                     if (debug):
                         print("adding S " + node2str)
