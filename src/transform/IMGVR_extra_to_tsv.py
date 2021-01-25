@@ -472,7 +472,7 @@ def parse(subject_index, df, debug=False):  # , taxdf):
                         nodes.append(node2str)
 
 
-return (edges, nodes)
+    return (edges, nodes)
 
 
 def write(output, outfile, header):
