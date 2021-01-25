@@ -183,14 +183,14 @@ def parse(subject_index, df, debug=False):
                         addval = int(round(addval, 0))
 
                 #print("addval "+str(addval_orig)+"\t"+str(addval))
-            elif "GOLD Ecosystem Subtype" == object_fields[j] and addval in ["Unclassified"]:
+            elif addval in ["Unclassified", "unclassified"]:#"GOLD Ecosystem Subtype" == object_fields[j] and
                 addval = np.NAN
             elif "Latitude" == object_fields[j] or "Longitude" == object_fields[j]:
                 ###load pairwise distance file and ingest as sample-sample in separate code block
                 addval = np.NAN
 
             ###write the edge
-            if not pd.isnull(addval):
+            if not pd.isnull(addval) and addval != np.NAN:
 
                 ##special case to link study -> project and skip analysis -> project (analysis -> study happens independently)
                 if "GOLD Sequencing Project ID" == object_fields[j]:
@@ -199,14 +199,14 @@ def parse(subject_index, df, debug=False):
 
                     subject_index_now = object_fields.index("GOLD Study ID")
 
-                    newstr = object_field_prefixes[subject_index_now] + ":" + str(df.iloc[i, subject_index_now]) + "\tbiolink:has_attribute\t" + \
+                    newstr = object_field_prefixes[subject_index] + ":" + str(df.iloc[i, subject_index]) + "\tbiolink:has_attribute\t" + \
                              object_field_prefixes[j] + ":" + str(addval) + "\tbiolink:has_attribute\t" + "GOLD"
                     if (debug):
                         print("adding " + newstr)
                     if newstr not in edges:
                         edges.append(newstr)
 
-                    node1str = object_field_prefixes[subject_index_now]  + ":" + str(df.iloc[i, subject_index_now]) + "\t" + str(
+                    node1str = object_field_prefixes[subject_index]  + ":" + str(df.iloc[i, subject_index]) + "\t" + str(
                         df.iloc[i, subject_index]) + "\t" + object_field_categories[subject_index_now]+"\tGOLD"
                     if (debug):
                         print("adding " + node1str)
@@ -219,7 +219,7 @@ def parse(subject_index, df, debug=False):
                         print("adding " + node2str)
                     if node2str not in nodes:
                         nodes.append(node2str)
-                else:
+                elif(addval != 'Unclassified'):
                     #print(i)
                     #print(j)
                     #print(subject_index)
@@ -255,14 +255,14 @@ def write(output, outfile, header):
 
 
 ###
-source_path ='/kbase/ke/data/IMG_VR/IMG_VR_2020-09-10_5/IMG_VR_In-IMG-Only_Unique-IMG-IDs_Unique-Non-Isolate-Only_v1.tsv'
-#source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
+#source_path ='/kbase/ke/data/IMG_VR/IMG_VR_2020-09-10_5/IMG_VR_In-IMG-Only_Unique-IMG-IDs_Unique-Non-Isolate-Only_v1.tsv'
+source_path = '/Users/marcin/Documents/KBase/KE/IMGVR/IMGVR_samples_table.tsv'
 
 tuple1 = load(source_path)
 subject_index = tuple1[0]
 df = tuple1[1]
 
-tuple2 = parse(subject_index, df,  False)
+tuple2 = parse(subject_index, df,  True)
 edge_output = tuple2[0]
 edge_outfile = "IMGVR_sample_KGX_edges.tsv"
 print("writing "+edge_outfile)
