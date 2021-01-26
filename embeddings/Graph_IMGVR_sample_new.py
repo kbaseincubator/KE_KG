@@ -1,4 +1,7 @@
-import silence_tensorflow.auto
+try:
+   import silence_tensorflow.auto
+except:
+   pass
 import numpy as np
 
 from ensmallen_graph import EnsmallenGraph
