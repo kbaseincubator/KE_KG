@@ -54,13 +54,13 @@ if (( args$cutoff >= 1 ) || ( args$cutoff <= 0 )) {
 # }
 
 # load non-argparse libraries only after checking for required input files
-library("pheatmap")
-library("amap")
-library("gplots")
-library("RColorBrewer")
-library("cluster")
-library("grid")
-library("tcR")
+#library("pheatmap")
+#library("amap")
+#library("gplots")
+#library("RColorBrewer")
+#library("cluster")
+#library("grid")
+#library("tcR")
 
 embedding_file <- args$embeddings
 nodes_file <- args$nodes
@@ -80,26 +80,28 @@ data <- read.csv(embedding_file, sep="\t", header=TRUE, row.names=1)
 head(data)
 dim(data)
 
+
+
 #nodes_file <- "/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv"
 #node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
 node_data <- read.csv(nodes_file, sep="\t",header=T)
 dim(node_data)
 head(node_data)
 
+row.names(data) <- node_data$id
+
 #search_string<-"GOLD:bulk_soil"
 search_string_input<-paste0(search_string,'$')
 
 #grep("GOLD:anaerobic$", node_data$id)
 grep(search_string_input, node_data$id)
-#index <- grep("GOLD:anaerobic$", node_data$id)
 index <- grep(search_string_input, node_data$id)
 
 node_data[index,]
 
-#row.names(data) <- node_data$V2
+
 #write.table(data, file="../IMGVR/SkipGram_embedding_IMGVR_extra_wids.tsv",sep="\t", row.names = F)
 
-#row.names(data)[index]
 #Alkaline = 3
 
 ###
@@ -143,6 +145,8 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
 
   output <- c()
   labels <- c()
+  max_non_1 <- 0
+  max_non_1_label <- ""
   for(j in 1:dim(data)[1]) {
 
     if(j != qindex) {
@@ -151,6 +155,11 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
 
         #print(as.numeric(data[j,]))
         dist <- cosine_simfast(as.numeric(query_data[qindex,]), as.numeric(data[j,]))
+        if(dist != 1 && dist > max_non_1) {
+          max_non_1 <- dist
+          max_non_1_label <- row.names(data)[j]
+          print(paste("max ", max_non_1_label, max_non_1, sep=" "))
+        }
         #print(paste("dist cos", dist))
         if(dist > cutoff) {
           #print(row.names(datahuman)[j])
@@ -162,6 +171,11 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
       }
       else if(distance == "euclidean") {
         dist <- dist(rbind(as.numeric(query_data[qindex,]), as.numeric(data[j,])))
+        if(dist != 0 && dist < max_non_1) {
+          max_non_1 <- dist
+          max_non_1_label <- row.names(data)[j]
+          print(paste("min ", max_non_1_label, max_non_1, sep=" "))
+        }
         if(dist < cutoff) {
           #print(row.names(datahuman)[j])
           #print(paste("dist euc", dist))
