@@ -17,39 +17,39 @@ parser$add_argument("-c", "--cutoff", help="Indicate cutoff value (default: 0.85
 parser$add_argument("-z", "--num_hits", help="Indicate number of hits to retain and export (default: 1000)", default=1000)
 
 # get command line options, if help option encountered print help and exit,
-# otherwise if options not found on command line then set defaults, 
+# otherwise if options not found on command line then set defaults,
 args <- parser$parse_args()
 
 
 # print some progress messages if variables not entered correctly
-if ( args$embeddings == "" ) { 
+if ( args$embeddings == "" ) {
     write("Error: bad link to embeddings file. Exiting.\n", stderr())
     quit(status=1)
 }
 
-if ( args$nodes == "" ) { 
-    write("Error: bad link to nodes file. Exiting.\n", stderr()) 
+if ( args$nodes == "" ) {
+    write("Error: bad link to nodes file. Exiting.\n", stderr())
     quit(status=1)
 }
 
-if ( args$search_string == "" ) { 
-    write("Error: input a search string. Exiting.\n", stderr()) 
+if ( args$search_string == "" ) {
+    write("Error: input a search string. Exiting.\n", stderr())
     quit(status=1)
 }
 
-if (( !args$distance == "cosine" ) & ( !args$distance == "euclidean" )) { 
-    write("Error: incorrect distance method selected. Exiting.\n", stderr()) 
+if (( !args$distance == "cosine" ) & ( !args$distance == "euclidean" )) {
+    write("Error: incorrect distance method selected. Exiting.\n", stderr())
     quit(status=1)
 }
 
-if (( args$cutoff >= 1 ) || ( args$cutoff <= 0 )) { 
-    write("Error: incorrect cutoff selected. Exiting.\n", stderr()) 
+if (( args$cutoff >= 1 ) || ( args$cutoff <= 0 )) {
+    write("Error: incorrect cutoff selected. Exiting.\n", stderr())
     quit(status=1)
 }
 
 # not sure why this variable assertion isn't working, will need to address later
-# if ( args$num_hits <= 0 || all.equal(args$num_hits, as.integer(args$num_hits)) != TRUE ) { 
-#     write("Error: incorrect number of hits selected. Exiting.\n", stderr()) 
+# if ( args$num_hits <= 0 || all.equal(args$num_hits, as.integer(args$num_hits)) != TRUE ) {
+#     write("Error: incorrect number of hits selected. Exiting.\n", stderr())
 #     quit(status=1)
 # }
 
@@ -69,8 +69,8 @@ search_string <- args$search_string
 #cutoff <- 0.9
 #hits <- 1000
 distance <- args$distance
-cutoff <- args$cutoff
-hits <- args$num_hits
+cutoff <- as.numeric(args$cutoff) # if not forced to a numeric type then the script will run but not respect cutoff input cutoff values
+hits <- as.numeric(args$num_hits)
 
 setwd(args$working_directory)
 
@@ -79,7 +79,6 @@ setwd(args$working_directory)
 data <- read.csv(embedding_file, sep="\t", header=TRUE, row.names=1)
 head(data)
 dim(data)
-
 
 
 #nodes_file <- "/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv"
@@ -123,31 +122,31 @@ angle <- function(x,y){
 }
 
 run_search <- function(query, query_data, data, distance, cutoff, hits, search_string) {
-  
+
   qindex <- which(row.names(data) == query)
-  
+
   #print(as.numeric(query_data[qindex,]))
-  
+
   print(paste("qindex", qindex))
   if(length(qindex) == 0) {
     return("query not found")
   }
-  
+
   #print(paste(query, qindex))
-  
+
   if(distance == "euclidean" && cutoff > 0.1) {
     print("WARNING: large cutoff for Euclidean distance!")
   }
   start_time <- Sys.time()
   total <- 0
   all <- c()
-  
+
   output <- c()
   labels <- c()
   max_non_1 <- 0
   max_non_1_label <- ""
   for(j in 1:dim(data)[1]) {
-    
+
     if(distance == "cosine") {
       #print(as.numeric(query_data))
       #print(as.numeric(data[j,]))
@@ -184,7 +183,7 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
         total <- total +1
       }
     }
-    
+
     #all <- c(all, as.numeric(dist))
   }
 
@@ -227,4 +226,3 @@ for(i in 1:length(queries)) {
   #run_search( row.names(data)[queries[i]], data[queries[i],], data, distance="cosine", cutoff=0.85, hits = 1000)
   run_search( row.names(data)[queries[i]], data[queries[i],], data, distance, cutoff, hits, search_string)
 }
-
