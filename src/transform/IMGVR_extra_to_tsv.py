@@ -107,7 +107,7 @@ object_edge_labels = [
     # Gene content Pfam;VOG;VPF
 ]
 
-kgx_header_edges = "subject\tedge_label\tobject\trelation\tprovided_by\n"
+kgx_header_edges = "subject\tpredicate\tobject\trelation\tprovided_by\n"
 kgx_header_nodes = "id\tname\tcategory\tprovided_by\n"
 
 
@@ -151,8 +151,13 @@ def parse(subject_index, df, debug=False):  # , taxdf):
 
     # convert chars to underscore
     #
+    #df = df.replace(',', '_', regex=True)
+    #df = df.replace(' ', '_', regex=True)
+
     df = df.replace(',', '_', regex=True)
     df = df.replace(' ', '_', regex=True)
+    df = df.replace(':', '_', regex=True)
+    df = df.replace('__', '_', regex=True)
     # convert to lower case for variation
     df = df.applymap(lambda s: s.lower() if type(s) == str else s)
 
