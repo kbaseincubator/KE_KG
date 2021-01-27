@@ -124,7 +124,8 @@ angle <- function(x,y){
 
 run_search <- function(query, query_data, data, distance, cutoff, hits, search_string) {
 
-  qindex <- which(row.names(query_data) == query)
+  
+  qindex <- which(row.names(data) == query)
 
   #print(as.numeric(query_data[qindex,]))
 
@@ -135,12 +136,10 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
 
   #print(paste(query, qindex))
 
-  if(distance == "euclidean" && cutoff == 0.9) {
-    print("resetting distance cutoff for Euclidean to 0.1")
-    cutoff = 0.1
+  if(distance == "euclidean" && cutoff > 0.1) {
+    print("WARNING: large cutoff for Euclidean distance!")
   }
   start_time <- Sys.time()
-  total <- 0
   all <- c()
 
   output <- c()
@@ -154,41 +153,38 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
       #dist <- angle(as.numeric(data[qindex,]), as.numeric(data[j,]))
 
       #print(as.numeric(data[j,]))
-      dist <- cosine_simfast(as.numeric(query_data[qindex,]), as.numeric(data[j,]))
+      dist <- cosine_simfast(as.numeric(query_data), as.numeric(data[j,]))
       if(dist != 1 && dist > max_non_1) {
         max_non_1 <- dist
         max_non_1_label <- row.names(data)[j]
         print(paste("max ", max_non_1_label, max_non_1, sep=" "))
       }
       #print(paste("dist cos", dist))
-      if(dist > cutoff) {
+      if(dist >= cutoff) {
+        print(paste("found cos ", row.names(data)[j], dist, sep=" "))
         #print(row.names(datahuman)[j])
         output <- c(output, dist)
         addval <- row.names(data)[j]#paste(query, row.names(data)[j], sep="\t")
         labels <- c(labels, addval)
-        total <- total + 1
       }
     }
     else if(distance == "euclidean") {
-      dist <- dist(rbind(as.numeric(query_data[qindex,]), as.numeric(data[j,])))
+      dist <- dist(rbind(as.numeric(query_data), as.numeric(data[j,])))
       if(dist != 0 && dist < max_non_1) {
         max_non_1 <- dist
         max_non_1_label <- row.names(data)[j]
         print(paste("min ", max_non_1_label, max_non_1, sep=" "))
       }
-      if(dist < cutoff) {
+      if(dist <= cutoff) {
+        print(paste("found euc ", row.names(data)[j], dist, sep=" "))
         #print(row.names(datahuman)[j])
         #print(paste("dist euc", dist))
         output <- c(output, dist)
         addval <-  row.names(data)[j]#paste(query,, sep="\t")
         labels <- c(labels, addval)
-        total <- total +1
       }
     }
-
-    all <- c(all, as.numeric(dist))
-
-    #}
+    #all <- c(all, as.numeric(dist))
   }
 
   names(output) <- labels
