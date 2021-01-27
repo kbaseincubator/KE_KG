@@ -212,8 +212,8 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
 
     print(paste("saving ", dim(sorted_top), outfile))
 
-    #write.table(sorted_top, outfile, sep="\t", col.names=F)
-    write.table(output_data, outfile, sep="\t", col.names=F, row.names=F, quote=F)
+    write.table(sorted_top, outfile, sep="\t", col.names=F)
+    #write.table(output_data, outfile, sep="\t", col.names=F, row.names=F, quote=F)
   }
   else {
     print("nothing")
