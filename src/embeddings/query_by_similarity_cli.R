@@ -123,49 +123,48 @@ angle <- function(x,y){
 }
 
 run_search <- function(query, query_data, data, distance, cutoff, hits, search_string) {
-
   
   qindex <- which(row.names(data) == query)
-
+  
   #print(as.numeric(query_data[qindex,]))
-
+  
   print(paste("qindex", qindex))
   if(length(qindex) == 0) {
     return("query not found")
   }
-
+  
   #print(paste(query, qindex))
-
+  
   if(distance == "euclidean" && cutoff > 0.1) {
     print("WARNING: large cutoff for Euclidean distance!")
   }
   start_time <- Sys.time()
+  total <- 0
   all <- c()
-
+  
   output <- c()
   labels <- c()
   max_non_1 <- 0
   max_non_1_label <- ""
   for(j in 1:dim(data)[1]) {
-
-    #if(j != qindex) {
+    
     if(distance == "cosine") {
-      #dist <- angle(as.numeric(data[qindex,]), as.numeric(data[j,]))
-
+      #print(as.numeric(query_data))
       #print(as.numeric(data[j,]))
       dist <- cosine_simfast(as.numeric(query_data), as.numeric(data[j,]))
+      #print(paste("dist cos", dist))
       if(dist != 1 && dist > max_non_1) {
         max_non_1 <- dist
         max_non_1_label <- row.names(data)[j]
         print(paste("max ", max_non_1_label, max_non_1, sep=" "))
       }
-      #print(paste("dist cos", dist))
       if(dist >= cutoff) {
         print(paste("found cos ", row.names(data)[j], dist, sep=" "))
         #print(row.names(datahuman)[j])
         output <- c(output, dist)
         addval <- row.names(data)[j]#paste(query, row.names(data)[j], sep="\t")
         labels <- c(labels, addval)
+        total <- total + 1
       }
     }
     else if(distance == "euclidean") {
@@ -182,8 +181,10 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
         output <- c(output, dist)
         addval <-  row.names(data)[j]#paste(query,, sep="\t")
         labels <- c(labels, addval)
+        total <- total +1
       }
     }
+    
     #all <- c(all, as.numeric(dist))
   }
 
