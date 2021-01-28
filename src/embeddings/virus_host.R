@@ -27,7 +27,7 @@ sum(hlens>1)
 
 virus_host$Host_taxonomy_prediction <- gsub(" ","_",virus_host$Host_taxonomy_prediction)
 hosts <- paste("NCBItaxon:",tolower(unique(virus_host$Host_taxonomy_prediction[hlens>1])),sep="")
-#hosts_full <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction[hlens>1]),sep="")
+hosts_full <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction[hlens>1]),sep="")
 #hosts <- gsub(" ","_",hosts)
 length(hosts)
 class(node_labels[1])
@@ -37,18 +37,23 @@ grep("vOTU:votu_219688", node_labels)
 #hosts_index <- hosts %in% node_labels
 vOTUs_index <- match(vOTUs, node_labels)
 hosts_index <- match(hosts, node_labels)
+hosts_full_index <- match(hosts_full, node_labels)
 
 length(unique(hosts))
 sum(!is.na(hosts_index))
 sum(is.na(hosts_index))
 hosts[is.na(hosts_index)][1:10]
 
+length(unique(hosts_full))
+sum(!is.na(hosts_full_index))
+sum(is.na(hosts_full_index))
+hosts[is.na(hosts_full_index)][1:10]
+
 host_curie <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),sep="")
 
 
 virus_host__subtract <- c()
 virus_host__subtract_label <- c()
-
 
 for(i in 1:length(vOTUs_index)){
   
@@ -68,11 +73,11 @@ for(i in 1:length(vOTUs_index)){
     vh_embed <- v_embed - h_embed 
     virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
     
-    virus_host__subtract_label <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep="")
+    virus_host__subtract_label <- c(virus_host__subtract_label, paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep=""))
   }
-  else {
-    print(paste("missing ", curhost))
-  }
+  #else {
+  #  print(paste("missing ", curhost))
+  #}
   #}
 }
 row.names(virus_host__subtract) <- virus_host__subtract_label
@@ -85,19 +90,52 @@ print(outfile_nodes)
 write.table(virus_host__subtract, file=outfile, sep="\t")
 write.table(virus_host__subtract_label, file=outfile, sep="\t")
 
+
+###create negative samples
 full_index <- seq(1, length(node_labels), 1)
 length(full_index)
-length(hosts_index)
-training_index <- hosts_index
-sum(!(hosts_index %in% full_index))
-negative_index <- full_index[!hosts_index %in% full_index]
+length(hosts_full_index)
+training_index <- hosts_full_index
+sum(!(hosts_full_index %in% full_index))
+negative_index <- full_index[!(full_index %in% hosts_full_index)]
+length(negative_index)
 negative_sample <- sample(1:length(negative_index), length(training_index))
+head(negative_sample)
+
+sum(is.na(match(negative_sample, hosts_full_index)))
+
+write.table(negative_sample, file="virus_host__negative_sample.tsv", sep="\t")
 
 sum(is.na(hosts))
 sum(is.na(hosts_index))
 length(unique(hosts[(hosts_index %in% full_index)]))
 length(unique(hosts[!(hosts_index %in% full_index)]))
 unique(hosts[!(hosts_index %in% full_index)])[1:10]
+
+
+virus_host__subtract__NEG <- c()
+virus_host__subtract_label__NEG <- c()
+
+for(i in 1:length(negative_sample)){
+  
+  curvir <- vOTUs[negative_sample[i]]
+
+  if(i %% 100 == 0) {
+    print(i)
+  }
+  hindex <- which(hashost)
+  v_embed <- embeddings[vOTUs_index[i],]
+  #for(j in 1:length(hosts_index)){
+  h_embed <- embeddings[hosts_index[hindex],]
+  
+  vh_embed <- v_embed - h_embed 
+  virus_host__subtract__NEG <- rbind(virus_host__subtract, vh_embed)
+  
+  virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep=""))
+}
+row.names(virus_host__subtract__NEG) <- virus_host__subtract_label__NEG
+dim(virus_host__subtract__NEG)
+
 
 
 outfile <- "virus_host_NEGATIVE__subtract.tsv"
