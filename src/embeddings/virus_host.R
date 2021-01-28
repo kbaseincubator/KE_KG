@@ -73,7 +73,7 @@ for(i in 1:length(vOTUs_index)){
     vh_embed <- v_embed - h_embed 
     virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
     
-    virus_host__subtract_label <- c(virus_host__subtract_label, paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep=""))
+    virus_host__subtract_label <- c(virus_host__subtract_label, paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],"__",i,sep=""))
   }
   #else {
   #  print(paste("missing ", curhost))
