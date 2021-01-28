@@ -60,20 +60,25 @@ for(i in 1:length(vOTUs_index)){
   curhost <- host_curie[i]
   #print(curhost)
   hashost <- curhost %in% hosts
+  
   #print(hashost)
   if(hashost) {
     if(i %% 100 == 0) {
       print(paste("vh", i))
     }
-    hindex <- which(hashost)
-    v_embed <- embeddings[vOTUs_index[i],]
-    #for(j in 1:length(hosts_index)){
-    h_embed <- embeddings[hosts_index[hindex],]
     
-    vh_embed <- v_embed - h_embed 
-    virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
-    
-    virus_host__subtract_label <- c(virus_host__subtract_label, paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],"__",i,sep=""))
+    curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep="")
+    if(!(curlabel %in% virus_host__subtract_label)) {
+      hindex <- which(hashost)
+      v_embed <- embeddings[vOTUs_index[i],]
+      #for(j in 1:length(hosts_index)){
+      h_embed <- embeddings[hosts_index[hindex],]
+      
+      vh_embed <- v_embed - h_embed 
+      virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
+      
+      virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
+    }
   }
   #else {
   #  print(paste("missing ", curhost))
