@@ -38,7 +38,7 @@ virus_host__subtract <- c()
 virus_host__subtract_label <- c()
 for(i in 1:length(vOTUs_index)){
   if(i %% 100) {
-    print(".")
+    print(i)
   }
   v_embed <- embeddings[vOTUs_index[i],]
   #for(j in 1:length(hosts_index)){
@@ -55,7 +55,8 @@ dim(virus_host__subtract)
 
 outfile <- "virus_host__subtract.tsv"
 outfile_nodes <- "virus_host__subtract_labels.tsv"
-
+print(outfile)
+print(outfile_nodes)
 write.table(virus_host__subtract, file=outfile, sep="\t")
 write.table(virus_host__subtract_label, file=outfile, sep="\t")
 
@@ -69,6 +70,9 @@ new_virus_host__subtract_label <- c()
 for(i in 1:length(random_new_viruses)){
   v_embed <- embeddings[random_new_viruses[i],]
     for(j in 1:length(hosts_index)){
+      if(j %% 100) {
+        print(j)
+      }
       h_embed <- embeddings[hosts_index[j],]
       
       vh_embed <- v_embed - h_embed 
@@ -83,7 +87,8 @@ dim(new_virus_host__subtract)
 
 outfile <- "virus_host_NEW__subtract.tsv"
 outfile_nodes <- "virus_host_NEW_subtract_labels.tsv"
-
+print(outfile)
+print(outfile_nodes)
 write.table(new_virus_host__subtract, file=outfile, sep="\t")
 write.table(new_virus_host__subtract_label, file=outfile, sep="\t")
 
