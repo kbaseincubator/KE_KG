@@ -63,7 +63,7 @@ for(i in 1:length(vOTUs_index)){
   #print(hashost)
   if(hashost) {
     if(i %% 100 == 0) {
-      print(i)
+      print(paste("vh", i))
     }
     hindex <- which(hashost)
     v_embed <- embeddings[vOTUs_index[i],]
@@ -121,17 +121,18 @@ for(i in 1:length(negative_sample)){
   curvir <- vOTUs[negative_sample[i]]
 
   if(i %% 100 == 0) {
-    print(i)
+    print(paste("v", i))
   }
-  hindex <- which(hashost)
+  hindex_rand <- sample(length(hosts_full_index), 1)
+  hindex <- hosts_full_index[hindex_rand]
   v_embed <- embeddings[vOTUs_index[i],]
   #for(j in 1:length(hosts_index)){
-  h_embed <- embeddings[hosts_index[hindex],]
+  h_embed <- embeddings[hindex,]
   
   vh_embed <- v_embed - h_embed 
   virus_host__subtract__NEG <- rbind(virus_host__subtract, vh_embed)
   
-  virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep=""))
+  virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, paste(node_labels[vOTUs_index[i]],"__",node_labels[hindex],sep=""))
 }
 row.names(virus_host__subtract__NEG) <- virus_host__subtract_label__NEG
 dim(virus_host__subtract__NEG)
