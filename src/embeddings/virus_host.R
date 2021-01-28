@@ -143,8 +143,8 @@ outfile <- "virus_host_NEGATIVE__subtract.tsv"
 outfile_nodes <- "virus_host_NEGATIVE_subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.table(new_virus_host__subtract, file=outfile, sep="\t")
-write.table(new_virus_host__subtract_label, file=outfile, sep="\t")
+write.table(virus_host__subtract__NEG, file=outfile, sep="\t")
+write.table(virus_host__subtract_label__NEG, file=outfile, sep="\t")
 
 
 
