@@ -37,6 +37,7 @@ grep("vOTU:votu_219688", node_labels)
 #hosts_index <- hosts %in% node_labels
 vOTUs_index <- match(vOTUs, node_labels)
 hosts_index <- match(hosts, node_labels)
+length(hosts_index)
 hosts_full_index <- match(hosts_full, node_labels)
 
 length(unique(hosts))
@@ -67,16 +68,18 @@ for(i in 1:length(vOTUs_index)){
       print(paste("vh", i))
     }
     
-    curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep="")
-    if(!(curlabel %in% virus_host__subtract_label)) {
-      hindex <- which(hashost)
-      v_embed <- embeddings[vOTUs_index[i],]
-      #for(j in 1:length(hosts_index)){
-      h_embed <- embeddings[hosts_index[hindex],]
-      
-      vh_embed <- v_embed - h_embed 
-      virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
-      virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
+    if(!is.na(hosts_index[i])){
+      curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep="")
+      if(!(curlabel %in% virus_host__subtract_label)) {
+        hindex <- which(hashost)
+        v_embed <- embeddings[vOTUs_index[i],]
+        #for(j in 1:length(hosts_index)){
+        h_embed <- embeddings[hosts_index[hindex],]
+        
+        vh_embed <- v_embed - h_embed 
+        virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
+        virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
+      }
     }
   }
   #else {
