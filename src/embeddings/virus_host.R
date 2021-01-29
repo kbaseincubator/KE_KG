@@ -76,7 +76,6 @@ for(i in 1:length(vOTUs_index)){
       
       vh_embed <- v_embed - h_embed 
       virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
-      
       virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
     }
   }
@@ -129,22 +128,36 @@ virus_host__subtract__NEG <- c()
 virus_host__subtract_label__NEG <- c()
 
 for(i in 1:length(negative_sample)){
-  
-  curvir <- vOTUs[negative_sample[i]]
-
   if(i %% 100 == 0) {
     print(paste("v", i))
   }
-  hindex_rand <- sample(length(hosts_full_index), 1)
-  hindex <- hosts_full_index[hindex_rand]
-  v_embed <- embeddings[vOTUs_index[i],]
-  #for(j in 1:length(hosts_index)){
-  h_embed <- embeddings[hindex,]
   
-  vh_embed <- v_embed - h_embed 
-  virus_host__subtract__NEG <- rbind(virus_host__subtract, vh_embed)
+  curvir <- sample(1:length(vOTUs), 1)
+  curhost <- sample(1:length(hosts), 1)
   
-  virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, paste(node_labels[vOTUs_index[i]],"__",node_labels[hindex],sep=""))
+  curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
+  #curlabel <- virus_host__subtract_label[1]
+  #print(curlabel)
+  if(!(curlabel %in% virus_host__subtract_label)) {
+    
+    #hindex <- match(node_labels, hosts[curhost])
+    hindex <- hosts_index[curhost]
+    #print(hindex)
+    #print(node_labels[hindex])
+    
+    v_embed <- embeddings[curvir,]
+    #for(j in 1:length(hosts_index)){
+    h_embed <- embeddings[hindex,]
+    
+    vh_embed <- v_embed - h_embed 
+    virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
+    virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, paste(node_labels[vOTUs_index[i]],"__",node_labels[hindex],sep=""))
+  }
+  else {
+    i <- i-1
+    print("BACK")
+    print(curlabel)
+  }
 }
 row.names(virus_host__subtract__NEG) <- virus_host__subtract_label__NEG
 dim(virus_host__subtract__NEG)
@@ -177,7 +190,6 @@ for(i in 1:length(random_new_viruses_sample)){
       
       vh_embed <- v_embed - h_embed 
       new_virus_host__subtract <- rbind(new_virus_host__subtract, vh_embed)
-      
       new_virus_host__subtract_label <- c(paste(node_labels[random_new_viruses_sample[i]],"__",node_labels[hosts_index[j]],sep=""))
     }
 }
