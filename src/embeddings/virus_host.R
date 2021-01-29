@@ -92,7 +92,7 @@ outfile <- "virus_host__subtract.tsv"
 outfile_nodes <- "virus_host__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.table(virus_host__subtract, file=outfile, sep="\t")
+write.csv(virus_host__subtract, file=outfile, sep="\t")
 write.table(virus_host__subtract_label, file=outfile, sep="\t")
 
 
