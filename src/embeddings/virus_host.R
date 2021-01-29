@@ -92,8 +92,8 @@ outfile <- "virus_host__subtract.tsv"
 outfile_nodes <- "virus_host__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.csv(virus_host__subtract, file=outfile, sep="\t")
-write.table(virus_host__subtract_label, file=outfile, sep="\t")
+write.csv(virus_host__subtract, file=outfile)
+write.table(virus_host__subtract_label, file=outfile_nodes, sep="\t")
 
 
 ###create negative samples
@@ -104,6 +104,13 @@ training_index <- hosts_full_index
 sum(!(hosts_full_index %in% full_index))
 negative_index <- full_index[!(full_index %in% hosts_full_index)]
 length(negative_index)
+
+
+vOTUs_unique <- unique(vOTUs)
+length(hosts)
+length(vOTUs[hosts_index])
+virus_host_combos <- paste(vOTUs[hosts_index],"__",hosts,sep="")
+length(virus_host_combos)
 negative_sample <- sample(1:length(negative_index), length(training_index))
 head(negative_sample)
 
@@ -148,8 +155,8 @@ outfile <- "virus_host_NEGATIVE__subtract.tsv"
 outfile_nodes <- "virus_host_NEGATIVE_subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.csv(virus_host__subtract__NEG, file=outfile, sep="\t")
-write.table(virus_host__subtract_label__NEG, file=outfile, sep="\t")
+write.csv(virus_host__subtract__NEG, file=outfile)
+write.table(virus_host__subtract_label__NEG, file=outfile_nodes, sep="\t")
 
 
 
@@ -185,8 +192,8 @@ outfile <- "virus_host_NEW__subtract.tsv"
 outfile_nodes <- "virus_host_NEW_subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.csv(new_virus_host__subtract, file=outfile, sep="\t")
-write.table(new_virus_host__subtract_label, file=outfile, sep="\t")
+write.csv(new_virus_host__subtract, file=outfile)
+write.table(new_virus_host__subtract_label, file=outfile_nodes, sep="\t")
 
 
 
