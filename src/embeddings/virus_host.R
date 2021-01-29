@@ -154,14 +154,14 @@ write.table(virus_host__subtract_label__NEG, file=outfile, sep="\t")
 
 
 
-random_new_viruses <- sample(1:length(vOTUs), 10)#runif(10, 0,  length(vOTUs))
-match(random_new_viruses,hosts_index)
+random_new_viruses_sample <- sample(1:length(vOTUs), 10)#runif(10, 0,  length(vOTUs))
+match(random_new_viruses_sample,hosts_index)
 
 #random_new_viruses2 <- sample(1:length(vOTUs), 100000)#runif(10, 0,  length(vOTUs))
 new_virus_host__subtract <- c()
 new_virus_host__subtract_label <- c()
-for(i in 1:length(random_new_viruses)){
-  v_embed <- embeddings[random_new_viruses[i],]
+for(i in 1:length(random_new_viruses_sample)){
+  v_embed <- embeddings[random_new_viruses_sample[i],]
     for(j in 1:length(hosts_index)){
       if(j %% 100) {
         print(j)
@@ -171,12 +171,15 @@ for(i in 1:length(random_new_viruses)){
       vh_embed <- v_embed - h_embed 
       new_virus_host__subtract <- rbind(new_virus_host__subtract, vh_embed)
       
-      new_virus_host__subtract_label <- paste(node_labels[random_new_viruses[i]],"__",node_labels[hosts_index[j]],sep="")
+      new_virus_host__subtract_label <- c(paste(node_labels[random_new_viruses_sample[i]],"__",node_labels[hosts_index[j]],sep=""))
     }
 }
 row.names(new_virus_host__subtract) <- new_virus_host__subtract_label
 
 dim(new_virus_host__subtract)
+
+write.table(random_new_viruses_sample, file="virus_host__random10_sample.tsv", sep="\t")
+
 
 outfile <- "virus_host_NEW__subtract.tsv"
 outfile_nodes <- "virus_host_NEW_subtract_labels.tsv"
