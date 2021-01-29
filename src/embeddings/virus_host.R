@@ -28,8 +28,10 @@ sum(hlens>1)
 virus_host$Host_taxonomy_prediction <- gsub(" ","_",virus_host$Host_taxonomy_prediction)
 hosts <- paste("NCBItaxon:",tolower(unique(virus_host$Host_taxonomy_prediction[hlens>1])),sep="")
 hosts_full <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction[hlens>1]),sep="")
-#hosts <- gsub(" ","_",hosts)
+hosts_full_all <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),sep="")#hosts <- gsub(" ","_",hosts)
 length(hosts)
+length(hosts_full)
+length(hosts_full_all)
 class(node_labels[1])
 
 grep("vOTU:votu_219688", node_labels)
@@ -39,7 +41,9 @@ vOTUs_index <- match(vOTUs, node_labels)
 hosts_index <- match(hosts, node_labels)
 length(hosts_index)
 hosts_full_index <- match(hosts_full, node_labels)
-
+hosts_full_all_index <- match(hosts_full_all, node_labels)
+length(hosts_full_index)
+length(vOTUs_index)
 length(unique(hosts))
 sum(!is.na(hosts_index))
 sum(is.na(hosts_index))
@@ -58,29 +62,31 @@ virus_host__subtract_label <- c()
 
 for(i in 1:length(vOTUs_index)){
   
-  curhost <- host_curie[i]
+  #curhost <- host_curie[i]
   #print(curhost)
-  hashost <- curhost %in% hosts
+  #hashost <- curhost %in% hosts
   
   #print(hashost)
-  if(hashost) {
-    if(i %% 100 == 0) {
-      print(paste("vh", i))
+  #if(hashost) {
+  if(i %% 100 == 0) {
+    print(paste("vh", i))
+  }
+  
+  if(!is.na(hosts_index[i])){
+    curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_full_all_index[i]],sep="")
+    print(curlabel)
+    if(!(curlabel %in% virus_host__subtract_label)) {
+      print(curlabel)
+      #hindex <- which(hashost)
+      v_embed <- embeddings[vOTUs_index[i],]
+      #for(j in 1:length(hosts_index)){
+      h_embed <- embeddings[hosts_full_all_index[i],]
+      
+      vh_embed <- v_embed - h_embed 
+      virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
+      virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
     }
-    
-    if(!is.na(hosts_index[i])){
-      curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_index[i]],sep="")
-      if(!(curlabel %in% virus_host__subtract_label)) {
-        hindex <- which(hashost)
-        v_embed <- embeddings[vOTUs_index[i],]
-        #for(j in 1:length(hosts_index)){
-        h_embed <- embeddings[hosts_index[hindex],]
-        
-        vh_embed <- v_embed - h_embed 
-        virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
-        virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
-      }
-    }
+  #}
   }
   #else {
   #  print(paste("missing ", curhost))
