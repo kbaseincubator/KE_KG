@@ -138,7 +138,7 @@ for(i in 1:length(negative_sample)){
   curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
   #curlabel <- virus_host__subtract_label[1]
   #print(curlabel)
-  if(!(curlabel %in% virus_host__subtract_label)) {
+  if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG)) {
     
     #hindex <- match(node_labels, hosts[curhost])
     hindex <- hosts_index[curhost]
