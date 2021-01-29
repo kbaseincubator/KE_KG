@@ -52,7 +52,7 @@ hosts[is.na(hosts_full_index)][1:10]
 host_curie <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),sep="")
 
 
-virus_host__subtract <- c()
+virus_host__subtract <- data.frame()
 virus_host__subtract_label <- c()
 
 for(i in 1:length(vOTUs_index)){
