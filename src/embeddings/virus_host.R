@@ -151,11 +151,13 @@ if(!done) {
   write.table(training_index, file="training_index.txt")
   write.table(negative_index, file="negative_index.txt")
 } else {
-  training_index <- as.vector(virus_host__subtract_label <- read.csv("training_index.txt", sep="\t"))
-  negative_index <- as.vector(virus_host__subtract_label <- read.csv("negative_index.txt", sep="\t"))
+  training_index <- read.table("training_index.txt", sep="\t")#, row.names=TRUE
+  negative_index <- read.table("negative_index.txt", sep="\t")#, row.names=TRUE
 }
 dim(training_index)
+head(training_index[,1])
 dim(negative_index)
+length(negative_index)
 ###actual rows used for training
 
 
@@ -171,11 +173,11 @@ length(vOTUs[hosts_index])
 #length(virus_host_combos)
 
 
-negative_sample <- sample(1:length(negative_index), length(training_index))
+negative_sample <- sample(1:length(negative_index[,1]), length(virus_host__subtract_label[,1]))
 head(negative_sample)
 length(negative_sample)
 
-sum(!is.na(match(negative_index[negative_sample], training_index)))
+sum(!is.na(match(negative_index[negative_sample,1], training_index[,1])))
 
 #sum(!is.na(match(negative_index[negative_sample], hosts_full_index)))
 #hosts_full_index[match(negative_index[negative_sample], hosts_full_index)]
@@ -193,6 +195,7 @@ unique(hosts[!(hosts_index %in% full_index)])[1:10]
 virus_host__subtract__NEG <- c()
 virus_host__subtract_label__NEG <- c()
 
+###for all negative samples
 for(i in 1:length(negative_sample)){
   if(i %% 100 == 0) {
     print(paste("v", i))
