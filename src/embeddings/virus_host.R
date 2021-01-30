@@ -201,7 +201,9 @@ for(i in 1:length(negative_sample)){
     print(paste("v", i))
   }
   
+  #random virus
   curvir <- sample(1:length(vOTUs), 1)
+  #random host
   curhost <- sample(1:length(hosts), 1)
   
   curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
@@ -220,7 +222,7 @@ for(i in 1:length(negative_sample)){
     
     vh_embed <- v_embed - h_embed 
     virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
-    virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, paste(node_labels[vOTUs_index[i]],"__",node_labels[hindex],sep=""))
+    virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
   }
   else {
     i <- i-1
