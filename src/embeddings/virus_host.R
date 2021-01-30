@@ -1,18 +1,18 @@
 rm(list=ls())
-setwd("~/Documents/KBase/KE/IMGVR/")
+setwd("~/Documents/KBase/KE/IMGVR/link_predict")
 
-embeddings <- read.csv("./embeddings/SkipGram_merged_imgvr_mg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
+embeddings <- read.csv("../embeddings/SkipGram_merged_imgvr_mg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("./merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
+node_data <- read.csv("../merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 dim(node_data)
 head(node_data) 
 
 node_labels <- as.character(node_data$id)
 
 
-virus_host <- read.csv("./IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",sep="\t",header=T)
+virus_host <- read.csv("../IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",sep="\t",header=T)
 dim(virus_host)
 head(virus_host) 
 
@@ -172,19 +172,23 @@ length(vOTUs[hosts_index])
 #virus_host_combos <- paste(vOTUs[hosts_full_index],"__",hosts_full,sep="")
 #length(virus_host_combos)
 
-
-negative_sample <- sample(1:length(negative_index[,1]), length(virus_host__subtract_label[,1]))
-head(negative_sample)
+done <- TRUE
+if(!done) {
+  negative_sample <- sample(1:length(negative_index[,1]), length(virus_host__subtract_label[,1]))
+  head(negative_sample)
+  length(negative_sample)
+  
+  sum(!is.na(match(negative_index[negative_sample,1], training_index[,1])))
+  
+  #sum(!is.na(match(negative_index[negative_sample], hosts_full_index)))
+  #hosts_full_index[match(negative_index[negative_sample], hosts_full_index)]
+  #node_labels[hosts_full_index]
+  
+  write.table(negative_sample, file="virus_host__negative_sample.tsv", sep="\t")
+} else {
+  negative_sample <- read.table("virus_host__negative_sample.tsv", sep="\t")[,1]
+}
 length(negative_sample)
-
-sum(!is.na(match(negative_index[negative_sample,1], training_index[,1])))
-
-#sum(!is.na(match(negative_index[negative_sample], hosts_full_index)))
-#hosts_full_index[match(negative_index[negative_sample], hosts_full_index)]
-#node_labels[hosts_full_index]
-
-write.table(negative_sample, file="virus_host__negative_sample.tsv", sep="\t")
-
 sum(is.na(hosts))
 sum(is.na(hosts_index))
 length(unique(hosts[(hosts_index %in% full_index)]))
@@ -213,14 +217,25 @@ for(i in 1:length(negative_sample)){
     
     #hindex <- match(node_labels, hosts[curhost])
     hindex <- hosts_index[curhost]
+    vindex <- vOTUs_index[curvir]
     #print(hindex)
     #print(node_labels[hindex])
     
-    v_embed <- embeddings[curvir,]
+    v_embed <- embeddings[vindex,]
     #for(j in 1:length(hosts_index)){
     h_embed <- embeddings[hindex,]
     
     vh_embed <- v_embed - h_embed 
+    if(sum(is.na(vh_embed)) >0 ) {
+      print(paste(curlabel, curhost, hindex, curvir, vindex))
+      if(sum(is.na(v_embed)) >0 ) {
+        print("VIRUS")
+        print(v_embed)
+      }
+      if(sum(is.na(h_embed)) >0 ) {
+        print("HOST")
+      }
+    }
     virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
     virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
   }
@@ -236,7 +251,7 @@ dim(virus_host__subtract__NEG)
 
 
 outfile <- "virus_host_NEGATIVE__subtract.tsv"
-outfile_nodes <- "virus_host_NEGATIVE_subtract_labels.tsv"
+outfile_nodes <- "virus_host_NEGATIVE__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
 write.csv(virus_host__subtract__NEG, file=outfile)
