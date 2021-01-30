@@ -269,14 +269,19 @@ new_virus_host__subtract_label <- c()
 for(i in 1:length(random_new_viruses_sample)){
   v_embed <- embeddings[random_new_viruses_sample[i],]
     for(j in 1:length(hosts_index)){
-      if(j %% 100) {
-        print(j)
-      }
-      h_embed <- embeddings[hosts_index[j],]
       
-      vh_embed <- v_embed - h_embed 
-      new_virus_host__subtract <- rbind(new_virus_host__subtract, vh_embed)
-      new_virus_host__subtract_label <- c(paste(node_labels[random_new_viruses_sample[i]],"__",node_labels[hosts_index[j]],sep=""))
+      curlabel <- paste(node_labels[random_new_viruses_sample[i]],"__",node_labels[hosts_index[j]],sep="")
+      
+      if(!(curlabel %in% new_virus_host__subtract_label)) {
+        if(j %% 100) {
+          print(j)
+        }
+        h_embed <- embeddings[hosts_index[j],]
+        
+        vh_embed <- v_embed - h_embed 
+        new_virus_host__subtract <- rbind(new_virus_host__subtract, vh_embed)
+        new_virus_host__subtract_label <- c(new_virus_host__subtract_label, curlabel)
+      }
     }
 }
 row.names(new_virus_host__subtract) <- new_virus_host__subtract_label
