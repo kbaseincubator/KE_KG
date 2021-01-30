@@ -250,7 +250,7 @@ dim(virus_host__subtract__NEG)
 
 
 
-outfile <- "virus_host_NEGATIVE__subtract.tsv"
+outfile <- "./virus_host_NEGATIVE__subtract.tsv"
 outfile_nodes <- "virus_host_NEGATIVE__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
