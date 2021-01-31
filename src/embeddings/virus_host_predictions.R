@@ -93,10 +93,12 @@ test <- data.matrix(test)
 colnames(train)
 sum(is.na(train))
 
+dimtrain
+dim(train)
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
-rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=200, replace=TRUE, proximity=FALSE, importance=TRUE,do.trace=TRUE)
-#rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=200, replace=FALSE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
+#rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=200, replace=TRUE, proximity=FALSE, importance=TRUE,do.trace=TRUE)
+rf_classifier <- randomForest(y=as.factor(train[,'pos_neg_label']), x=train[, 1:(dimtrain[2]-1)], ntree=10, mtry=2, replace=FALSE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
 
 rf_classifier
 varImpPlot(rf_classifier)
