@@ -97,8 +97,8 @@ dimtrain
 dim(train)
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
-#rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=200, replace=TRUE, proximity=FALSE, importance=TRUE,do.trace=TRUE)
-rf_classifier <- randomForest(y=as.factor(train[,'pos_neg_label']), x=train[, 1:(dimtrain[2]-1)], ntree=10, mtry=2, replace=FALSE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
+rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=200, replace=TRUE, proximity=FALSE, importance=TRUE,do.trace=TRUE)
+#rf_classifier <- randomForest(y=as.factor(train[,'pos_neg_label']), x=train[, 1:(dimtrain[2]-1)], ntree=200, replace=FALSE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
 
 rf_classifier
 varImpPlot(rf_classifier)
@@ -146,7 +146,7 @@ length(prediction_for_table2)
 
 prediction_for_table2[which(prediction_for_table2 == 1)]
 
-write.table(prediction_for_table2, file="virus_host_predict_NEW_links_on_negtrain.txt ", sep="\t")
+write.table(prediction_for_table2, file="virus_host_predict_NEW_links_on_negtrain.txt", sep="\t")
 
 
 ###predict on positive train
@@ -155,7 +155,7 @@ length(prediction_for_table3)
 
 prediction_for_table2[which(prediction_for_table3 == 1)]
 
-write.table(prediction_for_table3, file="virus_host_predict_NEW_links_on_postrain.txt ", sep="\t")
+write.table(prediction_for_table3, file="virus_host_predict_NEW_links_on_postrain.txt", sep="\t")
 
 
 #virus_host_new
@@ -164,7 +164,7 @@ length(prediction_for_table4)
 
 prediction_for_table4[which(prediction_for_table4 == 1)]
 
-write.table(prediction_for_table4, file="virus_host_predict_NEW_links_on_rand10new.txt ", sep="\t")
+write.table(prediction_for_table4, file="virus_host_predict_NEW_links_on_rand10new.txt", sep="\t")
 
 
 
