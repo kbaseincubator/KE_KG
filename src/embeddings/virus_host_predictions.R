@@ -26,19 +26,27 @@ dimpos
 
 
 
-#virus_host_negative <- read.csv("./link_predict/virus_host_NEGATIVE__subtract.tsv", row.names=1)
 virus_host_negative <- read.csv("./link_predict/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
 virus_host_negative_labels <- read.csv("./link_predict/virus_host_NEGATIVE__subtract_labels.tsv")
 dim(virus_host_negative)
 sum(is.na(virus_host_negative))
 dim(virus_host_negative_labels)
 head(virus_host_negative)
-#virus_host_negative <- read.csv("./link_predict/virus_host_NEGATIVE__subtract.tsv")
-#virus_host_negative_labels <- read.csv("./link_predict/virus_host_NEGATIVE__subtract_labels.tsv")
 dimneg <- dim(virus_host_negative)
 head(virus_host_negative)
-dimneg
 row.names(virus_host_negative) <- virus_host_negative_labels[,1]
+
+
+virus_host_new <- read.csv("./link_predict/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_new_labels <- read.csv("./link_predict/virus_host_NEW_subtract_labels.tsv")
+dim(virus_host_new)
+sum(is.na(virus_host_new))
+dim(virus_host_new_labels)
+head(virus_host_new)
+dimneg <- dim(virus_host_new)
+head(virus_host_new)
+row.names(virus_host_new) <- virus_host_new_labels[,1]
+
 
 print("trimming positive because FEWER NEGATIVE!!!")
 virus_host_positive <- virus_host_positive[1:dimneg[1],]
@@ -146,6 +154,13 @@ prediction_for_table2[which(prediction_for_table3 == 1)]
 write.table(prediction_for_table3, file="virus_host_predict__new_links_on_postrain.txt ", sep="\t")
 
 
+virus_host_new
+prediction_for_table4 <- predict(rf_classifier,virus_host_new)
+length(prediction_for_table4)
+
+prediction_for_table4[which(prediction_for_table4 == 1)]
+
+write.table(prediction_for_table4, file="virus_host_predict__new_links_on_rand10new.txt ", sep="\t")
 
 
 
