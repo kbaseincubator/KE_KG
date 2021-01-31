@@ -140,27 +140,27 @@ auc <- as.numeric(auc.tmp@y.values)
 prediction_for_table2 <- predict(rf_classifier,virus_host_negative)
 length(prediction_for_table2)
 
-#prediction_for_table2[which(prediction_for_table2 == 1)]
+prediction_for_table2[which(prediction_for_table2 == 1)]
 
-write.table(prediction_for_table2, file="virus_host_predict___NEW_links_on_negtrain.txt ", sep="\t")
+write.table(prediction_for_table2, file="virus_host_predict_NEW_links_on_negtrain.txt ", sep="\t")
 
 
 ###predict on positive train
 prediction_for_table3 <- predict(rf_classifier,virus_host_positive)
 length(prediction_for_table3)
 
-#prediction_for_table2[which(prediction_for_table3 == 1)]
+prediction_for_table2[which(prediction_for_table3 == 1)]
 
-write.table(prediction_for_table3, file="virus_host_predict___NEW_links_on_postrain.txt ", sep="\t")
+write.table(prediction_for_table3, file="virus_host_predict_NEW_links_on_postrain.txt ", sep="\t")
 
 
 #virus_host_new
 prediction_for_table4 <- predict(rf_classifier,virus_host_new)
 length(prediction_for_table4)
 
-#prediction_for_table4[which(prediction_for_table4 == 1)]
+prediction_for_table4[which(prediction_for_table4 == 1)]
 
-write.table(prediction_for_table4, file="virus_host_predict___NEW_links_on_rand10new.txt ", sep="\t")
+write.table(prediction_for_table4, file="virus_host_predict_NEW_links_on_rand10new.txt ", sep="\t")
 
 
 
