@@ -63,6 +63,8 @@ sum(is.na(virus_host_positive))
 sum(is.na(virus_host_negative))
 
 total_train_data <- rbind(virus_host_positive, virus_host_negative)
+###limit to top features
+total_tran_data <- total_tran_data[c(45, 82, 44,45, 90, 0, 3,7, 60, 70, 88, 39, 59, 56,94,97, 17),]
 dim(total_train_data)
 #head(total_train_data)
 sum(is.na(total_train_data))
@@ -93,7 +95,7 @@ sum(is.na(train))
 
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
-rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=200, replace=TRUE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
+rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=200, replace=TRUE, proximity=FALSE, importance=TRUE,do.trace=TRUE)
 #rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=200, replace=FALSE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
 
 rf_classifier
@@ -134,7 +136,7 @@ dev.off()
 # ROC area under the curve
 auc.tmp <- performance(pred,"auc");
 auc <- as.numeric(auc.tmp@y.values)
-
+dev.off()
 
 ###predict on negative train
 prediction_for_table2 <- predict(rf_classifier,virus_host_negative)
