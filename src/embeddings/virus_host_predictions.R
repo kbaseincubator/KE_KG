@@ -5,7 +5,7 @@ library("caTools")
 library ("ROCR")
 
 #setwd("~/graphs/KE_KG")
-#node_data <- read.csv("global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
+#node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 setwd("~/Documents/KBase/KE/IMGVR/")
 node_data <- read.csv("./merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 
@@ -82,7 +82,7 @@ sum(is.na(train))
 
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
-rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=5*dimtrain[1], mtry=sqrt(dimtrain[1]), importance=TRUE)
+rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=5*dimtrain[1], mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
 rf_classifier
 varImpPlot(rf_classifier)
 
