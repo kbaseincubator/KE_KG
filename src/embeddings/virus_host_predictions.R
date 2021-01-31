@@ -63,6 +63,9 @@ pos_neg_label <- c(rep(1, dimpos[1]), rep(0, dimneg[1]))
 names(pos_neg_label) <- "pos_neg"
 total_train_data <- cbind(total_train_data, pos_neg_label)
 
+
+###shuffle rows here?
+
 sample = sample.split(total_train_data$pos_neg, SplitRatio = 0.8)
 train = subset(total_train_data, sample == TRUE)
 class(train)
@@ -83,7 +86,7 @@ sum(is.na(train))
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
 #rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=5*dimtrain[1], mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
-rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=500, mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
+rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=10, mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
 
 rf_classifier
 varImpPlot(rf_classifier)
