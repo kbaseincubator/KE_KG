@@ -94,7 +94,7 @@ sum(is.na(train))
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
 #rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=train, ntree=5*dimtrain[1], mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
-rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=10, mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
+rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=200, importance=TRUE,do.trace=TRUE)
 
 rf_classifier
 varImpPlot(rf_classifier)
