@@ -10,7 +10,7 @@ setwd("~/Documents/KBase/KE/IMGVR/")
 node_data <- read.csv("./merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 
 dim(node_data)
-head(node_data) 
+#head(node_data) 
 
 node_labels <- as.character(node_data$id)
 
@@ -20,7 +20,7 @@ virus_host_positive <- read.csv("./link_predict/virus_host__subtract.tsv", row.n
 virus_host_positive_labels <- read.csv("./link_predict/virus_host__subtract_labels.tsv")
 dim(virus_host_positive)
 dim(virus_host_positive_labels)
-head(virus_host_positive)
+#head(virus_host_positive)
 dimpos <- dim(virus_host_positive)
 dimpos
 
@@ -31,9 +31,9 @@ virus_host_negative_labels <- read.csv("./link_predict/virus_host_NEGATIVE__subt
 dim(virus_host_negative)
 sum(is.na(virus_host_negative))
 dim(virus_host_negative_labels)
-head(virus_host_negative)
+#head(virus_host_negative)
 dimneg <- dim(virus_host_negative)
-head(virus_host_negative)
+#head(virus_host_negative)
 row.names(virus_host_negative) <- virus_host_negative_labels[,1]
 
 
@@ -42,9 +42,9 @@ virus_host_new_labels <- read.csv("./link_predict/virus_host_NEW_subtract_labels
 dim(virus_host_new)
 sum(is.na(virus_host_new))
 dim(virus_host_new_labels)
-head(virus_host_new)
-dimneg <- dim(virus_host_new)
-head(virus_host_new)
+#head(virus_host_new)
+dimnew <- dim(virus_host_new)
+#head(virus_host_new)
 row.names(virus_host_new) <- virus_host_new_labels[,1]
 
 
@@ -64,7 +64,7 @@ sum(is.na(virus_host_negative))
 
 total_train_data <- rbind(virus_host_positive, virus_host_negative)
 dim(total_train_data)
-head(total_train_data)
+#head(total_train_data)
 sum(is.na(total_train_data))
 
 pos_neg_label <- c(rep(1, dimpos[1]), rep(0, dimneg[1]))
