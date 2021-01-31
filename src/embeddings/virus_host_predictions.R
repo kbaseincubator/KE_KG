@@ -142,7 +142,7 @@ length(prediction_for_table2)
 
 prediction_for_table2[which(prediction_for_table2 == 1)]
 
-write.table(prediction_for_table2, file="virus_host_predict__new_links_on_negtrain.txt ", sep="\t")
+write.table(prediction_for_table2, file="virus_host_predict___NEW_links_on_negtrain.txt ", sep="\t")
 
 
 ###predict on positive train
@@ -151,7 +151,7 @@ length(prediction_for_table3)
 
 prediction_for_table2[which(prediction_for_table3 == 1)]
 
-write.table(prediction_for_table3, file="virus_host_predict__new_links_on_postrain.txt ", sep="\t")
+write.table(prediction_for_table3, file="virus_host_predict___NEW_links_on_postrain.txt ", sep="\t")
 
 
 virus_host_new
@@ -160,7 +160,7 @@ length(prediction_for_table4)
 
 prediction_for_table4[which(prediction_for_table4 == 1)]
 
-write.table(prediction_for_table4, file="virus_host_predict__new_links_on_rand10new.txt ", sep="\t")
+write.table(prediction_for_table4, file="virus_host_predict___NEW_links_on_rand10new.txt ", sep="\t")
 
 
 
