@@ -64,7 +64,7 @@ sum(is.na(virus_host_negative))
 
 total_train_data <- rbind(virus_host_positive, virus_host_negative)
 ###limit to top features
-total_train_data <- total_train_data[,c(45, 82, 44,45, 90, 0, 3,7, 60, 70, 88, 39, 59, 56,94,97, 17)]
+#total_train_data <- total_train_data[,c(45, 82, 44,45, 90, 0, 3,7, 60, 70, 88, 39, 59, 56,94,97, 17)]
 dim(total_train_data)
 #head(total_train_data)
 sum(is.na(total_train_data))
