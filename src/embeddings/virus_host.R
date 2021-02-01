@@ -267,10 +267,10 @@ match(random_new_viruses_sample,hosts_index)
 new_virus_host__subtract <- c()
 new_virus_host__subtract_label <- c()
 for(i in 1:length(random_new_viruses_sample)){
-  v_embed <- embeddings[random_new_viruses_sample[i],]
+  v_embed <- embeddings[vOTUs_index[random_new_viruses_sample[i]],]
     for(j in 1:length(hosts_index)){
       
-      curlabel <- paste(node_labels[random_new_viruses_sample[i]],"__",node_labels[hosts_index[j]],sep="")
+      curlabel <- paste(node_labels[vOTUs_index[random_new_viruses_sample[i]]],"__",node_labels[hosts_index[j]],sep="")
       
       if(!(curlabel %in% new_virus_host__subtract_label)) {
         if(j %% 100) {
