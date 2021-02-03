@@ -69,14 +69,14 @@ for(i in 1:length(cur_edges)) {
     if(!(split1 %chin% new_nodes_labels)) {
       ind1 <- chmatch(split1, node_labels)
       new_nodes[nodecount,] <- node_data[ind1,]
+      new_nodes_labels[nodecount] <- split1
       nodecount <- nodecount+1
-      new_nodes_labels <- c(new_nodes_labels, split1)
     }
     if(!(split2 %chin% new_nodes_labels)) {
       ind2 <- chmatch(split2, node_labels) 
       new_nodes[nodecount,] <- node_data[ind2,]
+      new_nodes_labels[nodecount] <- split2
       nodecount <- nodecount+1
-      new_nodes_labels <- c(new_nodes_labels, split2)
     }
   }
 }
