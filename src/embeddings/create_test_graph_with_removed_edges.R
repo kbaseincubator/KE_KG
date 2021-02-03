@@ -72,22 +72,8 @@ new_nodes <- new_nodes[-1,]
 length(new_edges)
 length(new_nodes)
 
-write.table(new_edges, file="./IMGVR_merged_kg_edges__positive80.tsv", sep="\t")
-write.table(new_edges, file="./IMGVR_merged_kg_nodes__positive80.tsv", sep="\t")
+write.table(new_edges, file="./IMGVR_merged_kg_edges__positive80.tsv", sep="\t", row.names=FALSE, header=FALSE)
+write.table(new_edges, file="./IMGVR_merged_kg_nodes__positive80.tsv", sep="\t", row.names=FALSE, header=FALSE)
 
 
-
-
-
-
-for(i in 1:length(new_edges)){
-  data <- strsplit(cur_edge, "\t")
-  
-  ind1 <- match(data[1], new_nodes)
-  if(is.na(ind1)) {
-    split <- strsplit(curedge, "__")
-    if(match())
-    new_nodes <- c(new_nodes, curnode) 
-  }
-}
 
