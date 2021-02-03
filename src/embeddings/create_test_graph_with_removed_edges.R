@@ -26,7 +26,7 @@ test_edges_split <- strsplit(as.character(test_edges[,1]), "__", fixed=TRUE)
 test_edges_split_mat <- unlist(test_edges_split)
 head(test_edges_split_mat)
 
-grep(node2, edge_data[,'subject'])
+#grep(node2, edge_data[,'subject'])
 
 cur_edges <- paste(edge_data[,'subject'], "__",edge_data[,'object'], sep="")
 head(cur_edges)
@@ -49,6 +49,9 @@ new_nodes <- "id\tlabel\tcategory"
 new_nodes_labels <- c()
 #edge_data_filtered <- edge_data
 for(i in 1:length(cur_edges)) {
+  if( i %% 100 == 0) {
+    print(i)
+  }
   oldedge <- cur_edges[i]
   ind1 <- match(oldedge, test_edges_clean)
   if(is.na(ind1)) {
@@ -57,7 +60,7 @@ for(i in 1:length(cur_edges)) {
     split2 <- unlist(split)[2]#,"\t")[2]
     addedge <-  paste(split1, "\tbiolink:has_attribute\t", split2, sep="")
     new_edges <- c(new_edges,edge_data) 
-    print(addedge)
+    #print(addedge)
     if(is.na(match(split1, new_nodes_labels))) {
       ind1 <- match(split1, node_labels)
       new_nodes <- rbind(new_nodes, node_data[ind1,]) 
