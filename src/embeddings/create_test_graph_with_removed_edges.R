@@ -64,16 +64,16 @@ for(i in 1:200){#length(cur_edges)) {
     split <- strsplit(cur_edges[i], "__")
     split1 <- unlist(split)[1]#,"\t")[2]
     split2 <- unlist(split)[2]#,"\t")[2]
-    new_edges[edgecount] <- edge_data[i,]#addedge
+    new_edges[edgecount,] <- edge_data[i,]#addedge
     edgecount <- edgecount +1
     if(!(split1 %chin% new_nodes_labels)) {
       ind1 <- chmatch(split1, node_labels)
-      new_nodes[nodecount] <- node_data[ind1,]
+      new_nodes[nodecount,] <- node_data[ind1,]
       nodecount <- nodecount+1
     }
     if(!(split2 %chin% new_nodes_labels)) {
       ind2 <- chmatch(split2, node_labels) 
-      new_nodes[nodecount] <- node_data[ind2,]
+      new_nodes[nodecount,] <- node_data[ind2,]
       nodecount <- nodecount+1
     }
   }
