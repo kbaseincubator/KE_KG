@@ -4,11 +4,9 @@ library("randomForest")
 library("caTools")
 library ("ROCR")
 
-#setwd("~/graphs/KE_KG")
-#node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
-setwd("~/Documents/KBase/KE/IMGVR/")
-node_data <- read.csv("./IMGVR_merged_kg_nodes.tsv", sep="\t",header=T)
-edge_data <- read.csv("./IMGVR_merged_kg_edges.tsv", sep="\t",header=T)
+setwd("~/graphs/KE_KG")
+node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/sample_extra/IMGVR_merged_kg_nodes.tsv", sep="\t",header=T)
+edge_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/sample_extra/IMGVR_merged_kg_edges.tsv", sep="\t",header=T)
 
 dim(node_data)
 dim(edge_data)
@@ -19,7 +17,7 @@ head(node_data)
 
 node_labels <- as.character(node_data$id)
 
-test_edges <- read.csv("IMGVR_sample_extra_test_edges.txt", row.names=1, header=TRUE, sep="\t")
+test_edges <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/sample_extra/IMGVR_sample_extra_test_edges.txt", row.names=1, header=TRUE, sep="\t")
 class(test_edges)
 test_edges[,1]
 test_edges_split <- strsplit(as.character(test_edges[,1]), "__", fixed=TRUE)
@@ -49,6 +47,9 @@ new_nodes <- "id\tlabel\tcategory"
 new_nodes_labels <- c()
 #edge_data_filtered <- edge_data
 for(i in 1:length(cur_edges)) {
+	if( i %% 100 == 0) {
+	   print(i)	
+	}
   oldedge <- cur_edges[i]
   ind1 <- match(oldedge, test_edges_clean)
   if(is.na(ind1)) {
@@ -57,7 +58,7 @@ for(i in 1:length(cur_edges)) {
     split2 <- unlist(split)[2]#,"\t")[2]
     addedge <-  paste(split1, "\tbiolink:has_attribute\t", split2, sep="")
     new_edges <- c(new_edges,edge_data) 
-    print(addedge)
+    #print(addedge)
     if(is.na(match(split1, new_nodes_labels))) {
       ind1 <- match(split1, node_labels)
       new_nodes <- rbind(new_nodes, node_data[ind1,]) 
