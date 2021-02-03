@@ -56,7 +56,7 @@ new_nodes_labels <- vector(mode="character", length=length(node_labels))#c()
 edgecount <- 0
 nodecount <- 0
 #edge_data_filtered <- edge_data
-for(i in 1:200){#length(cur_edges)) {
+for(i in 1:length(cur_edges)) {
   if( i %% 100 == 0) {
     print(i)
   }
