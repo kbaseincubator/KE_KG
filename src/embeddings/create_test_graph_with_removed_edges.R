@@ -1,3 +1,4 @@
+
 rm(list=ls())
 
 library("randomForest")
@@ -5,6 +6,7 @@ library("caTools")
 library ("ROCR")
 library("data.table")
 library("plyr")
+library("hash")
 #library("fmatch")
 
 #setwd("~/graphs/KE_KG")
@@ -71,6 +73,16 @@ head(subjsplit)
 objsplit  <- unlist(cur_edges_split)[2*(1:length(cur_edges_split))  ]
 head(objsplit)
 cur_edges_split_df <- data.frame(cbind(as.character(subjsplit), as.character(objsplit)),stringsAsFactors = F)
+
+class(node_labels)
+node_label_hash <- hash( keys=node_labels, values=1:length(node_labels))
+head(node_label_hash)
+unlist(as.list(node_label_hash["vOTU:sg_502237"]))
+match("vOTU:sg_502237", node_labels)
+has.key("vOTU:sg_502237", node_label_hash)
+head(unlist(as.list(node_label_hash)))
+head(keys(node_label_hash))
+
 #edge_data_filtered <- edge_data
 for(i in 1:length(cur_edges)) {
   if( i %% 100 == 0) {
@@ -87,13 +99,13 @@ for(i in 1:length(cur_edges)) {
     n2 <- cur_edges_split_df[i, 2]
     
     if(!(n1 %chin% new_nodes_labels)) {
-      ind1 <- chmatch(n1, node_labels)
+      ind1 <- as.numeric(unlist(as.list(node_label_hash[n1]))[1])#node_label_hash[n1]#chmatch(n1, node_labels)
       new_nodes[nodecount,] <- node_data[ind1,]
       new_nodes_labels[nodecount] <- n1
       nodecount <- nodecount+1
     }
     if(!(n2 %chin% new_nodes_labels)) {
-      ind2 <- chmatch(n2, node_labels) 
+      ind2 <-  as.numeric(unlist(as.list(node_label_hash[n2]))[1])#node_label_hash[n2]#ind2 <- chmatch(n2, node_labels) 
       new_nodes[nodecount,] <- node_data[ind2,]
       new_nodes_labels[nodecount] <- n2
       nodecount <- nodecount+1
