@@ -72,7 +72,7 @@ objsplit  <- unlist(cur_edges_split)[2*(1:length(cur_edges_split))  ]
 head(objsplit)
 cur_edges_split_df <- data.frame(cbind(as.character(subjsplit), as.character(objsplit)),stringsAsFactors = F)
 #edge_data_filtered <- edge_data
-for(i in 1:1000) {#length(cur_edges)) {
+for(i in 1:length(cur_edges)) {
   if( i %% 100 == 0) {
     print(i)
   }
@@ -83,16 +83,19 @@ for(i in 1:1000) {#length(cur_edges)) {
     #split2 <- unlist(split)[2]#,"\t")[2]
     new_edges[edgecount,] <- edge_data[i,]#addedge
     edgecount <- edgecount +1
-    if(!(cur_edges_split_df[i,1] %chin% new_nodes_labels)) {
-      ind1 <- chmatch(cur_edges_split_df[i,1], node_labels)
+    n1 <- cur_edges_split_df[i, 1]
+    n2 <- cur_edges_split_df[i, 2]
+    
+    if(!(n1 %chin% new_nodes_labels)) {
+      ind1 <- chmatch(n1, node_labels)
       new_nodes[nodecount,] <- node_data[ind1,]
-      new_nodes_labels[nodecount] <- cur_edges_split_df[i, 1]
+      new_nodes_labels[nodecount] <- n1
       nodecount <- nodecount+1
     }
-    if(!(cur_edges_split_df[i, 2] %chin% new_nodes_labels)) {
-      ind2 <- chmatch(cur_edges_split_df[i, 2], node_labels) 
+    if(!(n2 %chin% new_nodes_labels)) {
+      ind2 <- chmatch(n2, node_labels) 
       new_nodes[nodecount,] <- node_data[ind2,]
-      new_nodes_labels[nodecount] <- cur_edges_split_df[i, 2]
+      new_nodes_labels[nodecount] <- n2
       nodecount <- nodecount+1
     }
   }
