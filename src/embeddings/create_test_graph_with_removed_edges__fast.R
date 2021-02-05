@@ -47,13 +47,21 @@ test_edges_str <- paste(objsplit, "__",subjsplit, sep="")
 head(test_edges_str)
 
 all_edges_minus_test_index <- match(all_edges_str ,test_edges_str)
+###
+#MAKE NODES!!!!
+
+sum(is.na(all_edges_minus_test_index))
 
 
 new_edges <- edge_data[which(is.na(all_edges_minus_test_index)), ]
-new_nodes <- node_data[which(is.na(all_edges_minus_test_index)), ]
+new_node_ids <- unique(c(as.vector(new_edges[,'subject']),as.vector(new_edges[,'object'])))
+length(new_node_ids)
+head(new_node_ids)
+new_node_index <- match(new_node_ids, node_labels)
+new_nodes <- node_data[new_node_index, ]
 #colnames(new_edges) <- c("uuid", "subject", "predicate", "object", "source")
 #colnames(new_nodes) <- c("id", "label", "category", "source")
-write.table(new_edges, file="./IMGVR_merged_kg_edges__positive80.tsv", sep="\t", row.names=FALSE)
-write.table(new_nodes, file="./IMGVR_merged_kg_nodes__positive80.tsv", sep="\t", row.names=FALSE)
+write.table(new_edges, file="./IMGVR_merged_kg_edges__positive80.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+write.table(new_nodes, file="./IMGVR_merged_kg_nodes__positive80.tsv", sep="\t", row.names=FALSE, quote=FALSE)
 
 
