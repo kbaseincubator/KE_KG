@@ -17,6 +17,17 @@ graph = EnsmallenGraph.from_unsorted_csv(
 #print(graph.report())
 print(graph)
 
+degrees = graph.degrees()
+print(degrees)
+file1 = open("IMGVR_sample_ensmallen_degrees.txt","a") 
+np.save(file1, degrees)
+file1.close() 
+
+nodes = graph.nodes()
+file2 = open("IMGVR_sample_ensmallen_nodes.txt","a") 
+file2.write(nodes)
+file2.close() 
+
 
 walk_length=100
 batch_size=2**8
