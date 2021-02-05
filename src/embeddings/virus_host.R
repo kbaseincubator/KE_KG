@@ -155,7 +155,7 @@ if(!done) {
   negative_index <- read.table("negative_index.txt", sep="\t")#, row.names=TRUE
 }
 dim(training_index)
-head(training_index[,1])
+head(training_index)
 dim(negative_index)
 length(negative_index)
 ###actual rows used for training
