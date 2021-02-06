@@ -178,7 +178,7 @@ if(!done) {
   head(negative_sample)
   length(negative_sample)
   
-  sum(!is.na(match(negative_index[negative_sample,1], training_index[,1])))
+  #sum(!is.na(match(negative_index[negative_sample,1], training_index[,1])))
   
   #sum(!is.na(match(negative_index[negative_sample], hosts_full_index)))
   #hosts_full_index[match(negative_index[negative_sample], hosts_full_index)]
