@@ -151,8 +151,8 @@ if(!done) {
   write.table(training_index, file="training_index.txt")
   write.table(negative_index, file="negative_index.txt")
 } else {
-  training_index <- read.table("training_index.txt", sep="\t")#, row.names=TRUE
-  negative_index <- read.table("negative_index.txt", sep="\t")#, row.names=TRUE
+  training_index <- read.table("training_index.txt", sep="\t")[,1]#, row.names=TRUE
+  negative_index <- read.table("negative_index.txt", sep="\t")[,1]#, row.names=TRUE
 }
 dim(training_index)
 head(training_index)
