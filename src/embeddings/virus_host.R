@@ -172,9 +172,9 @@ length(vOTUs[hosts_index])
 #virus_host_combos <- paste(vOTUs[hosts_full_index],"__",hosts_full,sep="")
 #length(virus_host_combos)
 
-done <- TRUE
+done <- FALSE
 if(!done) {
-  negative_sample <- sample(1:length(negative_index[,1]), length(virus_host__subtract_label[,1]))
+  negative_sample <- sample(1:length(negative_index), length(virus_host__subtract_label[,1]))
   head(negative_sample)
   length(negative_sample)
   
