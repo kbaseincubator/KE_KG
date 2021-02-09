@@ -1,4 +1,5 @@
 rm(list=ls())
+set.seed(12345)
 setwd("~/Documents/KBase/KE/IMGVR/link_predict")
 
 embeddings <- read.csv("../embeddings/SkipGram_merged_imgvr_mg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
@@ -213,6 +214,8 @@ for(i in 1:length(negative_sample)){
   curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
   #curlabel <- virus_host__subtract_label[1]
   #print(curlabel)
+  
+  #not in positive and not yet in negative
   if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG)) {
     
     #hindex <- match(node_labels, hosts[curhost])
@@ -235,9 +238,12 @@ for(i in 1:length(negative_sample)){
       if(sum(is.na(h_embed)) >0 ) {
         print("HOST")
       }
+      i <- i-1
     }
+    else {
     virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
     virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
+    }
   }
   else {
     i <- i-1
