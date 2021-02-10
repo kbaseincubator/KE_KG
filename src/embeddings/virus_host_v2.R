@@ -183,7 +183,7 @@ unique(hosts[!(hosts_index %in% full_index)])[1:10]
 
 virus_host__subtract__NEG <- c()
 virus_host__subtract_label__NEG <- c()
-
+length(hosts)
 ###for all negative samples
 for(i in 1:length(training_index)){
   if(i %% 100 == 0) {
@@ -192,8 +192,14 @@ for(i in 1:length(training_index)){
   
   #random virus
   curvir <- training_index[i]#sample(1:length(vOTUs), 1)
+  #print(curvir)
   #random host
   for(j in 1:length(hosts)){
+    
+    if(j %% 100 == 0) {
+      print(paste("h", j))
+    }
+    
     curhost <- j#sample(1:length(hosts), 1)
     
     curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
@@ -227,6 +233,7 @@ for(i in 1:length(training_index)){
         #i <- i-1
       }
       else {
+        #print("adding")
         virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
         virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
       }
