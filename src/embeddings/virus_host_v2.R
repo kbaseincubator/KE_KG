@@ -1,6 +1,6 @@
 rm(list=ls())
 set.seed(12345)
-setwd("~/Documents/KBase/KE/IMGVR/link_predict")
+setwd("~/Documents/KBase/KE/IMGVR/link_predict_all")
 
 embeddings <- read.csv("../embeddings/SkipGram_merged_imgvr_mg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
@@ -113,7 +113,7 @@ if(!done) {
 }
 
 dim(virus_host__subtract)
-dim(virus_host__subtract_label)
+length(virus_host__subtract_label)
 head(virus_host__subtract)
 head(virus_host__subtract_label)
 
@@ -135,7 +135,7 @@ training_index_all_rev <- match(host_raw,virus_host$Host_taxonomy_prediction)
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- TRUE#TRUE
+done <- FALSE#TRUE
 if(!done) {
   training_index <-c()
   negative_index <- c()
@@ -149,8 +149,8 @@ if(!done) {
     }
   }
   
-  write.table(training_index, file="training_index.txt")
-  write.table(negative_index, file="negative_index.txt")
+  write.table(training_index, file="training_index.txt", row.names=F, col.name=F)
+  write.table(negative_index, file="negative_index.txt", row.names=F, col.name=F)
 } else {
   training_index <- read.table("training_index.txt", sep="\t")[,1]#, row.names=TRUE
   negative_index <- read.table("negative_index.txt", sep="\t")[,1]#, row.names=TRUE
@@ -198,8 +198,9 @@ for(i in 1:length(training_index)){
     
     curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
     #curlabel <- virus_host__subtract_label[1]
-    #print(curlabel)
-    
+    print(curlabel)
+    print(curvir)
+    print(vOTUs[curvir])
     #not in positive and not yet in negative
     if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG)) {
       
