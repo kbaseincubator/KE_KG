@@ -135,7 +135,7 @@ training_index_all_rev <- match(host_raw,virus_host$Host_taxonomy_prediction)
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- FALSE#TRUE
+done <- TRUE#TRUE
 if(!done) {
   training_index <-c()
   negative_index <- c()
@@ -223,11 +223,11 @@ for(i in 1:length(training_index)){
         if(sum(is.na(h_embed)) >0 ) {
           print("HOST")
         }
-        i <- i-1
+        #i <- i-1
       }
       else {
-      virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
-      virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
+        virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
+        virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
       }
     }
   }
