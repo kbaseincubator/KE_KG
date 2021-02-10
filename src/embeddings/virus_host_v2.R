@@ -198,9 +198,9 @@ for(i in 1:length(training_index)){
     
     curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
     #curlabel <- virus_host__subtract_label[1]
-    print(curlabel)
-    print(curvir)
-    print(vOTUs[curvir])
+    #print(curlabel)
+    #print(curvir)
+    #print(vOTUs[curvir])
     #not in positive and not yet in negative
     if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG)) {
       
@@ -216,14 +216,14 @@ for(i in 1:length(training_index)){
       
       vh_embed <- v_embed - h_embed 
       if(sum(is.na(vh_embed)) >0 ) {
-        print(paste(curlabel, curhost, hindex, curvir, vindex))
-        if(sum(is.na(v_embed)) >0 ) {
-          print("VIRUS")
-          print(v_embed)
-        }
-        if(sum(is.na(h_embed)) >0 ) {
-          print("HOST")
-        }
+        print(paste("NA",curlabel, curhost, hindex, curvir, vindex))
+        #if(sum(is.na(v_embed)) >0 ) {
+        #  print("VIRUS")
+        #  print(v_embed)
+        #}
+        #if(sum(is.na(h_embed)) >0 ) {
+        #  print("HOST")
+        #}
         #i <- i-1
       }
       else {
