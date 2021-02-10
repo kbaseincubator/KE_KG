@@ -65,7 +65,7 @@ host_curie <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),se
 virus_host__subtract <- data.frame()
 virus_host__subtract_label <- c()
 
-done <- FALSE#TRUE
+done <- TRUE#FALSE
 if(!done) {
   for(i in 1:length(vOTUs_index)){
     
@@ -229,11 +229,6 @@ for(i in 1:length(training_index)){
       virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
       virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
       }
-    }
-    else {
-      i <- i-1
-      print("BACK")
-      print(curlabel)
     }
   }
 }
