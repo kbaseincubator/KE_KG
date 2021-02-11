@@ -1,6 +1,6 @@
 rm(list=ls())
 set.seed(12345)
-setwd("~/Documents/KBase/KE/IMGVR/link_predict")
+setwd("~/Documents/KBase/KE/IMGVR/link_predict_all")
 
 embeddings <- read.csv("../embeddings/SkipGram_merged_imgvr_mg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
@@ -65,7 +65,7 @@ host_curie <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),se
 virus_host__subtract <- data.frame()
 virus_host__subtract_label <- c()
 
-done <- TRUE
+done <- TRUE#FALSE
 if(!done) {
   for(i in 1:length(vOTUs_index)){
     
@@ -109,11 +109,11 @@ if(!done) {
   write.table(virus_host__subtract_label, file=outfile_nodes, sep="\t")
 } else {
   virus_host__subtract <- read.csv("virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
-  virus_host__subtract_label <- read.csv("virus_host__subtract_labels.tsv", sep="\t")
+  virus_host__subtract_label <- read.csv("virus_host__subtract_labels.tsv", sep="\t")[,1]
 }
 
 dim(virus_host__subtract)
-dim(virus_host__subtract_label)
+length(virus_host__subtract_label)
 head(virus_host__subtract)
 head(virus_host__subtract_label)
 
@@ -135,7 +135,7 @@ training_index_all_rev <- match(host_raw,virus_host$Host_taxonomy_prediction)
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- TRUE
+done <- TRUE#FALSE
 if(!done) {
   training_index <-c()
   negative_index <- c()
@@ -149,8 +149,8 @@ if(!done) {
     }
   }
   
-  write.table(training_index, file="training_index.txt")
-  write.table(negative_index, file="negative_index.txt")
+  write.table(training_index, file="training_index.txt", row.names=F, col.name=F)
+  write.table(negative_index, file="negative_index.txt", row.names=F, col.name=F)
 } else {
   training_index <- read.table("training_index.txt", sep="\t")[,1]#, row.names=TRUE
   negative_index <- read.table("negative_index.txt", sep="\t")[,1]#, row.names=TRUE
@@ -173,23 +173,7 @@ length(vOTUs[hosts_index])
 #virus_host_combos <- paste(vOTUs[hosts_full_index],"__",hosts_full,sep="")
 #length(virus_host_combos)
 
-done <- FALSE
-if(!done) {
-  negative_sample <- sample(1:length(negative_index), length(virus_host__subtract_label[,1]))
-  head(negative_sample)
-  length(negative_sample)
-  
-  #sum(!is.na(match(negative_index[negative_sample,1], training_index[,1])))
-  
-  #sum(!is.na(match(negative_index[negative_sample], hosts_full_index)))
-  #hosts_full_index[match(negative_index[negative_sample], hosts_full_index)]
-  #node_labels[hosts_full_index]
-  
-  write.table(negative_sample, file="virus_host__negative_sample.tsv", sep="\t")
-} else {
-  negative_sample <- read.table("virus_host__negative_sample.tsv", sep="\t")[,1]
-}
-length(negative_sample)
+
 sum(is.na(hosts))
 sum(is.na(hosts_index))
 length(unique(hosts[(hosts_index %in% full_index)]))
@@ -199,56 +183,64 @@ unique(hosts[!(hosts_index %in% full_index)])[1:10]
 
 virus_host__subtract__NEG <- c()
 virus_host__subtract_label__NEG <- c()
+length(unique(hosts))
+length(unique(vOTUs[training_index]))
 
+host_samples <- 5
 ###for all negative samples
-for(i in 1:length(negative_sample)){
+for(i in 1:length(training_index)){
   if(i %% 100 == 0) {
     print(paste("v", i))
   }
   
   #random virus
-  curvir <- sample(1:length(vOTUs), 1)
+  curvir <- training_index[i]#sample(1:length(vOTUs), 1)
+  #print(curvir)
   #random host
-  curhost <- sample(1:length(hosts), 1)
-  
-  curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
-  #curlabel <- virus_host__subtract_label[1]
-  #print(curlabel)
-  
-  #not in positive and not yet in negative
-  if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG)) {
+  for(j in 1:host_samples){#length(hosts)){
     
-    #hindex <- match(node_labels, hosts[curhost])
-    hindex <- hosts_index[curhost]
-    vindex <- vOTUs_index[curvir]
-    #print(hindex)
-    #print(node_labels[hindex])
-    
-    v_embed <- embeddings[vindex,]
-    #for(j in 1:length(hosts_index)){
-    h_embed <- embeddings[hindex,]
-    
-    vh_embed <- v_embed - h_embed 
-    if(sum(is.na(vh_embed)) >0 ) {
-      print(paste(curlabel, curhost, hindex, curvir, vindex))
-      if(sum(is.na(v_embed)) >0 ) {
-        print("VIRUS")
-        print(v_embed)
-      }
-      if(sum(is.na(h_embed)) >0 ) {
-        print("HOST")
-      }
-      i <- i-1
+    if(j %% 100 == 0) {
+      print(paste("h", j))
     }
-    else {
-    virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
-    virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
+    
+    curhost <- sample(1:length(hosts), 1)#j
+    
+    curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
+    #curlabel <- virus_host__subtract_label[1]
+    #print(curlabel)
+    #print(curvir)
+    #print(vOTUs[curvir])
+    #not in positive and not yet in negative
+    if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG)) {
+      
+      #hindex <- match(node_labels, hosts[curhost])
+      hindex <- hosts_index[curhost]
+      vindex <- vOTUs_index[curvir]
+      #print(hindex)
+      #print(node_labels[hindex])
+      
+      v_embed <- embeddings[vindex,]
+      #for(j in 1:length(hosts_index)){
+      h_embed <- embeddings[hindex,]
+      
+      vh_embed <- v_embed - h_embed 
+      if(sum(is.na(vh_embed)) >0 ) {
+        print(paste("NA",curlabel, curhost, hindex, curvir, vindex))
+        #if(sum(is.na(v_embed)) >0 ) {
+        #  print("VIRUS")
+        #  print(v_embed)
+        #}
+        #if(sum(is.na(h_embed)) >0 ) {
+        #  print("HOST")
+        #}
+        j <- j-1
+      }
+      else {
+        #print("adding")
+        virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
+        virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
+      }
     }
-  }
-  else {
-    i <- i-1
-    print("BACK")
-    print(curlabel)
   }
 }
 row.names(virus_host__subtract__NEG) <- virus_host__subtract_label__NEG

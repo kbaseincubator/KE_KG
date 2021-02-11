@@ -25,11 +25,21 @@ head(node_data)
 node_labels <- as.character(node_data$id)
 
 test_edges <- read.csv("IMGVR_sample_extra_test_edges.txt", row.names=1, header=TRUE, sep="\t")
+dim(test_edges)
 class(test_edges)
 test_edges[,1]
 test_edges_split <- strsplit(as.character(test_edges[,1]), "__", fixed=TRUE)
 test_edges_split_mat <- unlist(test_edges_split)
 head(test_edges_split_mat)
+
+
+test_data <- read.csv("IMGVR_sample_extra_test.txt", row.names=1, header=TRUE, sep="\t")
+dim(test_data)
+
+
+train_data <- read.csv("IMGVR_sample_extra_train.txt", row.names=1, header=TRUE, sep="\t")
+dim(train_data)
+
 
 #grep(node2, edge_data[,'subject'])
 
@@ -53,15 +63,22 @@ all_edges_minus_test_index <- match(all_edges_str ,test_edges_str)
 sum(is.na(all_edges_minus_test_index))
 
 
+
 new_edges <- edge_data[which(is.na(all_edges_minus_test_index)), ]
+hold_edges_20 <- which(is.na(all_edges_minus_test_index))
+
 new_node_ids <- unique(c(as.vector(new_edges[,'subject']),as.vector(new_edges[,'object'])))
 length(new_node_ids)
 head(new_node_ids)
 new_node_index <- match(new_node_ids, node_labels)
 new_nodes <- node_data[new_node_index, ]
+held_nodes_20 <- which(is.na(match(node_labels, new_node_ids)))
+
 #colnames(new_edges) <- c("uuid", "subject", "predicate", "object", "source")
 #colnames(new_nodes) <- c("id", "label", "category", "source")
 write.table(new_edges, file="./IMGVR_merged_kg_edges__positive80.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+write.table(hold_edges_20, file="./IMGVR_merged_kg_edges__positive20_index.tsv", sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
 write.table(new_nodes, file="./IMGVR_merged_kg_nodes__positive80.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+write.table(new_nodes, file="./IMGVR_merged_kg_nodes__positive20_index.tsv", sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
 
 

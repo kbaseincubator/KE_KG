@@ -1,4 +1,5 @@
 rm(list=ls())
+set.seed(12345)
 
 library("randomForest")
 library("caTools")
