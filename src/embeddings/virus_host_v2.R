@@ -135,7 +135,7 @@ training_index_all_rev <- match(host_raw,virus_host$Host_taxonomy_prediction)
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- FALSE#TRUE
+done <- TRUE#FALSE
 if(!done) {
   training_index <-c()
   negative_index <- c()
@@ -183,7 +183,10 @@ unique(hosts[!(hosts_index %in% full_index)])[1:10]
 
 virus_host__subtract__NEG <- c()
 virus_host__subtract_label__NEG <- c()
-length(hosts)
+length(unique(hosts))
+length(unique(vOTUs[training_index]))
+
+host_samples <- 5
 ###for all negative samples
 for(i in 1:length(training_index)){
   if(i %% 100 == 0) {
@@ -194,13 +197,13 @@ for(i in 1:length(training_index)){
   curvir <- training_index[i]#sample(1:length(vOTUs), 1)
   #print(curvir)
   #random host
-  for(j in 1:length(hosts)){
+  for(j in 1:host_samples){#length(hosts)){
     
     if(j %% 100 == 0) {
       print(paste("h", j))
     }
     
-    curhost <- j#sample(1:length(hosts), 1)
+    curhost <- sample(1:length(hosts), 1)#j
     
     curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
     #curlabel <- virus_host__subtract_label[1]
@@ -230,7 +233,7 @@ for(i in 1:length(training_index)){
         #if(sum(is.na(h_embed)) >0 ) {
         #  print("HOST")
         #}
-        #i <- i-1
+        j <- j-1
       }
       else {
         #print("adding")
