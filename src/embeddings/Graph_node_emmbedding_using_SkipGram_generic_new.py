@@ -11,6 +11,8 @@ import tensorflow as tf
 #from tensorflow.keras.optimizers import Nadam
 #from embiggen import SkipGram
 
+import pandas as pd
+import numpy as np
 
 if len(sys.argv) < 3:
    sys.exit()
@@ -101,7 +103,8 @@ history = model.fit(
 #SAVE
 model.save_weights(f"{model.name}_weights_{outprefix}.h5")
 
-import pandas as pd
-embeddings = pd.DataFrame(model.embedding,
-                                    index=graph.get_node_names())
+embeddings = pd.DataFrame(model.embedding, index=graph.get_node_names())
 embeddings.to_csv(f"{model.name}_embedding_{outprefix}.npy", header=True)
+
+nodes = graph.get_node_names()
+np.savetxt(f"{outprefix}_nodes_after.tsv", nodes, delimiter="\t", fmt="%s")
