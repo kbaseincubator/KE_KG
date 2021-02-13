@@ -1,14 +1,23 @@
+
+# Doesn't yet work with embiggen versions installed
+#
 try:
    import silence_tensorflow.auto
 except:
    pass
 import numpy as np
+import sys
 
 from ensmallen_graph import EnsmallenGraph
+if len(sys.argv)!=4:
+    sys.exit()
+edge = sys.argv[1]
+node = sys.argv[2]
+out = sys.argv[3]
 
 graph = EnsmallenGraph.from_unsorted_csv(
-    edge_path="/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_edges.tsv",
-    node_path="/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_nodes.tsv",
+    edge_path=edge,
+    node_path=node,
     sources_column="subject",
     destinations_column="object",
     nodes_column = 'id',
@@ -23,12 +32,12 @@ print(graph)
 
 degrees = graph.degrees()
 print(degrees)
-file1 = open("IMGVR_sample_ensmallen_degrees.txt","a") 
+file1 = open(f"{out}_degrees.txt","ab")
 np.save(file1, degrees)
 file1.close() 
 
 nodes = graph.nodes()
-file2 = open("IMGVR_sample_ensmallen_nodes.txt","a") 
+file2 = open(f"{out}_nodes.txt","a") 
 file2.write(nodes)
 file2.close() 
 
