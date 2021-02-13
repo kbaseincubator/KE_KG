@@ -37,9 +37,9 @@ graph = EnsmallenGraph.from_unsorted_csv(
 print(graph)
 
 degrees = graph.degrees()
-np.savetxt(f"{outprefix}_degrees.tsv", degrees, delimiter="\t", fmt="%i")
+np.savetxt(f"{out_prefix}_degrees.tsv", degrees, delimiter="\t", fmt="%i")
 nodes = graph.get_node_names()
-np.savetxt(f"{outprefix}_nodes.tsv", nodes, delimiter="\t", fmt="%s")
+np.savetxt(f"{out_prefix}_nodes.tsv", nodes, delimiter="\t", fmt="%s")
 
 
 walk_length=100
@@ -101,10 +101,10 @@ history = model.fit(
 )
 
 #SAVE
-model.save_weights(f"{model.name}_weights_{outprefix}.h5")
+model.save_weights(f"{model.name}_weights_{out_prefix}.h5")
 
 embeddings = pd.DataFrame(model.embedding, index=graph.get_node_names())
-embeddings.to_csv(f"{model.name}_embedding_{outprefix}.npy", header=True)
+embeddings.to_csv(f"{model.name}_embedding_{out_prefix}.npy", header=True)
 
 nodes = graph.get_node_names()
-np.savetxt(f"{outprefix}_nodes_after.tsv", nodes, delimiter="\t", fmt="%s")
+np.savetxt(f"{out_prefix}_nodes_after.tsv", nodes, delimiter="\t", fmt="%s")
