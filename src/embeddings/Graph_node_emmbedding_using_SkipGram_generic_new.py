@@ -20,8 +20,8 @@ out_prefix = sys.argv[3]
 
 
 graph = EnsmallenGraph.from_unsorted_csv(
-    edge_path=edge_file,#"/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_edges.tsv",
-    node_path=node_file,#"/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_nodes.tsv",
+    edge_path=edge_file,
+    node_path=node_file,
     sources_column="subject",
     destinations_column="object",
     nodes_column = 'id',
@@ -35,9 +35,9 @@ graph = EnsmallenGraph.from_unsorted_csv(
 print(graph)
 
 degrees = graph.degrees()
-np.savetxt("merged_imgvr_mg_degrees.tsv", degrees, delimiter="\t", fmt="%i")
+np.savetxt(f"{outprefix}_degrees.tsv", degrees, delimiter="\t", fmt="%i")
 nodes = graph.get_node_names()
-np.savetxt("merged_imgvr_mg_nodes.tsv", nodes, delimiter="\t", fmt="%s")
+np.savetxt(f"{outprefix}_nodes.tsv", nodes, delimiter="\t", fmt="%s")
 
 
 walk_length=100
