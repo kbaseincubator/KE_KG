@@ -6,10 +6,10 @@ import sys
 from embiggen import Node2VecSequence
 
 import tensorflow as tf
-#from tensorflow.keras.callbacks import EarlyStopping
-#from tensorflow.distribute import MirroredStrategy
-#from tensorflow.keras.optimizers import Nadam
-#from embiggen import SkipGram
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.distribute import MirroredStrategy
+from tensorflow.keras.optimizers import Nadam
+from embiggen import SkipGram
 
 import pandas as pd
 import numpy as np
