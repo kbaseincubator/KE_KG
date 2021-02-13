@@ -1,10 +1,27 @@
 import silence_tensorflow.auto
 
 from ensmallen_graph import EnsmallenGraph
+import sys
+
+from embiggen import Node2VecSequence
+
+import tensorflow as tf
+#from tensorflow.keras.callbacks import EarlyStopping
+#from tensorflow.distribute import MirroredStrategy
+#from tensorflow.keras.optimizers import Nadam
+#from embiggen import SkipGram
+
+
+if len(sys.argv) < 3:
+   sys.exit()
+edge_file = sys.argv[1]
+node_file = sys.argv[2]
+out_prefix = sys.argv[3]
+
 
 graph = EnsmallenGraph.from_unsorted_csv(
-    edge_path="/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_edges.tsv",
-    node_path="/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_nodes.tsv",
+    edge_path=edge_file,#"/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_edges.tsv",
+    node_path=node_file,#"/global/scratch/marcin/N2V/embiggen/notebooks/IMGVR/IMGVR_sample_KGX_nodes.tsv",
     sources_column="subject",
     destinations_column="object",
     nodes_column = 'id',
@@ -18,15 +35,9 @@ graph = EnsmallenGraph.from_unsorted_csv(
 print(graph)
 
 degrees = graph.degrees()
-print(degrees)
-file1 = open("IMGVR_sample_ensmallen_degrees.txt","a") 
-np.save(file1, degrees)
-file1.close() 
-
-nodes = graph.nodes()
-file2 = open("IMGVR_sample_ensmallen_nodes.txt","a") 
-file2.write(nodes)
-file2.close() 
+np.savetxt("merged_imgvr_mg_degrees.tsv", degrees, delimiter="\t", fmt="%i")
+nodes = graph.get_node_names()
+np.savetxt("merged_imgvr_mg_nodes.tsv", nodes, delimiter="\t", fmt="%s")
 
 
 walk_length=100
@@ -43,8 +54,6 @@ epochs=1000
 learning_rate=0.1
 
 
-from embiggen import Node2VecSequence
-
 graph_sequence = Node2VecSequence(
     graph,
     walk_length=walk_length,
@@ -57,9 +66,6 @@ graph_sequence = Node2VecSequence(
 )
 
 #CREATING
-from tensorflow.distribute import MirroredStrategy
-from tensorflow.keras.optimizers import Nadam
-from embiggen import SkipGram
 
 strategy = MirroredStrategy()
 with strategy.scope():
@@ -74,7 +80,9 @@ with strategy.scope():
 print(model.summary())
 
 #TUNING
-from tensorflow.keras.callbacks import EarlyStopping
+
+print("GPU")
+print(tf.test.gpu_device_name())
 
 history = model.fit(
     graph_sequence,
@@ -91,13 +99,9 @@ history = model.fit(
 )
 
 #SAVE
-model.save_weights(f"{model.name}_weights_IMGVR_sample.h5")
+model.save_weights(f"{model.name}_weights_{outprefix}.h5")
 
-import numpy as np
-
-np.save(f"{model.name}_embedding_IMGVR_sample.npy", model.embedding)
-
-
-#from plot_keras_history import plot_history
-
-#plot_history(history)
+import pandas as pd
+embeddings = pd.DataFrame(model.embedding,
+                                    index=graph.get_node_names())
+embeddings.to_csv(f"{model.name}_embedding_{outprefix}.npy", header=True)
