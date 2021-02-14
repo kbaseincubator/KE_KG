@@ -109,7 +109,7 @@ if(!done) {
   write.table(virus_host__subtract_label, file=outfile_nodes, sep="\t")
 } else {
   virus_host__subtract <- read.csv("virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
-  virus_host__subtract_label <- read.csv("virus_host__subtract_labels.tsv", sep="\t")
+  virus_host__subtract_label <- read.csv("virus_host__subtract_labels.tsv", sep="\t")[,1]
 }
 
 dim(virus_host__subtract)
@@ -175,7 +175,7 @@ length(vOTUs[hosts_index])
 
 done <- FALSE
 if(!done) {
-  negative_sample <- sample(1:length(negative_index), length(virus_host__subtract_label[,1]))
+  negative_sample <- sample(1:length(negative_index), length(virus_host__subtract_label))
   head(negative_sample)
   length(negative_sample)
   

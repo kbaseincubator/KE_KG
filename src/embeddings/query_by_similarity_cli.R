@@ -168,6 +168,7 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
     }
     else if(distance == "euclidean") {
       dist <- dist(rbind(as.numeric(query_data), as.numeric(data[j,])))
+      print(paste(dist, cutoff))
       if(dist != 0 && dist < max_non_1) {
         max_non_1 <- dist
         max_non_1_label <- row.names(data)[j]

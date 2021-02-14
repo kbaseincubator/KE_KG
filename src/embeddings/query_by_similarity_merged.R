@@ -9,8 +9,6 @@ setwd("~/Documents/KBase/KE/KE_KG/")
 #library("grid")
 #library("tcR")
 
-setwd("~/Documents/KBase/KE/KE_KG/")
-
 data <- read.csv("../IMGVR/embeddings/SkipGram_IMGVR_merged_finalv2_kg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
 head(data)
 dim(data)
