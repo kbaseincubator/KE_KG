@@ -73,7 +73,7 @@ virus_host__subtract_label <- c()
 
 edge_data_test_labels <- paste(edge_data_test[, 'subject'],"__",edge_data_test[, 'object'], sep="")
 
-done <- TRUE#FALSE
+done <- FALSE#FALSE
 if(!done) {
   for(i in 1:length(vOTUs_index)){
     
@@ -143,7 +143,7 @@ training_index_all_rev <- match(host_raw,virus_host$Host_taxonomy_prediction)
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- TRUE#FALSE
+done <- FALSE#FALSE
 if(!done) {
   training_index <-c()
   negative_index <- c()
