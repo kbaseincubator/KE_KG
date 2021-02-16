@@ -219,7 +219,7 @@ for(i in 1:length(training_index)){
     #print(curvir)
     #print(vOTUs[curvir])
     #not in positive and not yet in negative
-    if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% edge_data_test_labels)) {
+    if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% edge_data_test_labels) && !(curlabel %in% virus_host__subtract_label__NEG)) {
       
       #hindex <- match(node_labels, hosts[curhost])
       hindex <- hosts_index[curhost]

@@ -10,7 +10,7 @@ library ("ROCR")
 #node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 setwd("~/Documents/KBase/KE/IMGVR/")
 #node_data <- read.csv("./IMGVR_merged_kg_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("./IMGVR_merged_kg_nodes__positive80.tsv", sep="\t",header=T)
+node_data <- read.csv("./link_predict_IMGVR_sample_extra_v3/IMGVR_merged_kg_nodes__positive80_v3.tsv", sep="\t",header=T)
 
 dim(node_data)
 head(node_data) 
@@ -18,13 +18,15 @@ head(node_data)
 node_labels <- as.character(node_data$id)
 
 
+#virus_host_positive <- read.csv("./link_predict/virus_host__subtract.tsv", row.names=1)
 virus_host_positive <- read.csv("./link_predict_IMGVR_sample_extra_v3_80/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
 virus_host_positive_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3_80/virus_host__subtract_labels.tsv")
 dim(virus_host_positive)
-length(virus_host_positive_labels)
-head(virus_host_positive)
+dim(virus_host_positive_labels)
+#head(virus_host_positive)
 dimpos <- dim(virus_host_positive)
 dimpos
+
 
 
 virus_host_negative <- read.csv("./link_predict_IMGVR_sample_extra_v3_80/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
@@ -32,203 +34,108 @@ virus_host_negative_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3_80/
 dim(virus_host_negative)
 sum(is.na(virus_host_negative))
 dim(virus_host_negative_labels)
-head(virus_host_negative)
+#head(virus_host_negative)
 dimneg <- dim(virus_host_negative)
-head(virus_host_negative)
-dimneg
+#head(virus_host_negative)
 row.names(virus_host_negative) <- virus_host_negative_labels[,1]
 
-virus_host_negative_naindex <- which(apply(virus_host_negative, 1, function(x) {sum(is.na(x))}) > 0)
-virus_host_negative <- virus_host_negative[-virus_host_negative_naindex,]
 
 virus_host_new <- read.csv("./link_predict_IMGVR_sample_extra_v3_80/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_new_labels <- read.csv("./link_predict_IMGVR_samlink_predict_IMGVR_sample_extra_v3_80ple_extra_80/virus_host_NEW_subtract_labels.tsv")
+virus_host_new_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3_80/virus_host_NEW_subtract_labels.tsv")
 dim(virus_host_new)
 sum(is.na(virus_host_new))
 dim(virus_host_new_labels)
-head(virus_host_new)
-dimnegnew <- dim(virus_host_new)
-head(virus_host_new)
-dimnegnew
+#head(virus_host_new)
+dimnew <- dim(virus_host_new)
+#head(virus_host_new)
 row.names(virus_host_new) <- virus_host_new_labels[,1]
 
 
-###
-###
-###
-
-virus_host_positive_all <- read.csv("./link_predict_IMGVR_sample_extra/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_positive_labels_all <- read.csv("./link_predict_IMGVR_sample_extra/virus_host__subtract_labels.tsv")
-dim(virus_host_positive_all)
-length(virus_host_positive_labels_all)
-head(virus_host_positive_all)
-dimpos_all <- dim(virus_host_positive_all)
-dimpos_all
-
-
-virus_host_negative_all <- read.csv("./link_predict_IMGVR_sample_extra/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_negative_labels_all <- read.csv("./link_predict_IMGVR_sample_extra/virus_host_NEGATIVE__subtract_labels.tsv")
-dim(virus_host_negative_all)
-sum(is.na(virus_host_negative_all))
-dim(virus_host_negative_labels_all)
-head(virus_host_negative_all)
-dimneg_all <- dim(virus_host_negative_all)
-head(virus_host_negative_all)
-dimneg_all
-row.names(virus_host_negative_all) <- virus_host_negative_labels_all[,1]
-
-virus_host_negative_naindex_all <- which(apply(virus_host_negative_all, 1, function(x) {sum(is.na(x))}) > 0)
-virus_host_negative_all <- virus_host_negative_all[-virus_host_negative_naindex_all,]
-
-virus_host_positive_all_diff_index <- which(is.na(match(virus_host_positive_labels_all, virus_host_positive_labels)))
-virus_host_negative_all_diff_index <- which(is.na(match(virus_host_negative_labels_all, virus_host_negative_labels)))                                     
-length(virus_host_positive_all_diff_index)
-length(virus_host_negative_all_diff_index)
-
-###
-###
-###
-
-
-#print("trimming positive because FEWER NEGATIVE!!!")
-#virus_host_positive <- virus_host_positive[1:dimneg[1],]
+print("trimming positive because FEWER NEGATIVE!!!")
+virus_host_positive <- virus_host_positive[1:dimneg[1],]
 class(virus_host_positive_labels)
 virus_host_positive_labels <- virus_host_positive_labels[1:dimneg[1],]
 dim(virus_host_positive)
 dim(virus_host_positive_labels)
 length(virus_host_positive_labels)
-#row.names(virus_host_positive) <- virus_host_positive_labels
+row.names(virus_host_positive) <- virus_host_positive_labels
 dimpos <- dim(virus_host_positive)
 dimpos
-dimneg <- dim(virus_host_negative)
-dimneg
 
 sum(is.na(virus_host_positive))
 sum(is.na(virus_host_negative))
 
 total_train_data <- rbind(virus_host_positive, virus_host_negative)
+###limit to top features
+#total_train_data <- total_train_data[,c(45, 82, 44,45, 90, 0, 3,7, 60, 70, 88, 39, 59, 56,94,97, 17)]
 dim(total_train_data)
-head(total_train_data)
+#head(total_train_data)
 sum(is.na(total_train_data))
-total_train_data_labels <- row.names(total_train_data)
-head(total_train_data_labels)
-class(class(train_data_labels))
-
-
-total_train_data_all <- rbind(virus_host_positive_all, virus_host_negative_all)
-total_train_data_all_labels <- row.names(total_train_data_all)
-
-
-###
-### NEW
-###
-
-
-test_data <- read.csv("IMGVR_sample_extra_test.txt", row.names=1, header=TRUE, sep="\t")
-dim(test_data)
-test_data_labels_split <- strsplit(row.names(test_data), "\t")
-test_data_labels <- unlist(test_data_labels_split)[2*(1:length(test_data_labels_split))]#unlist(row.names(test_data))
-length(test_data_labels)
-head(test_data_labels)
-
-train_data <- read.csv("IMGVR_sample_extra_train.txt", row.names=1, header=TRUE, sep="\t")
-dim(train_data)
-train_data_labels_split <- strsplit(row.names(train_data), "\t")
-train_data_labels <- unlist(train_data_labels_split)[2*(1:length(train_data_labels_split))]#unlist(row.names(test_data))
-length(train_data_labels)
-head(train_data_labels)
-class(train_data_labels)
-
-test_match <- match(test_data_labels, total_train_data_labels)
-train_match <- match(train_data_labels, total_train_data_labels)
-
-test_data_labels[is.na(test_match)]
-
-sum(is.na(test_match))
-sum(!is.na(test_match))
-sum(is.na(train_match))
-sum(!is.na(train_match))
-
-
-
-test_match_all <- match(test_data_labels, total_train_data_all_labels)
-train_match_all  <- match(train_data_labels, total_train_data_all_labels)
-
-test_data_labels[is.na(test_match_all)]
-
-sum(is.na(test_match_all))
-sum(!is.na(test_match_all))
-sum(is.na(train_match_all))
-sum(!is.na(train_match_all))
-
-
-###
-###
-###
-
-
-row.names(virus_host_negative)[which(apply(virus_host_negative, 1, function(x) { sum(is.na(x))}) > 0)]
 
 pos_neg_label <- c(rep(1, dimpos[1]), rep(0, dimneg[1]))
 names(pos_neg_label) <- "pos_neg"
 total_train_data <- cbind(total_train_data, pos_neg_label)
-dimtotal <- dim(total_train_data)
-dimtotal
-sum(is.na(total_train_data))
 
-sample <- read.csv("IMGVR_sample_extra_sample.txt", row.names=1, header=TRUE, sep="\t")
-sum(sample == FALSE)#8340
-sum(sample==TRUE)#33362
-dim(sample)
-dim(total_train_data)
-33362 + 8340
 
-total_train_data_80 <- total_train_data[sample==TRUE, ]
-total_train_data_20 <- total_train_data[sample==FALSE, ]
-dim(total_train_data_80)
-dim(total_train_data_20)
-
-which(sum(is.na(total_train_data_80)) > 0)
-
-narows <- which((grepl("NA", row.names(total_train_data_80))))
-narows
-row.names(total_train_data_80)[narows]
-total_train_data_80[narows,]
-total_train_data_80 <- total_train_data_80[-narows,]
-
-row.names(total_train_data_80)
-narows <- which(apply(total_train_data_80, 1, function(x) { sum(is.na(x))}) > 0)
-print(narows)
-row.names(total_train_data_80)[narows]
+virus_host_test <- read.csv("./link_predict_IMGVR_sample_extra_v3/IMGVR_sample_extra_test.txt", row.names=1, header=TRUE, sep=",")
+virus_host_test_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3/IMGVR_sample_extra_test_edges_labels.txt")
+dim(virus_host_test)
+sum(is.na(virus_host_test_labels))
+dim(virus_host_test_labels)
+#head(virus_host_negative)
+dimtest <- dim(virus_host_test)
+#head(virus_host_negative)
+row.names(virus_host_test) <- virus_host_test_labels[,1]
 
 
 
-head(total_train_data_80)
-sum(is.na(total_train_data_80))
-#total_train_data
+#virus_host_positive <- read.csv("./link_predict/virus_host__subtract.tsv", row.names=1)
+virus_host_positive_ALL <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_positive_ALL_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host__subtract_labels.tsv")
+dim(virus_host_positive_ALL)
+dim(virus_host_positive_ALL_labels)
+#head(virus_host_positive)
+dimposALL <- dim(virus_host_positive_ALL)
+dimposALL
+
+
+
+
+
+
+colnames(total_train_data)
+
+train <- data.matrix(train)
+dimtrain <- dim(train)
+test <- data.matrix(test)
+
+colnames(train)
+sum(is.na(train))
+
+dimtrain
+dim(train)
 ###convert response variable to factor for classification
 ###otherwise random forest regression model
-#[,-dimtotal[2]]
-rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=total_train_data_80, ntree=200, importance=TRUE,do.trace=TRUE)#mtry=sqrt(dimtrain[1]),
-#rf_classifier <- randomForest(train[,'pos_neg_label'], data=train[, 1:(dimtrain[1]-1)], ntree=10, mtry=sqrt(dimtrain[1]), importance=TRUE,do.trace=TRUE)
+rf_classifier <- randomForest(as.factor(pos_neg_label) ~ ., data=total_train_data, ntree=200, replace=TRUE, proximity=FALSE, importance=TRUE,do.trace=TRUE)
+#rf_classifier <- randomForest(y=as.factor(train[,'pos_neg_label']), x=train[, 1:(dimtrain[2]-1)], ntree=200, replace=FALSE, proximity=TRUE, importance=TRUE,do.trace=TRUE)
 
 rf_classifier
 varImpPlot(rf_classifier)
 
-#predict_train <- predict(rf_classifier,train)
+predict_train <- predict(rf_classifier,train)
 
-prediction_for_table <- predict(rf_classifier,total_train_data_20)
+prediction_for_table <- predict(rf_classifier,virus_host_test)
 length(prediction_for_table)
-dim(test_data)
-class(test_data)
-colnames(test_data)
-table(observed=test_data[,101],predicted=prediction_for_table)#pos_neg_label
+dim(test)
+class(test)
+colnames(test)
+table(observed=test[,101],predicted=prediction_for_table)#pos_neg_label
 
 
 ####
 
 
-y <- test_data[,'pos_neg_label']#... # logical array of positive / negative cases
+y <- test[,'pos_neg_label']#... # logical array of positive / negative cases
 predictions <- prediction_for_table # array of predictions
 class(predictions)
 pred <- prediction(as.numeric(as.character(predictions)), y);
@@ -250,8 +157,34 @@ dev.off()
 # ROC area under the curve
 auc.tmp <- performance(pred,"auc");
 auc <- as.numeric(auc.tmp@y.values)
+dev.off()
+
+###predict on negative train
+prediction_for_table2 <- predict(rf_classifier,virus_host_negative)
+length(prediction_for_table2)
+
+prediction_for_table2[which(prediction_for_table2 == 1)]
+
+write.table(prediction_for_table2, file="virus_host_predict_NEW_links_on_negtrain.txt", sep="\t")
+
+
+###predict on positive train
+prediction_for_table3 <- predict(rf_classifier,virus_host_positive)
+length(prediction_for_table3)
+
+prediction_for_table2[which(prediction_for_table3 == 1)]
+
+write.table(prediction_for_table3, file="virus_host_predict_NEW_links_on_postrain.txt", sep="\t")
+
+
+#virus_host_new
+prediction_for_table4 <- predict(rf_classifier,virus_host_new)
+length(prediction_for_table4)
+
+prediction_for_table4[which(prediction_for_table4 == 1)]
+
+write.table(prediction_for_table4, file="virus_host_predict_NEW_links_on_rand10new.txt", sep="\t")
 
 
 
-save.image(file='randomForest_v0.01__IMGVR_sample_extra_80_v3')
-
+save.image(file='randomForest_v0.01')
