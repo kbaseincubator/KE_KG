@@ -71,7 +71,7 @@ host_curie <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),se
 virus_host__subtract <- data.frame()
 virus_host__subtract_label <- c()
 
-edge_data_test_labels <- paste(edge_data_test[, 'subject'],"__",edge_data_test[, 'object'], sep="")
+edge_data_test_labels <- row.names(edge_data_test)#paste(edge_data_test[, 'subject'],"__",edge_data_test[, 'object'], sep="")
 
 done <- FALSE#FALSE
 if(!done) {
