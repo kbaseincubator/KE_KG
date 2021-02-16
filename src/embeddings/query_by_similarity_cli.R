@@ -76,14 +76,14 @@ setwd(args$working_directory)
 
 #embedding_file <- "/global/cfs/cdirs/kbase/ke_prototype/embeddings/SkipGram_embedding_IMGVR_merged_final_embedding.tsv"
 #data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/embeddings/SkipGram_embedding_IMGVR_merged_final_embedding.tsv", sep="\t", header=TRUE, row.names=1)
-data <- read.csv(embedding_file, sep="\t", header=TRUE, row.names=1)
+data <- read.csv(embedding_file, sep="\t", header=T, row.names=1, stringsAsFactors=FALSE, quote="\"")
 head(data)
 dim(data)
 
 
 #nodes_file <- "/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv"
 #node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv(nodes_file, sep="\t",header=T)
+node_data <- read.csv(nodes_file, sep="\t",header=T, stringsAsFactors=FALSE, quote="\"")
 dim(node_data)
 head(node_data)
 
