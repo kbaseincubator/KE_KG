@@ -13,7 +13,7 @@ head(node_data)
 node_labels <- as.character(node_data$id)
 
 
-edge_data_test <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_kg_edges__positive80_v3.tsv", sep="\t",header=T)
+edge_data_test <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/link_predict_IMGVR_sample_extra_v3/IMGVR_sample_extra_test.txt", sep="\t",header=T)
 dim(edge_data_test)
 head(edge_data_test)
 
