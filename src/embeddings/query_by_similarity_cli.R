@@ -74,17 +74,17 @@ hits <- as.numeric(args$num_hits)
 
 setwd(args$working_directory)
 
-#embedding_file <- "/global/cfs/cdirs/kbase/ke_prototype/embeddings/SkipGram_embedding_IMGVR_merged_final_embedding.tsv"
-#data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/embeddings/SkipGram_embedding_IMGVR_merged_final_embedding.tsv", sep="\t", header=TRUE, row.names=1)
+#try loading old style tab embeddings with no labels
 data <- read.csv(embedding_file, sep="\t", header=T, row.names=1, stringsAsFactors=FALSE, quote="")
 head(data)
 dimdata <- dim(data)
 
+#otherwise try new style
 if(dimdata[2] == 0) {
   data <- read.csv(embedding_file, sep=",", header=T, row.names=1, stringsAsFactors=FALSE, quote="")
   head(data)
   dimdata <- dim(data)
-  node_data <- data.frame()
+  node_data <- data.frame(nrow=dimdata[1],ncol=1)
   node_data$id <- row.names(data)
 } else {
   node_data <- read.csv(nodes_file, sep="\t",header=T, stringsAsFactors=FALSE, quote="")
