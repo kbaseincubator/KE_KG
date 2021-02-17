@@ -84,8 +84,8 @@ if(dimdata[2] == 0) {
   data <- read.csv(embedding_file, sep=",", header=T, row.names=1, stringsAsFactors=FALSE, quote="")
   head(data)
   dimdata <- dim(data)
-  node_data <- data.frame(nrow=dimdata[1],ncol=1)
-  node_data$id <- row.names(data)
+  node_data <- data.frame(row.names(data), stringsAsFactors=FALSE)
+  colnames(node_data) <- c("id")
 } else {
   node_data <- read.csv(nodes_file, sep="\t",header=T, stringsAsFactors=FALSE, quote="")
   dim(node_data)
