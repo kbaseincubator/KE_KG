@@ -208,7 +208,7 @@ run_search <- function(query, query_data, data, distance, cutoff, hits, search_s
     query_output_name<-search_string
 
     for(i in 1:nrow(output_data)) {
-      output_data$V1[i]<-node_data[as.integer(output_data$V1[i])+1,]$id
+      output_data$V1[i]<-node_data$id[as.integer(output_data$V1[i])+1]
     }
 
     outfile <- paste(distance,"__",query_output_name,"_top",hits,"_cutoff",cutoff,".txt",sep="")
