@@ -84,16 +84,15 @@ if(dimdata[2] == 0) {
   data <- read.csv(embedding_file, sep=",", header=T, row.names=1, stringsAsFactors=FALSE, quote="")
   head(data)
   dimdata <- dim(data)
+  node_data <- row.names(data)
+} else {
+  node_data <- read.csv(nodes_file, sep="\t",header=T, stringsAsFactors=FALSE, quote="")
+  dim(node_data)
+  head(node_data)
+  
+  row.names(data) <- node_data$id
 }
 
-
-#nodes_file <- "/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv"
-#node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv(nodes_file, sep="\t",header=T, stringsAsFactors=FALSE, quote="")
-dim(node_data)
-head(node_data)
-
-row.names(data) <- node_data$id
 
 #search_string<-"GOLD:bulk_soil"
 search_string_input<-paste0(search_string,'$')
