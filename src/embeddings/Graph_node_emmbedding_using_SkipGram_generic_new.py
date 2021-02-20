@@ -104,7 +104,7 @@ history = model.fit(
 model.save_weights(f"{model.name}_weights_{out_prefix}.h5")
 
 embeddings = pd.DataFrame(model.embedding, index=graph.get_node_names())
-embeddings.to_csv(f"{model.name}_embedding_{out_prefix}.npy", header=True)
+embeddings.to_csv(f"{model.name}_embedding_{out_prefix}.tsv", header=True, sep="\t")
 
 nodes = graph.get_node_names()
 np.savetxt(f"{out_prefix}_nodes_after.tsv", nodes, delimiter="\t", fmt="%s")
