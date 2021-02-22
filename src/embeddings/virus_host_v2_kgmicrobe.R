@@ -23,10 +23,11 @@ head(all_objects)
 
 subjects <- train_edges$subject
 length(subjects)
+head(subjects)
 
 objects <- train_edges$object
 objects_full <- all_objects$id
-
+head(objects)
 length(objects)
 length(objects_full)
 
