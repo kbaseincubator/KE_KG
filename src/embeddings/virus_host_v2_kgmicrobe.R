@@ -21,11 +21,11 @@ all_objects <-  read.csv("/global/scratch/marcin/N2V/embiggen/notebooks/kg_micro
 dim(all_objects)
 head(all_objects) 
 
-subjects <- train_edges$subject
+subjects <- train_edges$object
 length(subjects)
 head(subjects)
 
-objects <- train_edges$object
+objects <- train_edges$subject
 objects_full <- all_objects$id
 head(objects)
 length(objects)
@@ -37,6 +37,7 @@ subjects_index <- match(subjects, node_labels)
 objects_index <- match(objects, node_labels)
 length(objects_index)
 objects_full_index <- match(objects_full, node_labels)
+head(objects_full)
 length(objects_full_index)
 length(subjects_index)
 length(unique(objects))
@@ -48,8 +49,6 @@ length(unique(objects_full))
 sum(!is.na(objects_full_index))
 sum(is.na(objects_full_index))
 objects[is.na(objects_full_index)][1:10]
-
-host_curie <- paste("NCBItaxon:",tolower(train_edges$subject),sep="")
 
 
 train_edges__subtract <- data.frame()
