@@ -13,125 +13,108 @@ head(node_data)
 node_labels <- as.character(node_data$id)
 
 
-virus_host <- read.csv("/global/scratch/marcin/N2V/embiggen/notebooks/kg_microbe/20210119/merged_kg_edges_SHAPE.tsv",sep="\t",header=T)
-dim(virus_host)
-head(virus_host) 
+train_edges <- read.csv("/global/scratch/marcin/N2V/embiggen/notebooks/kg_microbe/20210119/merged_kg_edges_SHAPE.tsv",sep="\t",header=T)
+dim(train_edges)
+head(train_edges) 
+
+all_objects <-  read.csv("/global/scratch/marcin/N2V/embiggen/notebooks/kg_microbe/20210119/merged-kg_nodes_NCBITaxon.tsv",sep="\t",header=T)
+dim(all_objects)
+head(all_objects) 
+
+subjects <- train_edges$subject
+length(subjects)
+
+objects <- train_edges$object
+objects_full <- all_objects$id
+
+length(objects)
+length(objects_full)
 
 
-vOTUs <- paste("vOTU:",tolower(virus_host$vOTU),sep="")
-length(vOTUs)
-class(virus_host$subject[1])
-length(virus_host$subject[1])
-hlens <- nchar(as.character(virus_host$subject))#unlist(lapply(virus_host$subject, length))#lengths(virus_host$subject)
-sum(hlens>1)
-#virus_host$subject[hlens>1]
 
-virus_host$subject <- gsub(" ","_",virus_host$subject)
-host_raw <- unique(virus_host$subject[hlens>1])
-host_raw_full <- virus_host$subject[hlens>1]
+subjects_index <- match(subjects, node_labels)
+objects_index <- match(objects, node_labels)
+length(objects_index)
+objects_full_index <- match(objects_full, node_labels)
+length(objects_full_index)
+length(subjects_index)
+length(unique(objects))
+sum(!is.na(objects_index))
+sum(is.na(objects_index))
+objects[is.na(objects_index)][1:10]
 
-hosts <- paste("NCBItaxon:",tolower(unique(virus_host$subject[hlens>1])),sep="")
-hosts_full <- paste("NCBItaxon:",tolower(virus_host$subject[hlens>1]),sep="")
-hosts_full_all <- paste("NCBItaxon:",tolower(virus_host$subject),sep="")#hosts <- gsub(" ","_",hosts)
-length(hosts)
-length(hosts_full)
-length(hosts_full_all)
-class(node_labels[1])
+length(unique(objects_full))
+sum(!is.na(objects_full_index))
+sum(is.na(objects_full_index))
+objects[is.na(objects_full_index)][1:10]
 
-grep("vOTU:votu_219688", node_labels)
-#vOTUs_index <- vOTUs %in% node_labels
-#hosts_index <- hosts %in% node_labels
-vOTUs_index <- match(vOTUs, node_labels)
-hosts_index <- match(hosts, node_labels)
-length(hosts_index)
-hosts_full_index <- match(hosts_full, node_labels)
-hosts_full_all_index <- match(hosts_full_all, node_labels)
-length(hosts_full_index)
-length(hosts_full_all_index)
-length(vOTUs_index)
-length(unique(hosts))
-sum(!is.na(hosts_index))
-sum(is.na(hosts_index))
-hosts[is.na(hosts_index)][1:10]
-
-length(unique(hosts_full))
-sum(!is.na(hosts_full_index))
-sum(is.na(hosts_full_index))
-hosts[is.na(hosts_full_index)][1:10]
-
-host_curie <- paste("NCBItaxon:",tolower(virus_host$subject),sep="")
+host_curie <- paste("NCBItaxon:",tolower(train_edges$subject),sep="")
 
 
-virus_host__subtract <- data.frame()
-virus_host__subtract_label <- c()
+train_edges__subtract <- data.frame()
+train_edges__subtract_label <- c()
 
-done <- TRUE#FALSE
+done <- FALSE#FALSE
 if(!done) {
-  for(i in 1:length(vOTUs_index)){
+  for(i in 1:length(subjects_index)){
     
-    #curhost <- host_curie[i]
-    #print(curhost)
-    #hashost <- curhost %in% hosts
-    
-    #print(hashost)
-    #if(hashost) {
     if(i %% 100 == 0) {
       print(paste("vh", i))
     }
     
-    if(!is.na(hosts_full_all_index[i])){
-      curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_full_all_index[i]],sep="")
+    if(!is.na(objects_full_index[i])){
+      curlabel <- paste(node_labels[subjects_index[i]],"__",node_labels[objects_full_index[i]],sep="")
       print(curlabel)
-      if(!(curlabel %in% virus_host__subtract_label)) {
+      if(!(curlabel %in% train_edges__subtract_label)) {
         print(curlabel)
-        #hindex <- which(hashost)
-        v_embed <- embeddings[vOTUs_index[i],]
-        #for(j in 1:length(hosts_index)){
-        h_embed <- embeddings[hosts_full_all_index[i],]
+        #objindex <- which(hashost)
+        subj_embed <- embeddings[subjects_index[i],]
+        #for(j in 1:length(objects_index)){
+        obj_embed <- embeddings[objects_full_index[i],]
         
-        vh_embed <- v_embed - h_embed 
-        virus_host__subtract <- rbind(virus_host__subtract, vh_embed)
-        virus_host__subtract_label <- c(virus_host__subtract_label, curlabel)#,"__",i
+        subj_obj_embed <- subj_embed - obj_embed 
+        train_edges__subtract <- rbind(train_edges__subtract, subj_obj_embed)
+        train_edges__subtract_label <- c(train_edges__subtract_label, curlabel)#,"__",i
       }
     #}
     }
     #else {
-    #  print(paste("missing ", curhost))
+    #  print(paste("missing ", curobject))
     #}
     #}
   }
-  row.names(virus_host__subtract) <- virus_host__subtract_label
-  outfile <- "virus_host__subtract.tsv"
-  outfile_nodes <- "virus_host__subtract_labels.tsv"
+  row.names(train_edges__subtract) <- train_edges__subtract_label
+  outfile <- "train_edges__subtract.tsv"
+  outfile_nodes <- "train_edges__subtract_labels.tsv"
   print(outfile)
   print(outfile_nodes)
-  write.csv(virus_host__subtract, file=outfile)
-  write.table(virus_host__subtract_label, file=outfile_nodes, sep="\t")
+  write.csv(train_edges__subtract, file=outfile)
+  write.table(train_edges__subtract_label, file=outfile_nodes, sep="\t")
 } else {
-  virus_host__subtract <- read.csv("virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
-  virus_host__subtract_label <- read.csv("virus_host__subtract_labels.tsv", sep="\t")[,1]
+  train_edges__subtract <- read.csv("train_edges__subtract.tsv", row.names=1, header=TRUE, sep=",")
+  train_edges__subtract_label <- read.csv("train_edges__subtract_labels.tsv", sep="\t")[,1]
 }
 
-dim(virus_host__subtract)
-length(virus_host__subtract_label)
-head(virus_host__subtract)
-head(virus_host__subtract_label)
+dim(train_edges__subtract)
+length(train_edges__subtract_label)
+head(train_edges__subtract)
+head(train_edges__subtract_label)
 
 
 ###create negative samples
 full_index <- seq(1, length(node_labels), 1)
 length(full_index)
-length(hosts_full_index)
+length(objects_full_index)
 
 ###pick the virus-host pairs, but only one if multiple
 ###however, mask all virus-host pairs including duplicates
-testlen_unique_virus_host <- dim(virus_host__subtract)[1]
+testlen_unique_train_edges <- dim(train_edges__subtract)[1]
 
 
 
 ###all rows of training + duplicates
-training_index_all <- match(virus_host$subject, host_raw)
-training_index_all_rev <- match(host_raw,virus_host$subject)
+training_index_all <- match(train_edges$subject, host_raw)
+training_index_all_rev <- match(host_raw,train_edges$subject)
 length(training_index_all)
 length(training_index_all_rev)
 
@@ -139,10 +122,10 @@ done <- FALSE
 if(!done) {
   training_index <-c()
   negative_index <- c()
-  for(i in 1:length(virus_host$subject))   {
-    print(virus_host$subject[i])
+  for(i in 1:length(train_edges$subject))   {
+    print(train_edges$subject[i])
     
-    if(!is.na(training_index_all[i]) && virus_host$subject[i] != "" ) {
+    if(!is.na(training_index_all[i]) && train_edges$subject[i] != "" ) {
       training_index <-c(training_index, i)
     } else {
       negative_index <-c(negative_index, i)
@@ -162,139 +145,128 @@ length(negative_index)
 ###actual rows used for training
 
 
-vOTUs_unique <- unique(vOTUs)
-length(hosts)
-length(vOTUs[hosts_index])
-
-###
-###
-#print("ERROR hosts_full_index indexes against nodes, but need virus-host index !!!")
-###
-#virus_host_combos <- paste(vOTUs[hosts_full_index],"__",hosts_full,sep="")
-#length(virus_host_combos)
+subjects_unique <- unique(subjects)
+length(subjects_unique)
+length(subjects[subjects_index])
 
 
-sum(is.na(hosts))
-sum(is.na(hosts_index))
-length(unique(hosts[(hosts_index %in% full_index)]))
-length(unique(hosts[!(hosts_index %in% full_index)]))
-unique(hosts[!(hosts_index %in% full_index)])[1:10]
+sum(is.na(objects))
+sum(is.na(objects_index))
+length(unique(objects[(objects_index %in% full_index)]))
+length(unique(objects[!(objects_index %in% full_index)]))
+unique(objects[!(objects_index %in% full_index)])[1:10]
 
 
-virus_host__subtract__NEG <- c()
-virus_host__subtract_label__NEG <- c()
-length(unique(hosts))
-length(unique(vOTUs[training_index]))
+train_edges__subtract__NEG <- c()
+train_edges__subtract_label__NEG <- c()
+length(unique(objects))
+length(unique(subjects[training_index]))
 
-host_samples <- 5
+object_samples <- 5
 ###for all negative samples
 for(i in 1:length(training_index)){
   if(i %% 100 == 0) {
     print(paste("v", i))
   }
   
-  #random virus
-  curvir <- training_index[i]#sample(1:length(vOTUs), 1)
-  #print(curvir)
-  #random host
-  for(j in 1:host_samples){#length(hosts)){
+  cursubject <- training_index[i]
+
+  for(j in 1:object_samples){
     
     if(j %% 100 == 0) {
       print(paste("h", j))
     }
     
-    curhost <- sample(1:length(hosts), 1)#j
+    curobject <- sample(1:length(objects), 1)#j
     
-    curlabel <- paste(vOTUs[curvir],"__",hosts[curhost],sep="")
-    #curlabel <- virus_host__subtract_label[1]
+    curlabel <- paste(subjects[cursubject],"__",objects[curobject],sep="")
+    #curlabel <- train_edges__subtract_label[1]
     #print(curlabel)
-    #print(curvir)
-    #print(vOTUs[curvir])
+    #print(cursubject)
+    #print(vOTUs[cursubject])
     #not in positive and not yet in negative
-    if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label__NEG) && !(curlabel %in% virus_host__subtract_label__NEG)) {
+    if(!(curlabel %in% train_edges__subtract_label) && !(curlabel %in% train_edges__subtract_label__NEG) && !(curlabel %in% train_edges__subtract_label__NEG)) {
       
-      #hindex <- match(node_labels, hosts[curhost])
-      hindex <- hosts_index[curhost]
-      vindex <- vOTUs_index[curvir]
-      #print(hindex)
-      #print(node_labels[hindex])
+      objindex <- objects_index[curobject]
+      subjindex <- subjects_index[cursubject]
+      #print(objindex)
+      #print(node_labels[objindex])
       
-      v_embed <- embeddings[vindex,]
-      #for(j in 1:length(hosts_index)){
-      h_embed <- embeddings[hindex,]
+      subj_embed <- embeddings[subjindex,]
+      #for(j in 1:length(objects_index)){
+      obj_embed <- embeddings[objindex,]
       
-      vh_embed <- v_embed - h_embed 
-      if(sum(is.na(vh_embed)) >0 ) {
-        print(paste("NA",curlabel, curhost, hindex, curvir, vindex))
-        #if(sum(is.na(v_embed)) >0 ) {
+      subj_obj_embed <- subj_embed - obj_embed 
+      if(sum(is.na(subj_obj_embed)) >0 ) {
+        print(paste("NA",curlabel, curobject, objindex, cursubject, subjindex))
+        #if(sum(is.na(subj_embed)) >0 ) {
         #  print("VIRUS")
-        #  print(v_embed)
+        #  print(subj_embed)
         #}
-        #if(sum(is.na(h_embed)) >0 ) {
+        #if(sum(is.na(obj_embed)) >0 ) {
         #  print("HOST")
         #}
         j <- j-1
       }
       else {
         #print("adding")
-        virus_host__subtract__NEG <- rbind(virus_host__subtract__NEG, vh_embed)
-        virus_host__subtract_label__NEG <- c(virus_host__subtract_label__NEG, curlabel)
+        train_edges__subtract__NEG <- rbind(train_edges__subtract__NEG, subj_obj_embed)
+        train_edges__subtract_label__NEG <- c(train_edges__subtract_label__NEG, curlabel)
       }
     }
   }
 }
-row.names(virus_host__subtract__NEG) <- virus_host__subtract_label__NEG
-dim(virus_host__subtract__NEG)
+row.names(train_edges__subtract__NEG) <- train_edges__subtract_label__NEG
+dim(train_edges__subtract__NEG)
 
 
 
-outfile <- "./virus_host_NEGATIVE__subtract.tsv"
-outfile_nodes <- "virus_host_NEGATIVE__subtract_labels.tsv"
+outfile <- "./train_edges_NEGATIVE__subtract.tsv"
+outfile_nodes <- "train_edges_NEGATIVE__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.csv(virus_host__subtract__NEG, file=outfile)
-write.table(virus_host__subtract_label__NEG, file=outfile_nodes, sep="\t")
+write.csv(train_edges__subtract__NEG, file=outfile)
+write.table(train_edges__subtract_label__NEG, file=outfile_nodes, sep="\t")
 
 
 
 
-random_new_viruses_sample <- sample(1:length(vOTUs), 10)#runif(10, 0,  length(vOTUs))
-match(random_new_viruses_sample,hosts_index)
+random_new_viruses_sample <- sample(1:length(subjects), 10)
+match(random_new_viruses_sample,objects_index)
 
-#random_new_viruses2 <- sample(1:length(vOTUs), 100000)#runif(10, 0,  length(vOTUs))
-new_virus_host__subtract <- c()
-new_virus_host__subtract_label <- c()
+new_train_edges__subtract <- c()
+new_train_edges__subtract_label <- c()
 for(i in 1:length(random_new_viruses_sample)){
-  v_embed <- embeddings[vOTUs_index[random_new_viruses_sample[i]],]
-    for(j in 1:length(hosts_index)){
+  subj_embed <- embeddings[subjects_index[random_new_viruses_sample[i]],]
+    for(j in 1:length(objects_index)){
       
-      curlabel <- paste(node_labels[vOTUs_index[random_new_viruses_sample[i]]],"__",node_labels[hosts_index[j]],sep="")
+      curlabel <- paste(node_labels[subjects_index[random_new_viruses_sample[i]]],"__",node_labels[objects_index[j]],sep="")
       
-      if(!(curlabel %in% new_virus_host__subtract_label)) {
+      if(!(curlabel %in% new_train_edges__subtract_label)) {
         if(j %% 100) {
           print(j)
         }
-        h_embed <- embeddings[hosts_index[j],]
+        obj_embed <- embeddings[objects_index[j],]
         
-        vh_embed <- v_embed - h_embed 
-        new_virus_host__subtract <- rbind(new_virus_host__subtract, vh_embed)
-        new_virus_host__subtract_label <- c(new_virus_host__subtract_label, curlabel)
+        subj_obj_embed <- subj_embed - obj_embed 
+        new_train_edges__subtract <- rbind(new_train_edges__subtract, subj_obj_embed)
+        new_train_edges__subtract_label <- c(new_train_edges__subtract_label, curlabel)
       }
     }
 }
-row.names(new_virus_host__subtract) <- new_virus_host__subtract_label
+row.names(new_train_edges__subtract) <- new_train_edges__subtract_label
 
-dim(new_virus_host__subtract)
+dim(new_train_edges__subtract)
 
-write.table(random_new_viruses_sample, file="virus_host__random10_sample.tsv", sep="\t")
+write.table(random_new_viruses_sample, file="train_edges__random10_sample.tsv", sep="\t")
 
 
-outfile <- "virus_host_NEW__subtract.tsv"
-outfile_nodes <- "virus_host_NEW_subtract_labels.tsv"
+outfile <- "train_edges_NEW__subtract.tsv"
+outfile_nodes <- "train_edges_NEW_subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.csv(new_virus_host__subtract, file=outfile)
-write.table(new_virus_host__subtract_label, file=outfile_nodes, sep="\t")
+write.csv(new_train_edges__subtract, file=outfile)
+write.table(new_train_edges__subtract_label, file=outfile_nodes, sep="\t")
 
 
 
