@@ -120,7 +120,7 @@ if(!done) {
   training_index <-c()
   negative_index <- c()
   for(i in 1:length(train_edges$subject))   {
-    print(train_edges$subject[i])
+    #print(train_edges$subject[i])
     
     if(!is.na(training_index_all[i]) && train_edges$object[i] != "" ) {
       training_index <-c(training_index, i)
@@ -186,12 +186,12 @@ for(i in 1:length(training_index)){
       
       objindex <- objects_index[curobject]
       subjindex <- subjects_index[cursubject]
-      print(objindex)
-      print(subjindex)
-      print(curobject)
-      print(cursubject)
-      print(node_labels[objindex])
-      print(node_labels[subjindex])
+      #print(objindex)
+      #print(subjindex)
+      #print(curobject)
+      #print(cursubject)
+      #print(node_labels[objindex])
+      #print(node_labels[subjindex])
       
       subj_embed <- embeddings[subjindex,]
       #for(j in 1:length(objects_index)){
