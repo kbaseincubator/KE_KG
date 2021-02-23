@@ -186,6 +186,7 @@ for(i in 1:length(training_index)){
       subjindex <- subjects_index[cursubject]
       print(objindex)
       print(subjindex)
+      print(curobject)
       print(cursubject)
       #print(node_labels[objindex])
       
