@@ -184,12 +184,15 @@ for(i in 1:length(training_index)){
       
       objindex <- objects_index[curobject]
       subjindex <- subjects_index[cursubject]
-      #print(objindex)
+      print(objindex)
+      print(subjindex)
       #print(node_labels[objindex])
       
       subj_embed <- embeddings[subjindex,]
       #for(j in 1:length(objects_index)){
       obj_embed <- embeddings[objindex,]
+      print(dim(subj_embed))
+      print(dim(obj_embed))
       
       subj_obj_embed <- subj_embed - obj_embed 
       if(sum(is.na(subj_obj_embed)) >0 ) {
