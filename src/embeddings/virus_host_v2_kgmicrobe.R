@@ -43,6 +43,8 @@ length(subjects_index)
 length(unique(objects))
 sum(!is.na(objects_index))
 sum(is.na(objects_index))
+sum(!is.na(subjects_index))
+sum(is.na(subjects_index))
 objects[is.na(objects_index)][1:10]
 
 length(unique(objects_full))
@@ -188,7 +190,8 @@ for(i in 1:length(training_index)){
       print(subjindex)
       print(curobject)
       print(cursubject)
-      #print(node_labels[objindex])
+      print(node_labels[objindex])
+      print(node_labels[subjindex])
       
       subj_embed <- embeddings[subjindex,]
       #for(j in 1:length(objects_index)){
