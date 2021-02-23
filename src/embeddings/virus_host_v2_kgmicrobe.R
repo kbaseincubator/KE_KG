@@ -196,8 +196,8 @@ for(i in 1:length(training_index)){
       subj_embed <- embeddings[subjindex,]
       #for(j in 1:length(objects_index)){
       obj_embed <- embeddings[objindex,]
-      print(dim(subj_embed))
-      print(dim(obj_embed))
+      #print(dim(subj_embed))
+      #print(dim(obj_embed))
       
       subj_obj_embed <- subj_embed - obj_embed 
       if(sum(is.na(subj_obj_embed)) >0 ) {
