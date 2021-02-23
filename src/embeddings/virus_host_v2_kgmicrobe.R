@@ -110,8 +110,8 @@ length(objects_full_index)
 
 
 ###all rows of training + duplicates
-training_index_all <- match(train_edges$subject, subjects_unique)
-training_index_all_rev <- match(subjects_unique,train_edges$subject)
+training_index_all <- match(train_edges$object, subjects_unique)
+training_index_all_rev <- match(subjects_unique,train_edges$object)
 length(training_index_all)
 length(training_index_all_rev)
 
@@ -122,7 +122,7 @@ if(!done) {
   for(i in 1:length(train_edges$subject))   {
     print(train_edges$subject[i])
     
-    if(!is.na(training_index_all[i]) && train_edges$subject[i] != "" ) {
+    if(!is.na(training_index_all[i]) && train_edges$object[i] != "" ) {
       training_index <-c(training_index, i)
     } else {
       negative_index <-c(negative_index, i)
