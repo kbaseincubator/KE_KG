@@ -31,7 +31,7 @@ head(objects)
 length(objects)
 length(objects_full)
 
-
+subjects_unique <- unique(subjects)
 
 subjects_index <- match(subjects, node_labels)
 objects_index <- match(objects, node_labels)
@@ -54,7 +54,7 @@ objects[is.na(objects_full_index)][1:10]
 train_edges__subtract <- data.frame()
 train_edges__subtract_label <- c()
 
-done <- FALSE#FALSE
+done <- TRUE#FALSE
 if(!done) {
   for(i in 1:length(subjects_index)){
     
@@ -106,15 +106,10 @@ full_index <- seq(1, length(node_labels), 1)
 length(full_index)
 length(objects_full_index)
 
-###pick the virus-host pairs, but only one if multiple
-###however, mask all virus-host pairs including duplicates
-testlen_unique_train_edges <- dim(train_edges__subtract)[1]
-
-
 
 ###all rows of training + duplicates
-training_index_all <- match(train_edges$subject, host_raw)
-training_index_all_rev <- match(host_raw,train_edges$subject)
+training_index_all <- match(train_edges$subject, subjects_unique)
+training_index_all_rev <- match(subjects_unique,train_edges$subject)
 length(training_index_all)
 length(training_index_all_rev)
 
