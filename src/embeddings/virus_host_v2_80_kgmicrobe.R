@@ -27,9 +27,9 @@ test_edges_split <- strsplit(train_edges_labels, "__")
 subjsplit_raw <- unlist(test_edges_split)[2*(1:length(test_edges_split))-1]
 head(subjsplit_raw)
 subjects <- unlist(strsplit(as.character(subjsplit_raw), "\t", fixed=TRUE))[2*(1:length(test_edges_split))]
-head(subjsplit)
+head(subjects)
 objects  <- unlist(test_edges_split)[2*(1:length(test_edges_split))  ]
-head(objsplit)
+head(objects)
 
 length(subjects)
 head(subjects)
