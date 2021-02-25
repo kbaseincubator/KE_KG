@@ -63,7 +63,7 @@ objects[is.na(objects_full_index)][1:10]
 train_edges__subtract <- data.frame()
 train_edges__subtract_label <- c()
 
-done <- TRUE#FALSE
+done <- FALSE#FALSE#TRUE
 if(!done) {
   for(i in 1:length(subjects_index)){
     
