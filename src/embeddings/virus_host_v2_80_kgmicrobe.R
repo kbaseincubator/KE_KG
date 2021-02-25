@@ -2,24 +2,43 @@ rm(list=ls())
 set.seed(12345)
 setwd("/global/scratch/marcin/N2V/KE_KG/")
 
-embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/SkipGram_embedding_link_predict_kgmicrobe_shape_80.csv", sep="\t", header=TRUE, row.names=1)
+#embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/SkipGram_embedding_link_predict_kgmicrobe_shape_80.csv", sep="\t", header=TRUE, row.names=1)
+#head(embeddings)
+#dim(embeddings)
+#node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/kgmicrobe_nodes__positive80.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
+#dim(node_data)
+#head(node_data) 
+#node_labels <- as.character(node_data$id)
+
+#train_edges <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/kgmicrobe_edges__positive80.tsv",sep="\t",header=T)
+#dim(train_edges)
+#head(train_edges) 
+
+#all_objects <-  read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/merged-kg_nodes_NCBITaxon_whead.tsv",sep="\t",header=T)
+#dim(all_objects)
+#head(all_objects) 
+
+
+
+embeddings <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/SkipGram_embedding_link_predict_kgmicrobe_shape_80.csv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/kgmicrobe_nodes__positive80.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
+node_data <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/kgmicrobe_nodes__positive80.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
 dim(node_data)
 head(node_data) 
-
 node_labels <- as.character(node_data$id)
 
-
-train_edges <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/kgmicrobe_edges__positive80.tsv",sep="\t",header=T)
+train_edges <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/kgmicrobe_edges__positive80.tsv",sep="\t",header=T)
 dim(train_edges)
 head(train_edges) 
 
-all_objects <-  read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape//merged-kg_nodes_NCBITaxon_whead.tsv",sep="\t",header=T)
+all_objects <-  read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/merged-kg_nodes_NCBITaxon_whead.tsv",sep="\t",header=T)
 dim(all_objects)
 head(all_objects) 
+
+
+
 
 train_edges_labels <- row.names(train_edges)
 
