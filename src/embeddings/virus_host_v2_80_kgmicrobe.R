@@ -40,15 +40,19 @@ head(all_objects)
 
 
 
+#train_edges_labels <- row.names(train_edges)
+#test_edges_split <- strsplit(train_edges_labels, "__")
+#subjsplit_raw <- unlist(test_edges_split)[2*(1:length(test_edges_split))-1]
+#head(subjsplit_raw)
+#subjects <- unlist(strsplit(as.character(subjsplit_raw), "\t", fixed=TRUE))[2*(1:length(test_edges_split))]
+#head(subjects)
+#objects  <- unlist(test_edges_split)[2*(1:length(test_edges_split))  ]
+#head(objects)
 
-train_edges_labels <- row.names(train_edges)
 
-test_edges_split <- strsplit(train_edges_labels, "__")
-subjsplit_raw <- unlist(test_edges_split)[2*(1:length(test_edges_split))-1]
-head(subjsplit_raw)
-subjects <- unlist(strsplit(as.character(subjsplit_raw), "\t", fixed=TRUE))[2*(1:length(test_edges_split))]
+subjects <- train_edges$subject
 head(subjects)
-objects  <- unlist(test_edges_split)[2*(1:length(test_edges_split))  ]
+objects  <- train_edges$object
 head(objects)
 
 length(subjects)
