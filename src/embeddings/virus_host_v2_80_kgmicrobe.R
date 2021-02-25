@@ -98,7 +98,7 @@ if(!done) {
     if(!is.na(objects_full_index[i])){
       curlabel <- paste(node_labels[subjects_index[i]],"__",node_labels[objects_full_index[i]],sep="")
       #print(curlabel)
-      if(!(curlabel %in% train_edges__subtract_label)) {
+      if(length(curlabel) > 0 && !(curlabel %in% train_edges__subtract_label)) {
         print(curlabel)
         #objindex <- which(hashost)
         subj_embed <- embeddings[subjects_index[i],]
