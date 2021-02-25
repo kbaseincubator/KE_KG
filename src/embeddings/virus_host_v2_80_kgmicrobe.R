@@ -1,6 +1,7 @@
 rm(list=ls())
 set.seed(12345)
-setwd("/global/scratch/marcin/N2V/KE_KG/")
+
+#setwd("/global/scratch/marcin/N2V/KE_KG/")
 
 #embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/SkipGram_embedding_link_predict_kgmicrobe_shape_80.csv", sep="\t", header=TRUE, row.names=1)
 #head(embeddings)
