@@ -117,15 +117,15 @@ if(!done) {
     #}
   }
   row.names(train_edges__subtract) <- train_edges__subtract_label
-  outfile <- "train_edges__subtract.tsv"
-  outfile_nodes <- "train_edges__subtract_labels.tsv"
+  outfile <- "taxa_trait__subtract.tsv"
+  outfile_nodes <- "taxa_trait__subtract_labels.tsv"
   print(outfile)
   print(outfile_nodes)
   write.csv(train_edges__subtract, file=outfile)
   write.table(train_edges__subtract_label, file=outfile_nodes, sep="\t")
 } else {
-  train_edges__subtract <- read.csv("train_edges__subtract.tsv", row.names=1, header=TRUE, sep=",")
-  train_edges__subtract_label <- read.csv("train_edges__subtract_labels.tsv", sep="\t")[,1]
+  train_edges__subtract <- read.csv("taxa_trait__subtract.tsv", row.names=1, header=TRUE, sep=",")
+  train_edges__subtract_label <- read.csv("taxa_trait__subtract_labels.tsv", sep="\t")[,1]
 }
 
 dim(train_edges__subtract)
@@ -255,8 +255,8 @@ dim(train_edges__subtract__NEG)
 
 
 
-outfile <- "./train_edges_NEGATIVE__subtract.tsv"
-outfile_nodes <- "train_edges_NEGATIVE__subtract_labels.tsv"
+outfile <- "./taxa_trait_NEGATIVE__subtract.tsv"
+outfile_nodes <- "taxa_trait_NEGATIVE__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
 write.csv(train_edges__subtract__NEG, file=outfile)
@@ -292,11 +292,11 @@ row.names(new_train_edges__subtract) <- new_train_edges__subtract_label
 
 dim(new_train_edges__subtract)
 
-write.table(random_new_viruses_sample, file="train_edges__random10_sample_80.tsv", sep="\t")
+write.table(random_new_viruses_sample, file="taxa_trait__random10_sample_80.tsv", sep="\t")
 
 
-outfile <- "train_edges_NEW__subtract_80.tsv"
-outfile_nodes <- "train_edges_NEW_subtract_labels_80.tsv"
+outfile <- "taxa_trait_NEW__subtract_80.tsv"
+outfile_nodes <- "taxa_trait_NEW_subtract_labels_80.tsv"
 print(outfile)
 print(outfile_nodes)
 write.csv(new_train_edges__subtract, file=outfile)
