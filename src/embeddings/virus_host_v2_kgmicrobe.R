@@ -56,7 +56,7 @@ objects[is.na(objects_full_index)][1:10]
 train_edges__subtract <- data.frame()
 train_edges__subtract_label <- c()
 
-done <- TRUE#FALSE
+done <- FALSE#FALSE#TRUE
 if(!done) {
   for(i in 1:length(subjects_index)){
     
@@ -64,15 +64,15 @@ if(!done) {
       print(paste("vh", i))
     }
     
-    if(!is.na(objects_full_index[i])){
-      curlabel <- paste(node_labels[subjects_index[i]],"__",node_labels[objects_full_index[i]],sep="")
+    if(!is.na(objects_index[i])){
+      curlabel <- paste(node_labels[subjects_index[i]],"__",node_labels[objects_index[i]],sep="")
       #print(curlabel)
       if(!(curlabel %in% train_edges__subtract_label)) {
         print(curlabel)
         #objindex <- which(hashost)
         subj_embed <- embeddings[subjects_index[i],]
         #for(j in 1:length(objects_index)){
-        obj_embed <- embeddings[objects_full_index[i],]
+        obj_embed <- embeddings[objects_index[i],]
         
         subj_obj_embed <- subj_embed - obj_embed 
         train_edges__subtract <- rbind(train_edges__subtract, subj_obj_embed)
@@ -174,9 +174,9 @@ for(i in 1:length(training_index)){
       print(paste("h", j))
     }
     
-    curobject <- sample(1:length(objects), 1)#j
+    curobject <- sample(1:length(objects_full), 1)#j
     
-    curlabel <- paste(subjects[cursubject],"__",objects[curobject],sep="")
+    curlabel <- paste(subjects[cursubject],"__",objects_full[curobject],sep="")
     #curlabel <- train_edges__subtract_label[1]
     #print(curlabel)
     #print(cursubject)
@@ -184,7 +184,7 @@ for(i in 1:length(training_index)){
     #not in positive and not yet in negative
     if(!(curlabel %in% train_edges__subtract_label) && !(curlabel %in% train_edges__subtract_label__NEG) && !(curlabel %in% train_edges__subtract_label__NEG)) {
       
-      objindex <- objects_index[curobject]
+      objindex <- objects_full_index[curobject]
       subjindex <- subjects_index[cursubject]
       #print(objindex)
       #print(subjindex)
