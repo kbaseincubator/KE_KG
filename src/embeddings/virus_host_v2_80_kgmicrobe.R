@@ -30,7 +30,7 @@ dim(node_data)
 head(node_data) 
 node_labels <- as.character(node_data$id)
 
-train_edges <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/kgmicrobe_edges__positive80_train_NCBITaxon_whead.tsv",sep="\t",header=T)
+train_edges <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/kgmicrobe_edges__positive80_train_NCBITaxon_trait_whead.tsv",sep="\t",header=T)
 dim(train_edges)
 head(train_edges) 
 
