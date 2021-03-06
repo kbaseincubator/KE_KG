@@ -3,22 +3,23 @@ set.seed(12345)
 
 setwd("~/graphs/KE_KG")
 
-embeddings <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/embeddings/IMGVR/SkipGram_embedding_IMGVR_mergd_sample_extra_80_v3.tsv", sep="\t", header=TRUE, row.names=1)
+embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4_80/SkipGram_embedding_mg_imgvr_80_OPT_v4.csv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/graphs/IMGVR/IMGVR_merged_kg_nodes__positive80_v3.tsv", sep="\t",header=T)
+node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4/IMGVR_merged_kg_nodes__positive80_v4.tsv", sep="\t",header=T)
 dim(node_data)
 head(node_data)
 node_labels <- as.character(node_data$id)
 
 
-edge_data_test <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/link_predict_IMGVR_sample_extra_v3/IMGVR_sample_extra_test.txt", sep="\t",header=T)
+edge_data_test <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4/IMGVR_sample_extra_test.txt", sep="\t",header=T)
 dim(edge_data_test)
 head(edge_data_test)
 
 
-virus_host <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/IMGVR/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",sep="\t",header=T)
+virus_host <- read.csv("/global/scratch/marcin/N2V/KE_KG/data/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv
+",sep="\t",header=T)
 dim(virus_host)
 head(virus_host)
 
