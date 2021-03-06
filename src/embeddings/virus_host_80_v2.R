@@ -3,7 +3,7 @@ set.seed(12345)
 
 setwd("/global/scratch/marcin/N2V/KE_KG")
 
-embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4_80/SkipGram_embedding_mg_imgvr_80_OPT_v4.csv", sep="\t", header=TRUE, row.names=1)
+embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4_80/SkipGram_embedding_mg_imgvr_80_OPT_v4.csv", sep=",", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
