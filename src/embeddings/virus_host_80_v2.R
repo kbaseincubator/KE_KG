@@ -19,7 +19,6 @@ head(edge_data_test)
 
 
 virus_host <- read.csv("/global/scratch/marcin/N2V/KE_KG/data/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv", sep="\t",header=T)
-",sep="\t",header=T)
 dim(virus_host)
 head(virus_host)
 
