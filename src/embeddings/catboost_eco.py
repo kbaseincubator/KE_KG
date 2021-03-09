@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 
 
-df_eco = pd.read_csv('/global/homes/m/marcinj/graphs/eco/DatasetsMarginal_Combined_60.csv', sep=',', encoding='utf-8')
+df_eco = pd.read_csv('/global/homes/m/marcinj/graphs/eco/Datasets/Marginal_Combined_60.csv', sep=',', encoding='utf-8')
 df_eco.head()
 
 # How many vals are null?
@@ -114,7 +114,7 @@ print(predictions_probs[:10])
 fea_imp = pd.DataFrame({'imp': cb_model.feature_importances_, 'col': X.columns})
 fea_imp = fea_imp.sort_values(['imp', 'col'], ascending=[True, False]).iloc[-50:]
 plot1 = fea_imp.plot(kind='barh', x='col', y='imp', figsize=(20, 10))
-plot1plot1.savefig('feature_importance.pdf')
+plot1.savefig('feature_importance.pdf')
 
 
 y_predict = list(flatten(cbmf.predict(X_test)))
