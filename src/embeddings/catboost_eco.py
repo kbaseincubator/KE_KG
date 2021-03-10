@@ -74,16 +74,16 @@ modelstart = time.time()
 print(f"Starting training at {modelstart}")
 
 cb_model = CatBoostRegressor(loss_function='RMSE',
-                             iterations = 200,
+                             iterations = 100,
                              verbose = 5,
                              learning_rate = 0.03,
                              depth = 2,
                              l2_leaf_reg = 0.5,
-                             eval_metric = 'MCC',
+                             #eval_metric = 'MCC',
                              random_seed = iseed,
-                             bagging_temperature = 0.2,
-                             od_type = 'Iter',
-                             od_wait = 100
+                             #bagging_temperature = 0.2,
+                             #od_type = 'Iter',
+                             #od_wait = 100
 )
 
 
