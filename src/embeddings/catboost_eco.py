@@ -88,7 +88,7 @@ sys.stdout.write(‘R2: {:.2f}’.format(r2))
 
 dill.dump_session('catboost_eco_model.db')
 
-sys.stdout.write(cbmpf)
+#sys.stdout.write(cbmpf)
 
 
 sorted_feature_importance = model.feature_importances_.argsort()
