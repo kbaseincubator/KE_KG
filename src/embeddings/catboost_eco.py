@@ -54,6 +54,9 @@ X = df_ecoZ.iloc[:,(df_ecoZ.shape-1):]
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=9) # The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
 sys.stdout.write("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
 
+train_dataset = Pool(X_train, y_train)
+test_dataset = Pool(X_test, y_test)
+
 class_counts = y_train.value_counts()
 max_count = max(class_counts)
 class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
@@ -66,10 +69,10 @@ sys.stdout.write(f"Starting training at {modelstart}")
 
 cb_model = CatBoostRegressor(loss_function='RMSE')
 
-grid = {'iterations': [100, 150, 200],
-        'learning_rate': [0.03, 0.1],
-        'depth': [2, 4, 6, 8],
-        'l2_leaf_reg': [0.2, 0.5, 1, 3]}
+grid = {'iterations': [100],#[100, 150, 200],
+        'learning_rate': [0.03],#[0.03, 0.1],
+        'depth': [2],#[2, 4, 6, 8],
+        'l2_leaf_reg': [0.2]}#[0.2, 0.5, 1, 3]}
 cb_model.grid_search(grid, train_dataset)
 
 
