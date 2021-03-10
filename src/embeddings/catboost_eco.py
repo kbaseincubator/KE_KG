@@ -63,10 +63,10 @@ print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(
 train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
 
-class_counts = y_train.value_counts()
-max_count = max(class_counts)
-class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
-print(class_weights)
+#class_counts = y_train.value_counts()
+#max_count = max(class_counts)
+#class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
+#print(class_weights)
 
 iseed = 67
 
