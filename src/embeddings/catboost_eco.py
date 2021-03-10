@@ -65,7 +65,7 @@ iseed = 67
 modelstart = time.time()
 sys.stdout.write(f"Starting training at {modelstart}")
 
-cb_model = cb.CatBoostRegressor(loss_function=’RMSE’)
+cb_model = cb.CatBoostRegressor(loss_function='RMSE')
 
 grid = {'iterations': [100, 150, 200],
         'learning_rate': [0.03, 0.1],
