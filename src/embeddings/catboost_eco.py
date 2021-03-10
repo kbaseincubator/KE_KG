@@ -74,7 +74,7 @@ modelstart = time.time()
 print(f"Starting training at {modelstart}")
 
 cb_model = CatBoostRegressor(loss_function='RMSE',
-                             iterations = 100,
+                             iterations = 200,
                              verbose = 5,
                              learning_rate = 0.03,
                              depth = 2,
@@ -97,7 +97,7 @@ cbmf=cb_model.fit(X_train,y_train)
 
 print(f"Training finished in {time.time() - modelstart}s")
 
-print(cbmpf)
+print(cbmf)
 pickle.dump(cbmf,open("cbmf", "wb" ) )
 
 pred = cb_model.predict(X_test)
