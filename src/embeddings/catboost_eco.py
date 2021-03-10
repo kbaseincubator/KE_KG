@@ -6,8 +6,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import time
-from catboost import CatBoostClassifier
-from catboost import CatBoostClassifier, Pool, cv
+from catboost import CatBoostClassifier, CatBoostRegressor, Pool, cv
 import dill
 import seaborn as sns
 
@@ -65,7 +64,7 @@ iseed = 67
 modelstart = time.time()
 sys.stdout.write(f"Starting training at {modelstart}")
 
-cb_model = cb.CatBoostRegressor(loss_function='RMSE')
+cb_model = CatBoostRegressor(loss_function='RMSE')
 
 grid = {'iterations': [100, 150, 200],
         'learning_rate': [0.03, 0.1],
@@ -78,7 +77,7 @@ sys.stdout.write(f"Training finished in {time.time() - modelstart}s")
 
 
 
-pred = model.predict(X_test)
+pred = cb_model.predict(X_test)
 rmse = (np.sqrt(mean_squared_error(y_test, pred)))
 r2 = r2_score(y_test, pred)
 sys.stdout.write("Testing performance:")
@@ -91,9 +90,9 @@ dill.dump_session('catboost_eco_model.db')
 #sys.stdout.write(cbmpf)
 
 
-sorted_feature_importance = model.feature_importances_.argsort()
+sorted_feature_importance = cb_model.feature_importances_.argsort()
 plt.barh(boston.feature_names[sorted_feature_importance],
-        model.feature_importances_[sorted_feature_importance],
+        cb_model.feature_importances_[sorted_feature_importance],
         color='turquoise')
 plt.xlabel("CatBoost Feature Importance")
 plt.savefig('feature_importance.pdf')
