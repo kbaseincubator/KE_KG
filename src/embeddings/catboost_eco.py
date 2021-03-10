@@ -11,11 +11,22 @@ import seaborn as sns
 
 import matplotlib
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 
 df_eco = pd.read_csv('/global/homes/m/marcinj/graphs/eco/Datasets/Marginal_Combined_60.csv', sep=',', encoding='utf-8')
 df_eco.head()
+
+bin_width = (max(df_eco['IFR']) - min(df_eco['IFR']))/3
+bins = [0, bin_width, 2*bin_width]
+names = ['low', 'medium', 'high', '35-65', '65+']
+bin_dict = dict(enumerate(names, 1))
+IFR_orig = df['IFR']
+df['IFR'] = np.vectorize(bin_dict.get)(np.digitize(df_eco['IFR'], bins))
+
+#df['IFR'] = np.vectorize(d.get)(np.digitize(df['IFR'], bins))
+
+df_eco['IFR'] = pd.qcut(df_eco['IFR'], q=4)
 
 # How many vals are null?
 null_value_stats = df_eco.isnull().sum(axis=0)
@@ -67,14 +78,22 @@ cb_model = CatBoostClassifier(
 grid = {'learning_rate': [0.06, 0.1,0.14],
         'depth': [5, 6, 7],
         'l2_leaf_reg': [0.5, 1, 5]}
+#grid = {'learning_rate': [0.06, 0.1,0.14],
+#        'depth': [5, 6, 7],
+#        'l2_leaf_reg': [0.5, 1, 5]}
 
 modelstart = time.time()
 print(f"Starting model parameter optimization at {modelstart}")
 
-grid_search_result = cb_model.grid_search(grid, X=X_train, y=y_train,verbose=5)
-lr = grid_search_result['params']['learning_rate']
-de = grid_search_result['params']['depth']
-l2 = grid_search_result['params']['l2_leaf_reg']
+#grid_search_result = cb_model.grid_search(grid, X=X_train, y=y_train,verbose=5)
+#lr = grid_search_result['params']['learning_rate']
+#de = grid_search_result['params']['depth']
+#l2 = grid_search_result['params']['l2_leaf_reg']
+
+lr = 0.02
+de = 5
+l2 = 1
+
 
 print(f"Finished in {time.time() - modelstart}s")
 
