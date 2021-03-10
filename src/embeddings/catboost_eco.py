@@ -120,7 +120,7 @@ pickle.dump(pred,open("pred", "wb" ) )
 
 
 sorted_feature_importance = cb_model.feature_importances_.argsort()
-plt.barh(boston.feature_names[sorted_feature_importance],
+plt.barh(cb_model.feature_names[sorted_feature_importance],
         cb_model.feature_importances_[sorted_feature_importance],
         color='turquoise')
 plt.xlabel("CatBoost Feature Importance")
@@ -130,7 +130,7 @@ plt.savefig('feature_importance.pdf')
 
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X_test)
-shap.summary_plot(shap_values, X_test, feature_names = boston.feature_names[sorted_feature_importance])
+shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance])
 
 dill.dump_session('catboost_eco_all.db')
 print('done')
