@@ -15,10 +15,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import shap
 
-sys.stdout.write("start")
+print("start")
 
 df_eco = pd.read_csv('/global/homes/m/marcinj/graphs/eco/Datasets/Marginal_Combined_60.csv', sep=',', encoding='utf-8')
-sys.stdout.write(df_eco.head())
+print(df_eco.head())
 
 #bin_width = (max(df_eco['IFR']) - min(df_eco['IFR']))/3
 #bins = [0, bin_width, 2*bin_width]
@@ -37,12 +37,12 @@ columns = list(df_eco.iloc[:,0:21].columns)+list(df_eco.iloc[:,21:].iloc[:,nzero
 nzeros = [i for i,v in enumerate(df_eco.iloc[:,21:].sum(axis=1)==0.0) if v==False]
 indices = list(df_eco.iloc[nzeros,21:].index)
 df_ecoZ = df_eco[columns].loc[indices]
-sys.stdout.write(df_ecoZ.describe())
+print(df_ecoZ.describe())
 #df_ecoZ['Habitat_type'].value_counts()
 
 
 y = df_ecoZ['IFR']
-sys.stdout.write(y)
+print(y)
 
 
 X = df_ecoZ.iloc[:,(df_ecoZ.shape-1):]
@@ -52,7 +52,7 @@ X = df_ecoZ.iloc[:,(df_ecoZ.shape-1):]
 
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=9) # The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
-sys.stdout.write("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
+print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
 
 train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
@@ -60,12 +60,12 @@ test_dataset = Pool(X_test, y_test)
 class_counts = y_train.value_counts()
 max_count = max(class_counts)
 class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
-sys.stdout.write(class_weights)
+print(class_weights)
 
 iseed = 67
 
 modelstart = time.time()
-sys.stdout.write(f"Starting training at {modelstart}")
+print(f"Starting training at {modelstart}")
 
 cb_model = CatBoostRegressor(loss_function='RMSE')
 
@@ -76,21 +76,21 @@ grid = {'iterations': [100],#[100, 150, 200],
 cb_model.grid_search(grid, train_dataset)
 
 
-sys.stdout.write(f"Training finished in {time.time() - modelstart}s")
+print(f"Training finished in {time.time() - modelstart}s")
 
 
 
 pred = cb_model.predict(X_test)
 rmse = (np.sqrt(mean_squared_error(y_test, pred)))
 r2 = r2_score(y_test, pred)
-sys.stdout.write("Testing performance:")
-sys.stdout.write('RMSE: {:.2f}'.format(rmse))
-sys.stdout.write('R2: {:.2f}'.format(r2))
+print("Testing performance:")
+print('RMSE: {:.2f}'.format(rmse))
+print('R2: {:.2f}'.format(r2))
 
 
 dill.dump_session('catboost_eco_model.db')
 
-#sys.stdout.write(cbmpf)
+#print(cbmpf)
 
 
 sorted_feature_importance = cb_model.feature_importances_.argsort()
@@ -107,4 +107,4 @@ shap_values = explainer.shap_values(X_test)
 shap.summary_plot(shap_values, X_test, feature_names = boston.feature_names[sorted_feature_importance])
 
 dill.dump_session('catboost_eco_all.db')
-sys.stdout.write('done')
+print('done')
