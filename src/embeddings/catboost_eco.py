@@ -81,9 +81,9 @@ sys.stdout.write(f"Training finished in {time.time() - modelstart}s")
 pred = model.predict(X_test)
 rmse = (np.sqrt(mean_squared_error(y_test, pred)))
 r2 = r2_score(y_test, pred)
-sys.stdout.write(“Testing performance”)
-sys.stdout.write(‘RMSE: {:.2f}’.format(rmse))
-sys.stdout.write(‘R2: {:.2f}’.format(r2))
+sys.stdout.write("Testing performance:")
+sys.stdout.write('RMSE: {:.2f}’.format(rmse))
+sys.stdout.write('R2: {:.2f}’.format(r2))
 
 
 dill.dump_session('catboost_eco_model.db')
