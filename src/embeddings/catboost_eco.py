@@ -12,12 +12,14 @@ from sklearn.inspection import permutation_importance
 import time
 from catboost import CatBoostClassifier, CatBoostRegressor, Pool, cv
 import dill
+import pickle
 import seaborn as sns
 
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import shap
+
 
 print("start")
 
@@ -71,18 +73,32 @@ iseed = 67
 modelstart = time.time()
 print(f"Starting training at {modelstart}")
 
-cb_model = CatBoostRegressor(loss_function='RMSE')
+cb_model = CatBoostRegressor(loss_function='RMSE',
+                             iterations = 200,
+                             verbose = 5,
+                             learning_rate = 0.03,
+                             depth = 2,
+                             l2_leaf_reg = 0.5,
+                             eval_metric = 'MCC',
+                             random_seed = iseed,
+                             bagging_temperature = 0.2,
+                             od_type = 'Iter',
+                             od_wait = 100
+)
 
-grid = {'iterations': [100],#[100, 150, 200],
-        'learning_rate': [0.03],#[0.03, 0.1],
-        'depth': [2],#[2, 4, 6, 8],
-        'l2_leaf_reg': [0.2]}#[0.2, 0.5, 1, 3]}
-cb_model.grid_search(grid, train_dataset)
 
+cbmf=cb_model.fit(X_train,y_train)
+
+#grid = {'iterations': [100],#[100, 150, 200],
+##       'learning_rate': [0.03],#[0.03, 0.1],
+#        'depth': [2],#[2, 4, 6, 8],
+#        'l2_leaf_reg': [0.2]}#[0.2, 0.5, 1, 3]}
+#cb_model.grid_search(grid, train_dataset)
 
 print(f"Training finished in {time.time() - modelstart}s")
 
-
+print(cbmpf)
+pickle.dump(cbmf,open("cbmf", "wb" ) )
 
 pred = cb_model.predict(X_test)
 rmse = (np.sqrt(mean_squared_error(y_test, pred)))
@@ -92,9 +108,15 @@ print('RMSE: {:.2f}'.format(rmse))
 print('R2: {:.2f}'.format(r2))
 
 
-dill.dump_session('catboost_eco_model.db')
+pickle.dump(pred,open("pred", "wb" ) )
 
-#print(cbmpf)
+
+
+
+
+#dill.dump_session('catboost_eco_model.db')
+
+
 
 
 sorted_feature_importance = cb_model.feature_importances_.argsort()
