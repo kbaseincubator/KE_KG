@@ -45,7 +45,7 @@ y = df_ecoZ['IFR']
 print(y)
 
 
-X = df_ecoZ.iloc[:,(df_ecoZ.shape[2]-1):]
+X = df_ecoZ.iloc[:,(df_ecoZ.shape[1]-1):]
 # Let's put the X's on a common scale
 #scaler = MinMaxScaler()
 #X[X.columns] = scaler.fit_transform(X)
