@@ -1,5 +1,7 @@
 # Requirements and imports
 
+import subprocess
+import sys
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -14,9 +16,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import shap
 
+print("start")
 
 df_eco = pd.read_csv('/global/homes/m/marcinj/graphs/eco/Datasets/Marginal_Combined_60.csv', sep=',', encoding='utf-8')
-df_eco.head()
+print(df_eco.head())
 
 #bin_width = (max(df_eco['IFR']) - min(df_eco['IFR']))/3
 #bins = [0, bin_width, 2*bin_width]
@@ -35,12 +38,12 @@ columns = list(df_eco.iloc[:,0:21].columns)+list(df_eco.iloc[:,21:].iloc[:,nzero
 nzeros = [i for i,v in enumerate(df_eco.iloc[:,21:].sum(axis=1)==0.0) if v==False]
 indices = list(df_eco.iloc[nzeros,21:].index)
 df_ecoZ = df_eco[columns].loc[indices]
-df_ecoZ.describe()
+print(df_ecoZ.describe())
 #df_ecoZ['Habitat_type'].value_counts()
 
 
 y = df_ecoZ['IFR']
-y
+print(y)
 
 
 X = df_ecoZ.iloc[:,(df_ecoZ.shape-1):]
@@ -55,7 +58,7 @@ print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(
 class_counts = y_train.value_counts()
 max_count = max(class_counts)
 class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
-class_weights
+print(class_weights)
 
 iseed = 67
 
@@ -85,7 +88,7 @@ print(‘R2: {:.2f}’.format(r2))
 
 dill.dump_session('catboost_eco_model.db')
 
-cbmpf
+print(cbmpf)
 
 
 sorted_feature_importance = model.feature_importances_.argsort()
