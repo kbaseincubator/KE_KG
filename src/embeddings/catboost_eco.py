@@ -38,14 +38,14 @@ print(df_eco.head())
 #null_value_stats[null_value_stats != 0]
 
 
-print(df_ecoZ.describe())
+print(df_eco.describe())
 
 
-y = df_ecoZ['IFR']
+y = df_eco['IFR']
 print(y)
 
 
-X = df_ecoZ.iloc[:,(df_ecoZ.shape[1]-1):]
+X = df_eco.iloc[:,(df_eco.shape[1]-1):]
 
 print("X "+str(X.shape))
 # Let's put the X's on a common scale
@@ -84,7 +84,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 
 
 cbmf=cb_model.fit(X_train,y_train)
-cbmf.feature_names = df_eco.columns[(df_ecoZ.shape[1]-1):]
+cbmf.feature_names = df_eco.columns[(df_eco.shape[1]-1):]
 #grid = {'iterations': [100],#[100, 150, 200],
 ##       'learning_rate': [0.03],#[0.03, 0.1],
 #        'depth': [2],#[2, 4, 6, 8],
