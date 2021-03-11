@@ -21,6 +21,10 @@ import numpy as np
 import shap
 
 
+
+random_seed = 123
+
+
 print("start")
 
 df_eco = pd.read_csv('/global/homes/m/marcinj/graphs/eco/Datasets/Marginal_Combined_60.csv', sep=',', encoding='utf-8')
@@ -54,7 +58,7 @@ print("X "+str(X.shape))
 #X[X.columns] = scaler.fit_transform(X)
 
 
-X_train, X_test, y_train, y_test = train_test_split(X, y) #, random_state=9# The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_seed) #, random_state=9# The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
 print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
 
 print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape)+"\t"+str(y_test.shape))
@@ -70,7 +74,6 @@ pickle.dump(input_data_dump,open("input_data_dump", "wb" ) )
 #class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
 #print(class_weights)
 
-random_seed = 67
 
 modelstart = time.time()
 print(f"Starting grid search at {modelstart}")
