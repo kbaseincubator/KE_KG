@@ -62,7 +62,7 @@ print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape
 train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
 
-input_data_dump = [X_train, X_test, y_train, y_test]
+input_data_dump = [X, y, X_train, X_test, y_train, y_test]
 pickle.dump(input_data_dump,open("input_data_dump", "wb" ) )
 
 #class_counts = y_train.value_counts()
@@ -116,7 +116,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
                              depth = de,
                              l2_leaf_reg = l2,
                              #eval_metric = 'MCC',
-                             random_seed = iseed,
+                             random_seed = random_seed,
                              #bagging_temperature = 0.2,
                              #od_type = 'Iter',
                              #od_wait = 100
