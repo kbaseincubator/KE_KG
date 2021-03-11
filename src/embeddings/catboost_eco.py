@@ -70,7 +70,7 @@ test_dataset = Pool(X_test, y_test)
 iseed = 67
 
 modelstart = time.time()
-print(f"Starting training at {modelstart}")
+print(f"Starting grid search at {modelstart}")
 
 cb_model = CatBoostRegressor(loss_function='RMSE',
                              iterations = 200,
@@ -86,18 +86,45 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 )
 
 
+
+
+print("names "+str(len(cbmf.feature_names)))
+grid = {#'iterations': [100, 150, 200],
+       'learning_rate': [0.03, 0.1],
+        'depth': [2, 4, 6, 8],
+        'l2_leaf_reg': [0.2, 0.5, 1, 3]}
+grid_search_result = cb_model.grid_search(grid, train_dataset)
+
+lr = grid_search_result['params']['learning_rate']
+de = grid_search_result['params']['depth']
+l2 = grid_search_result['params']['l2_leaf_reg']
+
+print(f"Training grid search in {time.time() - modelstart}s")
+
+print("lr, de, l2"+str(lr)+", "+str(de)+", "+str(l2))
+
+
+print(f"Starting at {modelstart}")
+
+cb_model = CatBoostRegressor(loss_function='RMSE',
+                             iterations = 200,
+                             verbose = 5,
+                             learning_rate = lr,
+                             depth = de,
+                             l2_leaf_reg = l2,
+                             #eval_metric = 'MCC',
+                             random_seed = iseed,
+                             #bagging_temperature = 0.2,
+                             #od_type = 'Iter',
+                             #od_wait = 100
+)
+
 cbmf=cb_model.fit(X_train,y_train)
 print("range "+str((df_eco.shape[1]-1)))
 cbmf.feature_names = df_eco.columns[:-1]
 
-print("names "+str(len(cbmf.feature_names)))
-#grid = {'iterations': [100],#[100, 150, 200],
-##       'learning_rate': [0.03],#[0.03, 0.1],
-#        'depth': [2],#[2, 4, 6, 8],
-#        'l2_leaf_reg': [0.2]}#[0.2, 0.5, 1, 3]}
-#cb_model.grid_search(grid, train_dataset)
+print(f"Training in {time.time() - modelstart}s")
 
-print(f"Training finished in {time.time() - modelstart}s")
 
 print(cbmf)
 pickle.dump(cbmf,open("cbmf", "wb" ) )
