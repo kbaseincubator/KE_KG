@@ -88,7 +88,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 
 
 
-print("names "+str(len(cbmf.feature_names)))
+
 grid = {#'iterations': [100, 150, 200],
        'learning_rate': [0.03, 0.1],
         'depth': [2, 4, 6, 8],
@@ -122,6 +122,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 cbmf=cb_model.fit(X_train,y_train)
 print("range "+str((df_eco.shape[1]-1)))
 cbmf.feature_names = df_eco.columns[:-1]
+print("names "+str(len(cbmf.feature_names)))
 
 print(f"Training in {time.time() - modelstart}s")
 
