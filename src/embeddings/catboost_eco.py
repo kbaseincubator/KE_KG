@@ -46,7 +46,7 @@ print(y)
 
 print("df_eco "+str(df_eco.shape))
 
-X = df_eco.iloc[:,(df_eco.shape[1]-1):]
+X = df_eco.iloc[:,:-1]
 
 print("X "+str(X.shape))
 # Let's put the X's on a common scale
