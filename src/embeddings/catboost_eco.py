@@ -125,7 +125,17 @@ plt.savefig('feature_importance.pdf')
 
 explainer = shap.TreeExplainer(cbmf)
 shap_values = explainer.shap_values(X_test)
-shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False,matplotlib=True).savefig('SHAP.pdf')
+shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False)#,matplotlib=True).savefig('SHAP.pdf',bbox_inches = 'tight')
+
+f = plt.gcf()
+f.savefig('SHAP.pdf')
+
+shap.force_plot(explainer.expected_value, shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False)#.savefig('SHAP.pdf',bbox_inches = 'tight')
+f = plt.gcf()
+f.savefig('force_plot.pdf')
+
 
 #dill.dump_session('catboost_eco_all.db')
+
+
 print('done')
