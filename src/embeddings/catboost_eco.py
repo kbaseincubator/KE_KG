@@ -54,7 +54,7 @@ print("X "+str(X.shape))
 #X[X.columns] = scaler.fit_transform(X)
 
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=9) # The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
+X_train, X_test, y_train, y_test = train_test_split(X, y) #, random_state=9# The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
 print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
 
 print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape)+"\t"+str(y_test.shape))
@@ -123,6 +123,16 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 )
 
 cbmf = cb_model.fit(X_train,y_train)
+
+
+predT = cb_model.predict(X_train)
+rmseT = (np.sqrt(mean_squared_error(y_train, predT)))
+r2T = r2_score(y_train, predT)
+print("Testing performance:")
+print('RMSE training: {:.2f}'.format(rmseT))
+print('R2 training: {:.2f}'.format(r2T))
+
+
 print("range "+str((df_eco.shape[1]-1)))
 cbmf.feature_names = df_eco.columns[:-1]
 print("names "+str(len(cbmf.feature_names)))
@@ -130,7 +140,7 @@ print("names "+str(len(cbmf.feature_names)))
 print(f"Training in {time.time() - modelstart}s")
 
 
-print(cbmf)
+#print(cbmf)
 
 
 
@@ -141,10 +151,10 @@ print("Testing performance:")
 print('RMSE: {:.2f}'.format(rmse))
 print('R2: {:.2f}'.format(r2))
 
+explainerT = shap.TreeExplainer(cbmf)
+explainer = shap.TreeExplainer(pred)
 
-explainer = shap.TreeExplainer(cbmf)
-
-data_output = [random_seed, grid, grid_search_result, cb_model, cbmf, pred, explainer]
+data_output = [random_seed, grid, grid_search_result, cb_model, cbmf, pred, explainer, predT, explainerT]
 pickle.dump(data_output,open("data_output", "wb" ) )
 
 
