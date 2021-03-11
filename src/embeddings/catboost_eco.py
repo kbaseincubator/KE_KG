@@ -44,6 +44,7 @@ print(df_eco.describe())
 y = df_eco['IFR']
 print(y)
 
+print("df_eco "+str(df_eco.shape))
 
 X = df_eco.iloc[:,(df_eco.shape[1]-1):]
 
