@@ -62,7 +62,7 @@ print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape
 train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
 
-input_data_dump = [df_eco, y, X, X_train, X_test, y_train, y_test,train_dataset,  test_dataset, ]
+input_data_dump = [y, X, X_train, X_test, y_train, y_test,train_dataset,  test_dataset]
 pickle.dump(input_data_dump,open("input_data_dump", "wb" ) )
 
 #class_counts = y_train.value_counts()
@@ -156,8 +156,6 @@ plt.barh(cb_model.feature_names[sorted_feature_importance[1:100]],
         color='turquoise')
 plt.xlabel("CatBoost Feature Importance")
 plt.savefig('feature_importance.pdf')
-
-
 
 shap_values = explainer.shap_values(X_test)
 shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False)#,matplotlib=True).savefig('SHAP.pdf',bbox_inches = 'tight')
