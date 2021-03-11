@@ -150,7 +150,7 @@ pickle.dump(pred,open("pred", "wb" ) )
 
 sorted_feature_importance = cb_model.feature_importances_.argsort()
 plt.barh(cb_model.feature_names[sorted_feature_importance[1:100]],
-        cb_model.feature_importances_[sorted_feature_importance[0:100]],
+        cb_model.feature_importances_[sorted_feature_importance[1:100]],
         color='turquoise')
 plt.xlabel("CatBoost Feature Importance")
 plt.savefig('feature_importance.pdf')
