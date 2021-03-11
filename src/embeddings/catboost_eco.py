@@ -125,7 +125,7 @@ plt.savefig('feature_importance.pdf')
 
 explainer = shap.TreeExplainer(cbmf)
 shap_values = explainer.shap_values(X_test)
-shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance])
+shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False,matplotlib=True).savefig('SHAP.pdf')
 
-dill.dump_session('catboost_eco_all.db')
+#dill.dump_session('catboost_eco_all.db')
 print('done')
