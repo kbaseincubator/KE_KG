@@ -56,6 +56,8 @@ print("X "+str(X.shape))
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=9) # The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
 print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
 
+print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape)+"\t"+str(y_test.shape))
+
 train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
 
