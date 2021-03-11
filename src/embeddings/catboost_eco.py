@@ -62,12 +62,15 @@ print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape
 train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
 
+input_data_dump = [df_eco, y, X, X_train, X_test, y_train, y_test,train_dataset,  test_dataset, ]
+pickle.dump(input_data_dump,open("input_data_dump", "wb" ) )
+
 #class_counts = y_train.value_counts()
 #max_count = max(class_counts)
 #class_weights = {i:max_count/x for i,x in class_counts.iteritems()}
 #print(class_weights)
 
-iseed = 67
+random_seed = 67
 
 modelstart = time.time()
 print(f"Starting grid search at {modelstart}")
@@ -79,7 +82,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
                              depth = 2,
                              l2_leaf_reg = 0.5,
                              #eval_metric = 'MCC',
-                             random_seed = iseed,
+                             random_seed = random_seed,
                              #bagging_temperature = 0.2,
                              #od_type = 'Iter',
                              #od_wait = 100
@@ -119,7 +122,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
                              #od_wait = 100
 )
 
-cbmf=cb_model.fit(X_train,y_train)
+cbmf = cb_model.fit(X_train,y_train)
 print("range "+str((df_eco.shape[1]-1)))
 cbmf.feature_names = df_eco.columns[:-1]
 print("names "+str(len(cbmf.feature_names)))
@@ -128,7 +131,8 @@ print(f"Training in {time.time() - modelstart}s")
 
 
 print(cbmf)
-pickle.dump(cbmf,open("cbmf", "wb" ) )
+
+
 
 pred = cb_model.predict(X_test)
 rmse = (np.sqrt(mean_squared_error(y_test, pred)))
@@ -138,12 +142,10 @@ print('RMSE: {:.2f}'.format(rmse))
 print('R2: {:.2f}'.format(r2))
 
 
-pickle.dump(pred,open("pred", "wb" ) )
+explainer = shap.TreeExplainer(cbmf)
 
-
-
-
-#dill.dump_session('catboost_eco_model.db')
+data_output = [random_seed, grid, grid_search_result, cb_model, cbmf, pred, explainer]
+pickle.dump(data_output,open("data_output", "wb" ) )
 
 
 
@@ -157,7 +159,6 @@ plt.savefig('feature_importance.pdf')
 
 
 
-explainer = shap.TreeExplainer(cbmf)
 shap_values = explainer.shap_values(X_test)
 shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False)#,matplotlib=True).savefig('SHAP.pdf',bbox_inches = 'tight')
 
