@@ -93,16 +93,16 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 
 
 grid = {#'iterations': [100, 150, 200],
-       'learning_rate': [0.1, 0.2],
-        'depth': [5, 6, 7],
-        'l2_leaf_reg': [3, 6, 9]}
+       'learning_rate': [0.075, 0.1],
+        'depth': [4.5, 5, 5.5],
+        'l2_leaf_reg': [2, 3, 3.5]}
 grid_search_result = cb_model.grid_search(grid, train_dataset)
 
 lr = grid_search_result['params']['learning_rate']
 de = grid_search_result['params']['depth']
 l2 = grid_search_result['params']['l2_leaf_reg']
 
-print(f"Trainedgrid search in {time.time() - modelstart}s")
+print(f"Trained grid search in {time.time() - modelstart}s")
 
 print("lr, de, l2 "+str(lr)+", "+str(de)+", "+str(l2))
 
@@ -133,11 +133,11 @@ print('RMSE training: {:.2f}'.format(rmseT))
 print('R2 training: {:.2f}'.format(r2T))
 
 
-print("range "+str((df_eco.shape[1]-1)))
+#print("range "+str((df_eco.shape[1]-1)))
 cbmf.feature_names = df_eco.columns[:-1]
-print("names "+str(len(cbmf.feature_names)))
+#print("names "+str(len(cbmf.feature_names)))
 
-print(f"Trained in {time.time() - modelstart}s")
+
 
 
 pred_test = cb_model.predict(X_test)
