@@ -90,9 +90,9 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 
 
 grid = {#'iterations': [100, 150, 200],
-       'learning_rate': [0.03, 0.1],
-        'depth': [2, 4, 6, 8],
-        'l2_leaf_reg': [0.2, 0.5, 1, 3]}
+       'learning_rate': [0.1, 0.2],
+        'depth': [5, 6, 7],
+        'l2_leaf_reg': [3, 6, 9]}
 grid_search_result = cb_model.grid_search(grid, train_dataset)
 
 lr = grid_search_result['params']['learning_rate']
@@ -101,7 +101,7 @@ l2 = grid_search_result['params']['l2_leaf_reg']
 
 print(f"Training grid search in {time.time() - modelstart}s")
 
-print("lr, de, l2"+str(lr)+", "+str(de)+", "+str(l2))
+print("lr, de, l2 "+str(lr)+", "+str(de)+", "+str(l2))
 
 
 print(f"Starting at {modelstart}")
@@ -149,8 +149,8 @@ pickle.dump(pred,open("pred", "wb" ) )
 
 
 sorted_feature_importance = cb_model.feature_importances_.argsort()
-plt.barh(cb_model.feature_names[sorted_feature_importance],
-        cb_model.feature_importances_[sorted_feature_importance],
+plt.barh(cb_model.feature_names[sorted_feature_importance[1:100]],
+        cb_model.feature_importances_[sorted_feature_importance[0:100]],
         color='turquoise')
 plt.xlabel("CatBoost Feature Importance")
 plt.savefig('feature_importance.pdf')
