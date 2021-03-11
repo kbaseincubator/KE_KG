@@ -34,17 +34,11 @@ print(df_eco.head())
 #df['IFR'] = np.vectorize(bin_dict.get)(np.digitize(df_eco['IFR'], bins))
 
 # How many vals are null?
-null_value_stats = df_eco.isnull().sum(axis=0)
-null_value_stats[null_value_stats != 0]
+#null_value_stats = df_eco.isnull().sum(axis=0)
+#null_value_stats[null_value_stats != 0]
 
 
-nzeros = [i for i,v in enumerate(df_eco.iloc[:,21:].sum()==0.0) if v==False]
-columns = list(df_eco.iloc[:,0:21].columns)+list(df_eco.iloc[:,21:].iloc[:,nzeros].columns)
-nzeros = [i for i,v in enumerate(df_eco.iloc[:,21:].sum(axis=1)==0.0) if v==False]
-indices = list(df_eco.iloc[nzeros,21:].index)
-df_ecoZ = df_eco[columns].loc[indices]
 print(df_ecoZ.describe())
-#df_ecoZ['Habitat_type'].value_counts()
 
 
 y = df_ecoZ['IFR']
@@ -52,6 +46,8 @@ print(y)
 
 
 X = df_ecoZ.iloc[:,(df_ecoZ.shape[1]-1):]
+
+print("X "+str(X.shape))
 # Let's put the X's on a common scale
 #scaler = MinMaxScaler()
 #X[X.columns] = scaler.fit_transform(X)
@@ -127,7 +123,7 @@ plt.savefig('feature_importance.pdf')
 
 
 
-explainer = shap.TreeExplainer(model)
+explainer = shap.TreeExplainer(cbmf)
 shap_values = explainer.shap_values(X_test)
 shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance])
 
