@@ -88,7 +88,7 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 
 
 cbmf=cb_model.fit(X_train,y_train)
-
+cbmf.feature_names = df_eco.columns[(df_ecoZ.shape[1]-1):]
 #grid = {'iterations': [100],#[100, 150, 200],
 ##       'learning_rate': [0.03],#[0.03, 0.1],
 #        'depth': [2],#[2, 4, 6, 8],
@@ -109,7 +109,6 @@ print('R2: {:.2f}'.format(r2))
 
 
 pickle.dump(pred,open("pred", "wb" ) )
-
 
 
 
