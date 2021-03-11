@@ -92,9 +92,6 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 )
 
 
-
-
-
 grid = {#'iterations': [100, 150, 200],
        'learning_rate': [0.1, 0.2],
         'depth': [5, 6, 7],
@@ -105,7 +102,7 @@ lr = grid_search_result['params']['learning_rate']
 de = grid_search_result['params']['depth']
 l2 = grid_search_result['params']['l2_leaf_reg']
 
-print(f"Training grid search in {time.time() - modelstart}s")
+print(f"Trainedgrid search in {time.time() - modelstart}s")
 
 print("lr, de, l2 "+str(lr)+", "+str(de)+", "+str(l2))
 
@@ -128,9 +125,9 @@ cb_model = CatBoostRegressor(loss_function='RMSE',
 cbmf = cb_model.fit(X_train,y_train)
 
 
-predT = cb_model.predict(X_train)
-rmseT = (np.sqrt(mean_squared_error(y_train, predT)))
-r2T = r2_score(y_train, predT)
+pred_train = cb_model.predict(X_train)
+rmseT = (np.sqrt(mean_squared_error(y_train, pred_train)))
+r2T = r2_score(y_train, pred_train)
 print("Testing performance:")
 print('RMSE training: {:.2f}'.format(rmseT))
 print('R2 training: {:.2f}'.format(r2T))
@@ -140,48 +137,21 @@ print("range "+str((df_eco.shape[1]-1)))
 cbmf.feature_names = df_eco.columns[:-1]
 print("names "+str(len(cbmf.feature_names)))
 
-print(f"Training in {time.time() - modelstart}s")
+print(f"Trained in {time.time() - modelstart}s")
 
 
-#print(cbmf)
-
-
-
-pred = cb_model.predict(X_test)
-rmse = (np.sqrt(mean_squared_error(y_test, pred)))
-r2 = r2_score(y_test, pred)
+pred_test = cb_model.predict(X_test)
+rmse = (np.sqrt(mean_squared_error(y_test, pred_test)))
+r2 = r2_score(y_test, pred_test)
 print("Testing performance:")
 print('RMSE: {:.2f}'.format(rmse))
 print('R2: {:.2f}'.format(r2))
 
-explainerT = shap.TreeExplainer(cbmf)
-explainer = shap.TreeExplainer(pred)
+explainer_model = shap.TreeExplainer(cb_model)
+explainer_fit = shap.TreeExplainer(cbmf)
 
-data_output = [random_seed, grid, grid_search_result, cb_model, cbmf, pred, explainer, predT, explainerT]
+data_output = [random_seed, grid, grid_search_result, cb_model, cbmf, pred_train, explainer_model, pred_test, explainer_fit]
 pickle.dump(data_output,open("data_output", "wb" ) )
-
-
-
-
-sorted_feature_importance = cb_model.feature_importances_.argsort()
-plt.barh(cb_model.feature_names[sorted_feature_importance[1:100]],
-        cb_model.feature_importances_[sorted_feature_importance[1:100]],
-        color='turquoise')
-plt.xlabel("CatBoost Feature Importance")
-plt.savefig('feature_importance.pdf')
-
-shap_values = explainer.shap_values(X_test)
-shap.summary_plot(shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False)#,matplotlib=True).savefig('SHAP.pdf',bbox_inches = 'tight')
-
-f = plt.gcf()
-f.savefig('SHAP.pdf')
-
-shap.force_plot(explainer.expected_value, shap_values, X_test, feature_names = cb_model.feature_names[sorted_feature_importance],show=False)#.savefig('SHAP.pdf',bbox_inches = 'tight')
-f = plt.gcf()
-f.savefig('force_plot.pdf')
-
-
-#dill.dump_session('catboost_eco_all.db')
 
 
 print('done')
