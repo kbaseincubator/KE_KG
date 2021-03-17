@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GroupShuffleSplit
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn.inspection import permutation_importance
@@ -27,11 +28,22 @@ print(df_eco.head())
 
 
 df_eco.shape
+df_eco_orig = df_eco
 
+#remove singleton environments
+y_counts = df_eco.loc[:,'GOLD_five_tuple'].value_counts()
+#require minimum category members = 3
+keep_envs = y_counts[y_counts > 2].index
+
+#df_eco_ = df_eco_orig
+df_eco = df_eco[df_eco['GOLD_five_tuple'].isin(keep_envs)]
+df_eco.shape
+
+y_counts2 = df_eco.loc[:,'GOLD_five_tuple'].value_counts()
+print(y_counts2)
 
 y = df_eco['GOLD_five_tuple']
 print(y)
-
 
 X = df_eco.loc[:, df_eco.columns != 'GOLD_five_tuple']#df_eco.iloc[:,:-1]
 print(X.columns)
@@ -48,10 +60,36 @@ inv_map = {v: k for k, v in habitat_ord.items()}
 
 len(y.unique())
 
-X.describe()
+#describe = X.describe()
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=random_seed) #, random_state=9# The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
+##groups = y#np.array([1, 1, 2, 2, 2, 3, 3, 3])
+##gss = GroupShuffleSplit(n_splits=1, train_size=.75, random_state=random_seed)
+##gss.get_n_splits()
+
+#train_inds, test_inds = next(GroupShuffleSplit(test_size=.20, n_splits=1, random_state = random_seed).split(X, groups=y))
+#X_train = X.iloc[train_inds]
+#X_test = X.iloc[test_inds]
+#y_train = y.iloc[train_inds]#pd.Series(y.to_numpy()[train_inds])
+#y_test = y.iloc[test_inds]#pd.Series(y.to_numpy()[test_inds])
+
+
+#for train_idx, test_idx in gss.split(X, y, groups):
+#    print("TRAIN:", train_idx, "TEST:", test_idx)
+#X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=random_seed) #, random_state=9# The seed was 'chosen' so test and training contain all labels: rn=3,4,8,9
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, stratify=y, random_state=random_seed)
+X_train.shape
+X_test.shape
+len(y_train)
+len(y_test)
 print("train label deficit:",len(set(y)-set(y_train)),"test label deficit:",len(set(y)-set(y_test)))
+
+
+#X_test = X_test[y_test[y_test.isin(y_train)]]
+#y_test = y_test[y_test.isin(y_train)]
+
+###check if env in test missing in training and if so remove?
+#y_test[~y_test.isin(y_train)]
+
 
 print("shapes "+str(X_train.shape)+"\t"+str(X_test.shape)+"\t"+str(y_train.shape)+"\t"+str(y_test.shape))
 
@@ -59,7 +97,7 @@ train_dataset = Pool(X_train, y_train)
 test_dataset = Pool(X_test, y_test)
 
 input_data_dump = [random_seed, X, y, X_train, X_test, y_train, y_test]
-pickle.dump(input_data_dump,open("input_data_dump", "wb" ) )
+pickle.dump(input_data_dump,open("input_data_dump_v3", "wb" ) )
 
 
 
@@ -85,10 +123,13 @@ cb_model_grid = CatBoostClassifier(
     od_wait=100,
     class_weights=class_weights)
 
-grid = {'learning_rate': [0.01, 0.1, 0.2],
-        'depth': [4, 5, 6],
-        'l2_leaf_reg': [0.5, 1, 5]}
-
+#grid = {'learning_rate': [0.01, 0.1, 0.2],
+#        'depth': [4, 5, 6],
+#        'l2_leaf_reg': [0.5, 1, 5]}
+#lr 0.2 de 6 l2 1
+grid = {'learning_rate': [0.3, 0.4, 0.5],
+        'depth': [5, 6,7],
+       'l2_leaf_reg': [0.5, 1, 5]}
 
 modelstart = time.time()
 print(f"Starting model parameter optimization at {modelstart}")
@@ -101,7 +142,7 @@ l2 = grid_search_result['params']['l2_leaf_reg']
 print(f"Finished in {time.time() - modelstart}s")
 
 print("lr "+str(lr)+" de "+str(de)+" l2 "+str(l2))
-#lr 0.2 de 6 l2 1
+#lr 0.5 de 7 l2 1
 
 #iseed = 123
 
@@ -139,8 +180,9 @@ confusion_matrix = get_confusion_matrix(cb_model, Pool(X_train, y_train))
 confusion_matrix_test = get_confusion_matrix(cb_model, Pool(X_test, y_test))
 
 data_output = [random_seed, grid, grid_search_result, cb_model, cbmpf, predictions, explainer_model, predictions_probs, explainer_fit, confusion_matrix]#,confusion_matrix_test]
-pickle.dump(data_output,open("data_output", "wb" ) )
-
+pickle.dump(data_output,open("data_output_v3", "wb" ) )
+data_output = [random_seed, grid, grid_search_result, cb_model, cbmpf, predictions, explainer_model, predictions_probs, explainer_fit, confusion_matrix,confusion_matrix_test]
+pickle.dump(data_output,open("data_output_v3_all", "wb" ) )
 
 sys.exit()
 
