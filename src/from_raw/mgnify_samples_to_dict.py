@@ -54,6 +54,6 @@ f.write( str(dict_all) )
 f.close()
 
 with open ("mgnify_sample_key_count.txt", "w") as f:
-    f.write(first_line + "\n")
+    #f.write(first_line + "\n")
     for key, value in dict_count.items():
         f.write("{}\t{}\n".format(key, value))
