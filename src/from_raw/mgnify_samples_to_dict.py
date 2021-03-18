@@ -21,7 +21,7 @@ for x in os.listdir(path):
             #print(key)
             if key == "sample-metadata":
                 print(curdata['attributes']["sample-metadata"])
-                for attr_data in curdata['attributes']:
+                for attr_data in curdata['attributes']["sample-metadata"]:
                     print(attr_data)
                     if attr_data["key"] in dict_all:
                         if str(attr_data["value"]) not in str(dict_all[key]):
