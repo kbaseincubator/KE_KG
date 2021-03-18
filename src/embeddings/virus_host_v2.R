@@ -1,19 +1,19 @@
 rm(list=ls())
 set.seed(12345)
-setwd("~/Documents/KBase/KE/IMGVR/link_predict_all")
 
-embeddings <- read.csv("../embeddings/SkipGram_merged_imgvr_mg_embedding.tsv", sep="\t", header=TRUE, row.names=1)
+
+embeddings <- read.csv("./data/SkipGram_embedding_merged_imgvr_mg_good.csv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("../merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
+node_data <- read.csv("./data/merged_imgvr_mg_nodes_good.tsv", sep="\t",header=T)
 dim(node_data)
 head(node_data) 
 
 node_labels <- as.character(node_data$id)
 
 
-virus_host <- read.csv("../IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",sep="\t",header=T)
+virus_host <- read.csv("./data/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",sep="\t",header=T)
 dim(virus_host)
 head(virus_host) 
 
@@ -65,7 +65,7 @@ host_curie <- paste("NCBItaxon:",tolower(virus_host$Host_taxonomy_prediction),se
 virus_host__subtract <- data.frame()
 virus_host__subtract_label <- c()
 
-done <- TRUE#FALSE
+done <- FALSE
 if(!done) {
   for(i in 1:length(vOTUs_index)){
     
@@ -135,7 +135,7 @@ training_index_all_rev <- match(host_raw,virus_host$Host_taxonomy_prediction)
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- TRUE#FALSE
+done <- FALSE
 if(!done) {
   training_index <-c()
   negative_index <- c()
