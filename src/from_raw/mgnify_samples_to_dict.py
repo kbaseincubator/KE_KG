@@ -18,9 +18,10 @@ for x in os.listdir(path):
         curdict = dict()
 
         for key in curdata['attributes']:
+            print(key)
             if key in dict_all:
-                if curdata['attributes'][key] not in dict_all[key]:
-                    dict_all[key] = dict_all[key] + " ** " + curdata['attributes'][key]
+                if str(curdata['attributes'][key]) not in str(dict_all[key]):
+                    dict_all[key] = str(dict_all[key]) + " ** " + str(curdata['attributes'][key])
             else:
                 dict_all[key] = curdata['attributes'][key]
 
