@@ -20,8 +20,8 @@ for x in os.listdir(path):
         for key in curdata['attributes']:
             #print(key)
             if key == "sample-metadata":
-                print(curdata['attributes'][0])
-                for attr_data in curdata['attributes'][0]:
+                print(curdata['attributes'])
+                for attr_data in curdata['attributes']:
                     if attr_data["key"] in dict_all:
                         if str(attr_data["value"]) not in str(dict_all[key]):
                             dict_all[attr_data["key"]] = str(dict_all[key]) + " ** " + str(attr_data["value"])
