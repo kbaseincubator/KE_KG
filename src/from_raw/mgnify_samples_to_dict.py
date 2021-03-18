@@ -13,7 +13,7 @@ for x in os.listdir(path):
         #print(curdata['attributes'])
 
         for key in curdata['attributes']:
-            print(key+"\t"+curdata['attributes'][key])
+            print(key+"\t"+str(curdata['attributes'][key]))
 
         curdict = dict()
         #curdict['type'] = curdata['type']
