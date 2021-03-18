@@ -7,7 +7,15 @@ dict_all = dict()
 for x in os.listdir(path):
     print(x)
     with open(path+"/"+x+"/sample.json") as json_file:
-        curdict = json.load(json_file)
+
+        curdata = json.load(json_file)
+
+        print(curdata['attributes'])
+
+        curdict = dict()
+        #curdict['type'] = curdata['type']
+        #curdict['id'] = curdata['id']
+
         dict_all.update(curdict)
 
 
