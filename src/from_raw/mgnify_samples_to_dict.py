@@ -1,6 +1,9 @@
 
 import json
 import os
+import csv
+
+
 
 path = "/global/cfs/cdirs/kbase/KE-Catboost/jrb/data/mgnify/samples"
 dict_all = dict()
@@ -46,10 +49,11 @@ for x in os.listdir(path):
                     dict_count[key] =  1
 
 
-f = open("mgnify_sample_key_count.txt","w")
-f.write( str(dict_count) )
-f.close()
-
 f = open("mgnify_sample_dict.txt","w")
 f.write( str(dict_all) )
 f.close()
+
+with open ("mgnify_sample_key_count.txt", "w") as f:
+    f.write(first_line + "\n")
+    for key, value in dict_count.items():
+        f.write("{}\t{}\n".format(key, value))
