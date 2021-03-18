@@ -3,26 +3,44 @@ rm(list=ls())
 
 library("plyr")
 
-setwd("~/Documents/KBase/KE/embedding_searches/embedding-search-Jan28_IMGVR_Torben_merge")
+setwd("~/Documents/KBase/KE/embedding_searches/embedding-search-Feb18-run2")
 
 
 files <- list.files("./")
 
-
+names <- c()
+all_names <- c()
 data <- list()#data.frame(matrix(NA, nrow = length(files)))
 count <- 1
+lastgood <- data.frame()
 for(i in 1:length(files)) {
   datanow <- read.csv(files[i], sep="\t")
-  dimd <- dim(datanow)
-  print(dimd)
-  if(dimd[1] > 0) {
+  dimd1 <- dim(datanow)
+  print(dimd1[1])
+  print(head(datanow))
+  datanow <- datanow[which(datanow[,2] > 0.9),]
+  dimd2 <- dim(datanow)
+  print(dimd2[1])
+  
+  start <- gregexpr(pattern ='__',files[i])[[1]][1]
+  end <- gregexpr(pattern ='_top10',files[i])[[1]][1]
+  name <- substr(files[i], start+2, end-1)
+  #print(name)
+  
+  if(dimd2[1] > 0) {
     print("adding")
+    print(dimd1[1] - dimd2[1])
     #data <- rbind(data, as.character(datanow[,1]))
     data[[count]] <- as.character(datanow[,1])
+    #print(data[[count]])
     #data[i,] <- datanow[,1]
+    names <- c(names, name)
     count <- count+1
+    lastgood <- datanow
   }
+  all_names <- c(all_names, name)
 }
+
 length(data)
 
 data_unlist_all <- unlist(data)
@@ -31,9 +49,13 @@ length(data_unlist_all)
 df <- do.call(rbind,lapply(data,function(x) "length<-"(x,max(lengths(data)))))
 dim(df)
 
+head(df)
+
+dfna <- apply(df, 1, function(x) { sum(is.na(x))})
+which(dfna == 998)
+
 #df <- do.call(rbind.fill, data)
 #df <- data.frame(matrix(unlist(data), nrow=length(data), byrow=T),stringsAsFactors=FALSE)
-
 
 
 
@@ -43,12 +65,23 @@ jaccard <- function(a, b) {
   return (intersection/union)
 }
 
+
+head(df)
 dim_df <- dim(df)
-pairwise_jaccard <- data.frame(matrix(NA, nrow = dim_df[1], ncol=dim_df[1]))
+pairwise_jaccard<- data.frame(matrix(NA, nrow = dim_df[1], ncol=dim_df[1]))
 for(i in 1:dim_df[1]) {
-  for(j in 1:dim_df[1]) {
+  dfi <- df[i,][which(!is.na(df[i,]))]
+  for(j in i:dim_df[1]) {
+    dfj <- df[j,][which(!is.na(df[j,]))]
     if(i != j) {
-      pairwise_jaccard[i, j] <- jaccard(df[i,], df[j,])
+      pairwise_jaccard[i, j] <- jaccard(dfi, dfj)
+      pairwise_jaccard[j, i] <- pairwise_jaccard[i, j]
+      intersect <- intersect(dfi, dfj)
+      if(length(intersect) > 0) {
+        outf <- paste(names[i], "_", names[j],"_common.txt",sep="")
+        print(outf)
+        write.table(intersect, file=outf,sep="\t")
+      }
     }
     else {
       pairwise_jaccard[i, j] <- 0
@@ -56,6 +89,11 @@ for(i in 1:dim_df[1]) {
   }
 }
 
+row.names(pairwise_jaccard) <- names
+colnames(pairwise_jaccard) <- names
+
+#write.table(names, file="GOLD_names.txt",row.names=F, col.names=F)
+#write.table(names_all, file="GOLD_names_all.txt",row.names=F, col.names=F)
 
 library(RColorBrewer)
 library(ggplot2)
@@ -78,7 +116,9 @@ mypalette <- c(mypalette, brewer.pal(4, "YlOrBr"))
 breaks <- seq(0, range[2],range[2]/8)
 
 
-heatmap.2(as.matrix(pairwise_jaccard), trace="none")
+heatmap.2(as.matrix(pairwise_jaccard), trace="none")#log(pairwise_jaccard + 0.001, 10))
+
+
 
 
 png(filename=paste("clustering_cosine_jaccard.png",sep=""),width=1200, height=800)
