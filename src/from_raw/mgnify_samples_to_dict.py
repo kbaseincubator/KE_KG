@@ -10,7 +10,10 @@ for x in os.listdir(path):
 
         curdata = json.load(json_file)
 
-        print(curdata['attributes'])
+        #print(curdata['attributes'])
+
+        for item in curdata['attributes']:
+            print(item)
 
         curdict = dict()
         #curdict['type'] = curdata['type']
