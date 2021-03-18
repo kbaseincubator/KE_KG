@@ -9,11 +9,14 @@ library("plyr")
 library("hash")
 #library("fmatch")
 
-#setwd("~/graphs/KE_KG")
-#node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
-setwd("~/Documents/KBase/KE/IMGVR/")
-node_data <- read.csv("./IMGVR_merged_kg_nodes.tsv", sep="\t",header=T)
-edge_data <- read.csv("./IMGVR_merged_kg_edges.tsv", sep="\t",header=T)
+#setwd("~/Documents/KBase/KE/IMGVR/")
+#node_data <- read.csv("./merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
+#edge_data <- read.csv("./merged_imgvr_mg_edges.tsv", sep="\t",header=T)
+
+
+setwd("~/Documents/VIMSS/ontology/KG-Hub/KG-Microbe/")
+edge_data <- read.csv("./20210119/merged-kg/merged-kg_edges.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
+node_data <- read.csv("./20210119/merged-kg/merged-kg_nodes.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
 
 dim(node_data)
 dim(edge_data)
@@ -33,12 +36,14 @@ node_labels <- as.character(node_data$id)
 #head(test_edges_split_mat)
 
 
-test_data <- read.csv("./link_predict_IMGVR_sample_extra_v3/IMGVR_sample_extra_test.txt", row.names=1, header=TRUE, sep="\t")
+#test_data <- read.csv("./link_predict_mg_imgvr_OPT_v4/IMGVR_sample_extra_test.txt", row.names=1, header=TRUE, sep="\t")
+test_data <- read.csv("./link_predict_kgmicrobe_shape/kgmicrobe_test.txt", row.names=1, header=TRUE, sep="\t")
 dim(test_data)
 head(test_data)
 row.names(test_data)
 
-train_data <- read.csv("./link_predict_IMGVR_sample_extra_v3/IMGVR_sample_extra_train.txt", row.names=1, header=TRUE, sep="\t")
+#train_data <- read.csv("./link_predict_mg_imgvr_OPT_v4/IMGVR_sample_extra_train.txt", row.names=1, header=TRUE, sep="\t")
+train_data <- read.csv("./link_predict_kgmicrobe_shape/kgmicrobe_train.txt", row.names=1, header=TRUE, sep="\t")
 dim(train_data)
 
 #grep(node2, edge_data[,'subject'])
@@ -53,6 +58,7 @@ head(objsplit)
 
 all_edges_str <- paste(edge_data[,'subject'], "__",edge_data[,'object'], sep="")
 head(all_edges_str)
+head(test_data)
 #test_edges_str <- paste(test_data[,'subject'], "__",test_data[,'object'], sep="")
 test_edges_str <- paste(objsplit, "__",subjsplit, sep="")
 head(test_edges_str)
@@ -76,9 +82,9 @@ hold_nodes_20 <- which(is.na(match(node_labels, new_node_ids)))
 
 #colnames(new_edges) <- c("uuid", "subject", "predicate", "object", "source")
 #colnames(new_nodes) <- c("id", "label", "category", "source")
-write.table(new_edges, file="./IMGVR_merged_kg_edges__positive80_v3.tsv", sep="\t", row.names=FALSE, quote=FALSE)
-write.table(hold_edges_20, file="./IMGVR_merged_kg_edges__positive20_index_v3.tsv", sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
-write.table(new_nodes, file="./IMGVR_merged_kg_nodes__positive80_v3.tsv", sep="\t", row.names=FALSE, quote=FALSE)
-write.table(hold_nodes_20, file="./IMGVR_merged_kg_nodes__positive20_index_v3.tsv", sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
+write.table(new_edges, file="./kgmicrobe_edges__positive80.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+write.table(hold_edges_20, file="./kgmicrobe_edges__positive20_index.tsv", sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
+write.table(new_nodes, file="./kgmicrobe_nodes__positive80.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+write.table(hold_nodes_20, file="./kgmicrobe_nodes__positive20_index.tsv", sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
 
 

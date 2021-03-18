@@ -22,7 +22,7 @@ for x in os.listdir(path):
 
         for key in curdata['attributes']:
             #print(key)
-            if key == "sample-metadata":
+            if key in ["sample-metadata"]:#, "links","relationships"]:
                 #print(curdata['attributes']["sample-metadata"])
                 for attr_data in curdata['attributes']["sample-metadata"]:
                     #print(attr_data)

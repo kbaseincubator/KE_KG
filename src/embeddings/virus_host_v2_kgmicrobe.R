@@ -13,7 +13,7 @@ head(node_data)
 node_labels <- as.character(node_data$id)
 
 
-train_edges <- read.csv("/global/scratch/marcin/N2V/embiggen/notebooks/kg_microbe/20210119/merged_kg_edges_SHAPE_whead.tsv",sep="\t",header=T)
+train_edges <- read.csv("/global/scratch/marcin/N2V/embiggen/notebooks/kg_microbe/20210119/merged_kg_edges_Shape_whead.tsv",sep="\t",header=T)
 dim(train_edges)
 head(train_edges) 
 

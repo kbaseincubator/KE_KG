@@ -8,7 +8,7 @@ library ("ROCR")
 #setwd("~/graphs/KE_KG")
 #node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 setwd("~/Documents/KBase/KE/IMGVR/")
-node_data <- read.csv("./IMGVR_merged_kg_nodes.tsv", sep="\t",header=T)
+node_data <- read.csv("./merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 
 dim(node_data)
 head(node_data) 
@@ -17,8 +17,8 @@ node_labels <- as.character(node_data$id)
 
 
 #virus_host_positive <- read.csv("./link_predict/virus_host__subtract.tsv", row.names=1)
-virus_host_positive <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_positive_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host__subtract_labels.tsv")
+virus_host_positive <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_positive_labels <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host__subtract_labels.tsv")
 dim(virus_host_positive)
 length(virus_host_positive_labels)
 head(virus_host_positive)
@@ -27,8 +27,8 @@ dimpos
 
 
 #virus_host_negative <- read.csv("./link_predict/virus_host_NEGATIVE__subtract.tsv", row.names=1)
-virus_host_negative <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_negative_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host_NEGATIVE__subtract_labels.tsv")
+virus_host_negative <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_negative_labels <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEGATIVE__subtract_labels.tsv")
 dim(virus_host_negative)
 sum(is.na(virus_host_negative))
 dim(virus_host_negative_labels)
@@ -39,8 +39,8 @@ dimneg
 row.names(virus_host_negative) <- virus_host_negative_labels[,1]
 
 
-virus_host_new <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_new_labels <- read.csv("./link_predict_IMGVR_sample_extra_v3/virus_host_NEW_subtract_labels.tsv")
+virus_host_new <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_new_labels <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEW_subtract_labels.tsv")
 dim(virus_host_new)
 sum(is.na(virus_host_new))
 dim(virus_host_new_labels)
@@ -180,5 +180,5 @@ write.table(prediction_for_table4, file="virus_host_predict__new_links_on_new.tx
 
 
 
-save.image(file='randomForest_v0.01__IMGVR_sample_extra_v2')
+save.image(file='randomForest_v0.01__IMGVR_sample_extra_v4')
 
