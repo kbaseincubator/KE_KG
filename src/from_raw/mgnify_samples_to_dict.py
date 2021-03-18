@@ -19,16 +19,30 @@ for x in os.listdir(path):
 
         for key in curdata['attributes']:
             #print(key)
-            if key in dict_all:
-                if str(curdata['attributes'][key]) not in str(dict_all[key]):
-                    dict_all[key] = str(dict_all[key]) + " ** " + str(curdata['attributes'][key])
-            else:
-                dict_all[key] = curdata['attributes'][key]
+            if key == "sample-metadata":
+                print(curdata['attributes'][0])
+                for attr_data in curdata['attributes'][0]:
+                    if attr_data["key"] in dict_all:
+                        if str(attr_data["value"]) not in str(dict_all[key]):
+                            dict_all[attr_data["key"]] = str(dict_all[key]) + " ** " + str(attr_data["value"])
+                    else:
+                        dict_all[attr_data["key"]] = attr_data["value"]
 
-            if key in dict_count:
-                dict_count[key] = dict_count[key] + 1
+                    if attr_data["key"] in dict_count and dict_count[attr_data["key"]] != 'None':
+                        dict_count[attr_data["key"]] = dict_count[attr_data["key"]] + 1
+                    else:
+                        dict_count[attr_data["key"]] = 1
             else:
-                dict_count[key] =  1
+                if key in dict_all:
+                    if str(curdata['attributes'][key]) not in str(dict_all[key]):
+                        dict_all[key] = str(dict_all[key]) + " ** " + str(curdata['attributes'][key])
+                else:
+                    dict_all[key] = curdata['attributes'][key]
+
+                if key in dict_count and dict_count[key] != 'None':
+                    dict_count[key] = dict_count[key] + 1
+                else:
+                    dict_count[key] =  1
 
 
 f = open("mgnify_sample_key_count.txt","w")
