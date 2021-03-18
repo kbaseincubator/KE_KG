@@ -25,7 +25,7 @@ for x in os.listdir(path):
                     print(attr_data)
                     if attr_data["key"] in dict_all:
                         if str(attr_data["value"]) not in str(dict_all[attr_data["key"]]):
-                            dict_all[attr_data["key"]] = str(dict_all[keattr_data["key"]]) + " ** " + str(attr_data["value"])
+                            dict_all[attr_data["key"]] = str(dict_all[attr_data["key"]]) + " ** " + str(attr_data["value"])
                     else:
                         dict_all[attr_data["key"]] = attr_data["value"]
 
