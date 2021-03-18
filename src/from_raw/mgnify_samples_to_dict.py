@@ -12,8 +12,8 @@ for x in os.listdir(path):
 
         #print(curdata['attributes'])
 
-        for item in curdata['attributes']:
-            print(item)
+        for key, val in curdata['attributes']:
+            print(key+"\t"+val)
 
         curdict = dict()
         #curdict['type'] = curdata['type']
