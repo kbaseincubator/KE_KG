@@ -21,7 +21,7 @@ set.seed(12345)
 
 
 
-embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/SkipGram_embedding_link_predict_kgmicrobe_shape_80.csv", sep=",", header=TRUE, row.names=1)
+embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/SkipGram_embedding_kgmicrobe_80.csv", sep=",", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
