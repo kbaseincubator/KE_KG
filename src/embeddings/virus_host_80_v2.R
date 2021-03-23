@@ -3,17 +3,17 @@ set.seed(12345)
 
 setwd("/global/scratch/marcin/N2V/KE_KG")
 
-embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4_80/SkipGram_embedding_mg_imgvr_80_OPT_v4.csv", sep=",", header=TRUE, row.names=1)
+embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5_80/SkipGram_embedding_IMGVR_merged_kg_80.csv", sep=",", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4/IMGVR_merged_kg_nodes__positive80_v4.tsv", sep="\t",header=T)
+node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5_80/IMGVR_merged_kg_nodes__positive80.tsv", sep="\t",header=T)
 dim(node_data)
 head(node_data)
 node_labels <- as.character(node_data$id)
 
 
-edge_data_test <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v4/IMGVR_sample_extra_test.txt", sep="\t",header=T)
+edge_data_test <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5/IMGVR_sample_extra_test.txt", sep="\t",header=T)
 dim(edge_data_test)
 head(edge_data_test)
 
