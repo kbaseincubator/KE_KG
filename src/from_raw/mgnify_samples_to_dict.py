@@ -32,7 +32,7 @@ for x in os.listdir(path):
                     else:
                         dict_all[attr_data["key"]] = attr_data["value"]
 
-                    if attr_data["key"] in dict_count and dict_count[attr_data["key"]] != 'None':
+                    if attr_data["key"] in dict_count and dict_count[attr_data["key"]] != 'None' and dict_count[attr_data["key"]]:
                         dict_count[attr_data["key"]] = dict_count[attr_data["key"]] + 1
                     else:
                         dict_count[attr_data["key"]] = 1
