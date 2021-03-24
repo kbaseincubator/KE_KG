@@ -2,11 +2,11 @@ rm(list=ls())
 set.seed(12345)
 
 
-embeddings <- read.csv("./data/SkipGram_embedding_merged_imgvr_mg_good.csv", sep=",", header=TRUE, row.names=1)
+embeddings <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/SkipGram_embedding_IMGVR_merged_kg_good_noko_whead.tsv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("./data/merged_imgvr_mg_nodes_good.tsv", sep="\t",header=T)
+node_data <- read.csv("./data/merged_imgvr_mg_nodes_good_noko_whead.tsv", sep="\t",header=T)
 dim(node_data)
 head(node_data) 
 
