@@ -26,21 +26,21 @@ for x in os.listdir(path):
                 #print(curdata['attributes']["sample-metadata"])
                 for attr_data in curdata['attributes']["sample-metadata"]:
                     #print(attr_data)
-                    if attr_data["key"] in dict_all:
+                    if attr_data["key"] and attr_data["key"] in dict_all:
                         if str(attr_data["value"]) not in str(dict_all[attr_data["key"]]):
                             dict_all[attr_data["key"]] = str(dict_all[attr_data["key"]]) + " ** " + str(attr_data["value"])
                     else:
                         dict_all[attr_data["key"]] = attr_data["value"]
 
-                    if attr_data["key"] in dict_count and dict_count[attr_data["key"]] != 'None' and dict_count[attr_data["key"]]:
+                    if attr_data["key"] and attr_data["key"] in dict_count and dict_count[attr_data["key"]] != 'None':
                         dict_count[attr_data["key"]] = dict_count[attr_data["key"]] + 1
                     else:
                         dict_count[attr_data["key"]] = 1
             else:
                 if key in dict_all:
-                    if str(curdata['attributes'][key]) not in str(dict_all[key]):
+                    if curdata['attributes'][key] and str(curdata['attributes'][key]) not in str(dict_all[key]):
                         dict_all[key] = str(dict_all[key]) + " ** " + str(curdata['attributes'][key])
-                else:
+                elif curdata['attributes'][key]:
                     dict_all[key] = curdata['attributes'][key]
 
                 if key in dict_count and dict_count[key] != 'None':
