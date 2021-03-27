@@ -4,6 +4,7 @@ import os
 import csv
 
 
+no_value = ['None', 'none', 'Null','null']
 
 path = "/global/cfs/cdirs/kbase/KE-Catboost/jrb/data/mgnify/samples"
 dict_all = dict()
@@ -32,7 +33,7 @@ for x in os.listdir(path):
                     else:
                         dict_all[attr_data["key"]] = attr_data["value"]
 
-                    if attr_data["key"] and attr_data["key"] in dict_count and dict_count[attr_data["key"]] != 'None':
+                    if attr_data["key"] and attr_data["key"] in dict_count and dict_count[attr_data["key"]] not in no_value:
                         dict_count[attr_data["key"]] = dict_count[attr_data["key"]] + 1
                     else:
                         dict_count[attr_data["key"]] = 1
@@ -40,13 +41,13 @@ for x in os.listdir(path):
                 if key in dict_all:
                     if curdata['attributes'][key] and str(curdata['attributes'][key]) not in str(dict_all[key]):
                         dict_all[key] = str(dict_all[key]) + " ** " + str(curdata['attributes'][key])
-                elif curdata['attributes'][key]:
+                elif curdata['attributes'][key] and str(curdata['attributes'][key]) not in str(dict_all[key]):
                     dict_all[key] = curdata['attributes'][key]
 
-                if key in dict_count and dict_count[key] != 'None':
+                if key in dict_count and dict_count[key] not in no_value:
                     dict_count[key] = dict_count[key] + 1
                 else:
-                    dict_count[key] =  1
+                    dict_count[key] = 1
 
 
 f = open("mgnify_sample_dict.txt","w")
