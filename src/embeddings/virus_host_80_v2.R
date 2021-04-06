@@ -89,9 +89,9 @@ if(!done) {
     
     if(!is.na(hosts_full_all_index[i])){
       curlabel <- paste(node_labels[vOTUs_index[i]],"__",node_labels[hosts_full_all_index[i]],sep="")
-      print(curlabel)
+      #print(curlabel)
       if(!(curlabel %in% virus_host__subtract_label) && !(curlabel %in% virus_host__subtract_label) ) {
-        print(curlabel)
+        #print(curlabel)
         #hindex <- which(hashost)
         v_embed <- embeddings[vOTUs_index[i],]
         #for(j in 1:length(hosts_index)){
