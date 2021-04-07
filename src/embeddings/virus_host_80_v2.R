@@ -253,16 +253,16 @@ length(unique(vOTUs[training_index]))
 #create new subtractions based on test sample subtraction from 100% graph emebeddings
 done <- FALSE#FALSE
 if (!done) {
-  ###for all negative samples
+  ###for all test samples
   for (i in 1:length(edge_data_test)) {
     if (i %% 100 == 0) {
       print(paste("t", i))
     }
     curlabel <- row.names(edge_data_test)[i]
     
-    #not in positive and not yet in negative
+    #not in positive and not in negative and not yet in test
     if (!(curlabel %in% virus_host__subtract_label) &&
-        !(curlabel %in% virus_host__subtract_label) &&
+        #!(curlabel %in% virus_host__subtract_label) &&
         !(curlabel %in% virus_host__subtract_label__TEST)) {
       curlabels <- strsplit(row.names(edge_data_test)[i], "__")
       print(curlabels)
@@ -303,7 +303,7 @@ outfile <- "./virus_host_TEST__subtract.tsv"
 outfile_nodes <- "virus_host_TEST__subtract_labels.tsv"
 print(outfile)
 print(outfile_nodes)
-write.csv(virus_host__subtract__TESTvirus_host__subtract__TEST, file = outfile)
+write.csv(virus_host__subtract__TEST, file = outfile)
 write.table(virus_host__subtract_label__TEST,
             file = outfile_nodes,
             sep = "\t")
