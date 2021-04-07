@@ -256,7 +256,7 @@ if (!done) {
   ###for all negative samples
   for (i in 1:length(edge_data_test)) {
     if (i %% 100 == 0) {
-      print(paste("test", i))
+      print(paste("t", i))
     }
     curlabel <- row.names(edge_data_test)[i]
     
@@ -323,7 +323,7 @@ virus_host__subtract_label__NEG <- c()
 length(unique(hosts))
 length(unique(vOTUs[training_index]))
 
-host_samples <- 5
+host_samples <- 1
 ###for all negative samples
 for (i in 1:length(training_index)) {
   if (i %% 100 == 0) {
