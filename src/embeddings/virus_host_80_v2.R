@@ -108,7 +108,72 @@ virus_host__subtract_label <- c()
 edge_data_test_labels <-
   row.names(edge_data_test)#paste(edge_data_test[, 'subject'],"__",edge_data_test[, 'object'], sep="")
 
-done <- TRUE#FALSE
+
+
+virus_host__subtract__TEST <- c()
+virus_host__subtract_label__TEST <- c()
+
+#create new subtractions based on test sample subtraction from 100% graph emebeddings
+done <- FALSE#FALSE#TRUE
+if (!done) {
+  ###for all test samples
+  for (i in 1:dim(edge_data_test)[1]) {
+    if (i %% 100 == 0) {
+      print(paste("t", i))
+    }
+    curlabel <- row.names(edge_data_test)[i]
+    print(curlabel)
+    print(curlabel %in% virus_host__subtract_label__TEST)
+    #not in positive and not in negative and not yet in test
+    if (!(curlabel %in% virus_host__subtract_label__TEST)) {
+      curlabels <- strsplit(curlabel, "__")
+      
+      curvir <- curlabels[0]#strsplit(curlabels[0], "\t")[2]
+      curhost <- curlabels[1]
+      print(paste(curvir, curhost))
+      
+      vindex <- match(curvir, node_labels)
+      hindex <- match(curhost, node_labels)
+      print(paste(vindex, hindex))
+      
+      #print(hindex)
+      #print(node_labels[hindex])
+      
+      v_embed <- embeddings[vindex,]
+      #for(j in 1:length(hosts_index)){
+      h_embed <- embeddings[hindex,]
+      
+      vh_embed <- v_embed - h_embed
+      if (sum(is.na(vh_embed)) > 0) {
+        print(paste("NA", curlabel, curhost, hindex, curvir, vindex))
+      }
+      else {
+        #print("adding")
+        virus_host__subtract__TEST <-
+          rbind(virus_host__subtract__TEST, vh_embed)
+        virus_host__subtract_label__TEST <-
+          c(virus_host__subtract_label__TEST, curlabel)
+      }
+    }
+  }
+}
+row.names(virus_host__subtract__TEST) <-
+  virus_host__subtract_label__TEST
+dim(virus_host__subtract__TEST)
+
+
+outfile <- "./virus_host_TEST__subtract.tsv"
+outfile_nodes <- "virus_host_TEST__subtract_labels.tsv"
+print(outfile)
+print(outfile_nodes)
+write.csv(virus_host__subtract__TEST, file = outfile)
+write.table(virus_host__subtract_label__TEST,
+            file = outfile_nodes,
+            sep = "\t")
+
+
+
+done <- FALSE#FALSE#TRUE
 if (!done) {
   for (i in 1:length(vOTUs_index)) {
     #curhost <- host_curie[i]
@@ -127,7 +192,7 @@ if (!done) {
                 "")
       #print(curlabel)
       if (!(curlabel %in% virus_host__subtract_label) &&
-          !(curlabel %in% virus_host__subtract_label)) {
+          !(curlabel %in% virus_host__subtract_label__TEST)) {
         #print(curlabel)
         #hindex <- which(hashost)
         v_embed <- embeddings[vOTUs_index[i],]
@@ -193,7 +258,7 @@ training_index_all_rev <-
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- TRUE#FALSE
+done <- FALSE#FALSE#TRUE
 if (!done) {
   training_index <- c()
   negative_index <- c()
@@ -243,71 +308,6 @@ length(vOTUs[hosts_index])
 ###
 #virus_host_combos <- paste(vOTUs[hosts_full_index],"__",hosts_full,sep="")
 #length(virus_host_combos)
-
-
-virus_host__subtract__TEST <- c()
-virus_host__subtract_label__TEST <- c()
-length(unique(hosts))
-length(unique(vOTUs[training_index]))
-
-#create new subtractions based on test sample subtraction from 100% graph emebeddings
-done <- FALSE#FALSE
-if (!done) {
-  ###for all test samples
-  for (i in 1:length(edge_data_test)) {
-    if (i %% 100 == 0) {
-      print(paste("t", i))
-    }
-    curlabel <- row.names(edge_data_test)[i]
-    
-    #not in positive and not in negative and not yet in test
-    if (!(curlabel %in% virus_host__subtract_label) &&
-        #!(curlabel %in% virus_host__subtract_label) &&
-        !(curlabel %in% virus_host__subtract_label__TEST)) {
-      curlabels <- strsplit(row.names(edge_data_test)[i], "__")
-      print(curlabels)
-      
-      curvir <- curlabels[0]
-      curhost <- curlabels[1]
-      
-      vindex <- match(curvir, node_labels)
-      hindex <- match(curhost, node_labels)
-      
-      #print(hindex)
-      #print(node_labels[hindex])
-      
-      v_embed <- embeddings[vindex,]
-      #for(j in 1:length(hosts_index)){
-      h_embed <- embeddings[hindex,]
-      
-      vh_embed <- v_embed - h_embed
-      if (sum(is.na(vh_embed)) > 0) {
-        print(paste("NA", curlabel, curhost, hindex, curvir, vindex))
-      }
-      else {
-        #print("adding")
-        virus_host__subtract__TEST <-
-          rbind(virus_host__subtract__TEST, vh_embed)
-        virus_host__subtract_label__TEST <-
-          c(virus_host__subtract_label__TEST, curlabel)
-      }
-    }
-  }
-}
-row.names(virus_host__subtract__TEST) <-
-  virus_host__subtract_label__TEST
-dim(virus_host__subtract__TEST)
-
-
-outfile <- "./virus_host_TEST__subtract.tsv"
-outfile_nodes <- "virus_host_TEST__subtract_labels.tsv"
-print(outfile)
-print(outfile_nodes)
-write.csv(virus_host__subtract__TEST, file = outfile)
-write.table(virus_host__subtract_label__TEST,
-            file = outfile_nodes,
-            sep = "\t")
-
 
 
 
