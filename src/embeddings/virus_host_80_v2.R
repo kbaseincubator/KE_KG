@@ -122,19 +122,19 @@ if (!done) {
       print(paste("t", i))
     }
     curlabel <- row.names(edge_data_test)[i]
-    print(curlabel)
-    print(curlabel %in% virus_host__subtract_label__TEST)
+    
+    #print(curlabel %in% virus_host__subtract_label__TEST)
     #not in positive and not in negative and not yet in test
     if (!(curlabel %in% virus_host__subtract_label__TEST)) {
       curlabels <- strsplit(curlabel, "__")
       
-      curvir <- curlabels[0]#strsplit(curlabels[0], "\t")[2]
-      curhost <- curlabels[1]
-      print(paste(curvir, curhost))
+      curvir <- curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
+      curhost <- curlabels[[1]][2]
+      #print(paste(curvir, curhost))
       
       vindex <- match(curvir, node_labels)
       hindex <- match(curhost, node_labels)
-      print(paste(vindex, hindex))
+      
       
       #print(hindex)
       #print(node_labels[hindex])
@@ -145,6 +145,8 @@ if (!done) {
       
       vh_embed <- v_embed - h_embed
       if (sum(is.na(vh_embed)) > 0) {
+        print(curlabel)
+        print(paste(vindex, hindex))
         print(paste("NA", curlabel, curhost, hindex, curvir, vindex))
       }
       else {
@@ -156,6 +158,16 @@ if (!done) {
       }
     }
   }
+} else {
+  virus_host__subtract__TEST <-
+    read.csv(
+      "virus_host_TEST__subtract.tsv",
+      row.names = 1,
+      header = TRUE,
+      sep = ","
+    )
+  virus_host__subtract_label__TEST <-
+    read.csv("virus_host_TEST__subtract_labels.tsv", sep = "\t")[, 1]
 }
 row.names(virus_host__subtract__TEST) <-
   virus_host__subtract_label__TEST
