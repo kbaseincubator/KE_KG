@@ -44,12 +44,12 @@ np.savetxt(f"{out_prefix}_nodes.tsv", nodes, delimiter="\t", fmt="%s")
 
 walk_length=100
 batch_size=2**8
-iterations=20
-window_size=4
+iterations=50
+window_size=16#4
 p=1.0
 q=1.0
 embedding_size=100
-negative_samples=30
+negative_samples=20
 patience=5
 delta=0.0001
 epochs=1000
