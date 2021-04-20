@@ -5,7 +5,7 @@ setwd("/global/scratch/marcin/N2V/KE_KG")
 
 embeddings <-
   read.csv(
-    "/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5_80/SkipGram_embedding_IMGVR_merged_kg_80.csv",
+    "/global/scratch/marcin/N2V/KE_KG/data/SkipGram_embedding_merged_imgvr_mg_good_train80.tsv",
     sep = ",",
     header = TRUE,
     row.names = 1
@@ -15,7 +15,8 @@ dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
 node_data <-
   read.csv(
-    "/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5_80/IMGVR_merged_kg_nodes__positive80.tsv",
+    #"/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5_80/IMGVR_merged_kg_nodes__positive80.tsv",
+    "/global/scratch/marcin/N2V/KE_KG/data/merged_imgvr_mg_nodes_good.tsv",
     sep = "\t",
     header = T
   )
@@ -26,7 +27,7 @@ node_labels <- as.character(node_data$id)
 
 edge_data_test <-
   read.csv(
-    "/global/scratch/marcin/N2V/KE_KG/link_predict_mg_imgvr_OPT_v5/IMGVR_sample_extra_test.txt",
+    "/global/scratch/marcin/N2V/KE_KG/data/merged_imgvr_mg_edges_good__test20.tsv",
     sep = "\t",
     header = T
   )
@@ -37,12 +38,20 @@ head(edge_data_test)
 virus_host <-
   read.csv(
     "/global/scratch/marcin/N2V/KE_KG/data/IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",
+    #"./IMGVR_all_Sequence_information_InIMG-Yes_Linked-to_TaxonOIDs_v2_Completeness-50-100_nocol20_v1.tsv",
     sep = "\t",
     header = T
   )
 dim(virus_host)
 head(virus_host)
 
+
+head(virus_host$vOTU)
+
+hindex_not <- which(virus_host$Host_taxonomy_prediction == "")
+virus_host_combos <- paste("vOTU:",tolower(virus_host$vOTU[-hindex_not]),"__", "NCBItaxon:",gsub( " ", "_", tolower(virus_host$Host_taxonomy_prediction[-hindex_not])), sep = "")
+head(virus_host_combos)
+write.table(virus_host_combos, "virus_host_combos.txt",sep="\t")
 
 
 vOTUs <- paste("vOTU:", tolower(virus_host$vOTU), sep = "")
@@ -102,15 +111,10 @@ host_curie <-
         sep = "")
 
 
-virus_host__subtract <- data.frame()
-virus_host__subtract_label <- c()
-
 edge_data_test_labels <-
   row.names(edge_data_test)#paste(edge_data_test[, 'subject'],"__",edge_data_test[, 'object'], sep="")
 
-
-
-virus_host__subtract__TEST <- c()
+virus_host__subtract__TEST <- data.frame()
 virus_host__subtract_label__TEST <- c()
 
 #create new subtractions based on test sample subtraction from 100% graph emebeddings
@@ -129,12 +133,15 @@ if (!done) {
       curlabels <- strsplit(curlabel, "__")
       
       curvir <- curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
+      curvir_tab <- gregexpr(pattern ='\t',curvir)
+      if(curvir_tab[[1]][1] > -1) {
+        curvir <- substr(curvir, curvir_tab[[1]][1]+1, nchar(curvir))
+      }
       curhost <- curlabels[[1]][2]
       #print(paste(curvir, curhost))
       
       vindex <- match(curvir, node_labels)
       hindex <- match(curhost, node_labels)
-      
       
       #print(hindex)
       #print(node_labels[hindex])
@@ -184,6 +191,9 @@ write.table(virus_host__subtract_label__TEST,
             sep = "\t")
 
 
+
+virus_host__subtract <- data.frame()
+virus_host__subtract_label <- c()
 
 done <- FALSE#FALSE#TRUE
 if (!done) {
@@ -250,6 +260,15 @@ length(virus_host__subtract_label)
 head(virus_host__subtract)
 head(virus_host__subtract_label)
 
+outfile <- "./virus_host__subtract.tsv"
+outfile_nodes <- "virus_host__subtract_labels.tsv"
+print(outfile)
+print(outfile_nodes)
+write.csv(virus_host__subtract, file = outfile)
+write.table(virus_host__subtract_label,
+            file = outfile_nodes,
+            sep = "\t")
+
 
 ###create negative samples
 full_index <- seq(1, length(node_labels), 1)
@@ -275,7 +294,7 @@ if (!done) {
   training_index <- c()
   negative_index <- c()
   for (i in 1:length(virus_host$Host_taxonomy_prediction))   {
-    print(virus_host$Host_taxonomy_prediction[i])
+    #print(virus_host$Host_taxonomy_prediction[i])
     
     if (!is.na(training_index_all[i]) &&
         virus_host$Host_taxonomy_prediction[i] != "") {
@@ -362,7 +381,7 @@ for (i in 1:length(training_index)) {
     #print(vOTUs[curvir])
     #not in positive and not yet in negative
     if (!(curlabel %in% virus_host__subtract_label) &&
-        !(curlabel %in% edge_data_test_labels) &&
+        !(curlabel %in% virus_host__subtract_label__TEST) &&
         !(curlabel %in% virus_host__subtract_label__NEG)) {
       #hindex <- match(node_labels, hosts[curhost])
       hindex <- hosts_index[curhost]
@@ -413,7 +432,7 @@ write.table(virus_host__subtract_label__NEG,
 
 
 random_new_viruses_sample <-
-  sample(1:length(vOTUs), 10)#runif(10, 0,  length(vOTUs))
+  sample(1:length(vOTUs), 20)#runif(10, 0,  length(vOTUs))
 match(random_new_viruses_sample, hosts_index)
 
 #random_new_viruses2 <- sample(1:length(vOTUs), 100000)#runif(10, 0,  length(vOTUs))
@@ -421,14 +440,19 @@ new_virus_host__subtract <- c()
 new_virus_host__subtract_label <- c()
 for (i in 1:length(random_new_viruses_sample)) {
   v_embed <- embeddings[vOTUs_index[random_new_viruses_sample[i]],]
+  #if (i %% 100 == 0) {
+  print(paste("i ",i))
+  #}
   for (j in 1:length(hosts_index)) {
     curlabel <-
       paste(node_labels[vOTUs_index[random_new_viruses_sample[i]]], "__", node_labels[hosts_index[j]], sep =
               "")
-    
-    if (!(curlabel %in% new_virus_host__subtract_label)) {
-      if (j %% 100) {
-        print(j)
+    if (!(curlabel %in% new_virus_host__subtract_label) &&
+        !(curlabel %in% virus_host__subtract_label) &&
+        !(curlabel %in% virus_host__subtract__NEG) &&
+        !(curlabel %in% virus_host__subtract_label__TEST)) {
+      if (j %% 100 == 0) {
+        print(paste("j ",j))
       }
       h_embed <- embeddings[hosts_index[j],]
       
@@ -445,8 +469,7 @@ row.names(new_virus_host__subtract) <-
 
 dim(new_virus_host__subtract)
 
-write.table(random_new_viruses_sample, file = "virus_host__random10_sample.tsv", sep =
-              "\t")
+write.table(random_new_viruses_sample, file = "virus_host__random10_sample.tsv", sep ="\t")
 
 
 outfile <- "virus_host_NEW__subtract.tsv"
@@ -457,3 +480,37 @@ write.csv(new_virus_host__subtract, file = outfile)
 write.table(new_virus_host__subtract_label,
             file = outfile_nodes,
             sep = "\t")
+
+####
+####
+####
+virus_host__subtract_label__TEST <-
+  read.csv("./link_predict_mg_imgvr_OPT_v5_80/virus_host_TEST__subtract_labels.tsv", sep = "\t")[, 1]
+
+match_ref_TEST <- match(virus_host__subtract_label__TEST, virus_host_combos)
+sum(is.na(match_ref_TEST))
+sum(!is.na(match_ref_TEST))
+match_ref_TEST_pos_neg <- rep(1, length(virus_host__subtract_label__TEST) )
+match_ref_TEST_pos_neg[is.na(match_ref_TEST)] <- 0
+write.table(match_ref_TEST_pos_neg,
+            file = "virus_host_TEST__subtract_pos_neg.tsv",
+            sep = "\t")
+
+#virus_host__subtract
+virus_host__subtract_label <-
+  read.csv("./link_predict_mg_imgvr_OPT_v5_80/virus_host__subtract_labels.tsv", sep = "\t")[, 1]
+
+match_ref <- match(virus_host__subtract_label, virus_host_combos)
+sum(is.na(match_ref))
+sum(!is.na(match_ref))
+
+
+#virus_host__subtract
+virus_host__subtract_label__NEG <-
+  read.csv("./link_predict_mg_imgvr_OPT_v5_80/virus_host_NEGATIVE__subtract_labels.tsv", sep = "\t")[, 1]
+
+match_neg <- match(virus_host__subtract_label__NEG, virus_host_combos)
+sum(is.na(match_neg))
+sum(!is.na(match_neg))
+
+

@@ -1,14 +1,18 @@
 rm(list=ls())
 
+set.seed(12345)
+
 library("randomForest")
 library("caTools")
 library ("ROCR")
+
 #library("data.table")#fmatch
 
 #setwd("~/graphs/KE_KG")
 #node_data <- read.csv("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/data/merged/merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
 setwd("~/Documents/KBase/KE/IMGVR/")
-node_data <- read.csv("./merged_imgvr_mg_nodes.tsv", sep="\t",header=T)
+#node_data <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/merged_imgvr_mg_nodes_good_noko_whead.tsv", sep="\t",header=T)
+node_data <- read.csv("./merged_imgvr_mg_nodes_good.tsv", sep="\t",header=T)
 
 dim(node_data)
 head(node_data) 
@@ -17,8 +21,10 @@ node_labels <- as.character(node_data$id)
 
 
 #virus_host_positive <- read.csv("./link_predict/virus_host__subtract.tsv", row.names=1)
-virus_host_positive <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_positive_labels <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host__subtract_labels.tsv")
+#virus_host_positive <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
+#virus_host_positive_labels <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/virus_host__subtract_labels.tsv")
+virus_host_positive <- read.csv("./link_predict_mg_imgvr_OPT_v5/virus_host__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_positive_labels <- read.csv("./link_predict_mg_imgvr_OPT_v5/virus_host__subtract_labels.tsv")
 dim(virus_host_positive)
 length(virus_host_positive_labels)
 head(virus_host_positive)
@@ -27,8 +33,10 @@ dimpos
 
 
 #virus_host_negative <- read.csv("./link_predict/virus_host_NEGATIVE__subtract.tsv", row.names=1)
-virus_host_negative <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_negative_labels <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEGATIVE__subtract_labels.tsv")
+#virus_host_negative <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
+#virus_host_negative_labels <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/virus_host_NEGATIVE__subtract_labels.tsv")
+virus_host_negative <- read.csv("./link_predict_mg_imgvr_OPT_v5/virus_host_NEGATIVE__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_negative_labels <- read.csv("./link_predict_mg_imgvr_OPT_v5/virus_host_NEGATIVE__subtract_labels.tsv")
 dim(virus_host_negative)
 sum(is.na(virus_host_negative))
 dim(virus_host_negative_labels)
@@ -36,11 +44,13 @@ head(virus_host_negative)
 dimneg <- dim(virus_host_negative)
 head(virus_host_negative)
 dimneg
-row.names(virus_host_negative) <- virus_host_negative_labels[,1]
+#row.names(virus_host_negative) <- virus_host_negative_labels[,1]
 
 
-virus_host_new <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
-virus_host_new_labels <- read.csv("./link_predict_IMGVR_sample_extra_v4/virus_host_NEW_subtract_labels.tsv")
+#virus_host_new <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
+#virus_host_new_labels <- read.csv("./link_predict_mg_imgvr_OPT_v5_noko/virus_host_NEW_subtract_labels.tsv")
+virus_host_new <- read.csv("./link_predict_mg_imgvr_OPT_v5/virus_host_NEW__subtract.tsv", row.names=1, header=TRUE, sep=",")
+virus_host_new_labels <- read.csv("./link_predict_mg_imgvr_OPT_v5/virus_host_NEW_subtract_labels.tsv")
 dim(virus_host_new)
 sum(is.na(virus_host_new))
 dim(virus_host_new_labels)
@@ -48,7 +58,8 @@ head(virus_host_new)
 dimnegnew <- dim(virus_host_new)
 head(virus_host_new)
 dimnegnew
-row.names(virus_host_new) <- virus_host_new_labels[,1]
+
+#row.names(virus_host_new) <- virus_host_new_labels[,1]
 
 #print("trimming positive because FEWER NEGATIVE!!!")
 #virus_host_positive <- virus_host_positive[1:dimneg[1],]
@@ -69,6 +80,15 @@ dim(total_train_data)
 head(total_train_data)
 sum(is.na(total_train_data))
 
+train_edges_split <- strsplit(row.names(total_train_data), "__")
+subjsplit_raw <- unlist(train_edges_split)[2*(1:length(train_edges_split))-1]
+head(subjsplit_raw)
+subjsplit <- unlist(strsplit(as.character(subjsplit_raw), "\t", fixed=TRUE))[2*(1:length(train_edges_split))]
+head(subjsplit)
+objsplit  <- unlist(train_edges_split)[2*(1:length(train_edges_split))  ]
+head(objsplit)
+
+
 pos_neg_label <- c(rep(1, dimpos[1]), rep(0, dimneg[1]))
 names(pos_neg_label) <- "pos_neg"
 total_train_data <- cbind(total_train_data, pos_neg_label)
@@ -78,18 +98,32 @@ total_train_data <- cbind(total_train_data, pos_neg_label)
 
 done = FALSE
 if(!done) {
-  sample <- sample.split(total_train_data$pos_neg, SplitRatio = 0.8)
-  write.table(sample, file="IMGVR_sample_extra_sample.txt", sep="\t")
-  train <- subset(total_train_data, sample == TRUE)
-  class(train)
-  test <- subset(total_train_data, sample == FALSE)
+  #sample <- sample.split(total_train_data$pos_neg, SplitRatio = 0.8)
+  p <- 0.8
+  
+  #stratify on host taxa
+  rr <- split(1:length(objsplit), objsplit)
+  idx <- sort(as.numeric(unlist(sapply(rr, function(x) sample(x, length(x) * p)))))
+  
+  train <- total_train_data[idx, ]
+  test <- total_train_data[-idx, ]
+  dim(train)
+  dim(test)
+  
+  #write.table(rr, file="IMGVR_sample.txt", sep="\t")
+  capture.output(rr, file="IMGVR_sample.txt")
+  save(rr, file="IMGVR_sample.RData")
+  #train <- subset(total_train_data, sample == TRUE)
+  #class(train)
+  #test <- subset(total_train_data, sample == FALSE)
 
-  write.table(train, file="IMGVR_sample_extra_train.txt", sep="\t")
-  write.table(test, file="IMGVR_sample_extra_test.txt", sep="\t")
+  write.table(train, file="IMGVR_train.txt", sep="\t")
+  write.table(test, file="IMGVR_test.txt", sep="\t")
 } else {
-  sample <- read.csv("IMGVR_sample_extra_sample.txt", row.names=1, header=TRUE, sep="\t")
-  train <- read.csv("IMGVR_sample_extra_train.txt", row.names=1, header=TRUE, sep="\t")
-  test <- read.csv("IMGVR_sample_extra_test.txt", row.names=1, header=TRUE, sep="\t")
+  #sample <- read.csv("IMGVR_sample.txt", row.names=1, header=TRUE, sep="\t")
+  sample <- load("IMGVR_sample.RData")
+  train <- read.csv("IMGVR_train.txt", row.names=1, header=TRUE, sep="\t")
+  test <- read.csv("IMGVR_test.txt", row.names=1, header=TRUE, sep="\t")
 }
 dim(sample)
 dim(train)

@@ -51,7 +51,7 @@ dim(virus_host_new_labels)
 #head(virus_host_new)
 dimnew <- dim(virus_host_new)
 #head(virus_host_new)
-row.names(virus_host_new) <- virus_host_new_labels[,1]
+#row.names(virus_host_new) <- virus_host_new_labels[,1]
 
 
 #print("trimming positive because FEWER NEGATIVE!!!")
