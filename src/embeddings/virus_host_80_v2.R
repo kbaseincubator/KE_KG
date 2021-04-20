@@ -125,7 +125,7 @@ if (!done) {
     if (i %% 100 == 0) {
       print(paste("t", i))
     }
-    curlabel <- paste(edge_data_test$object,"__",edge_data_test$subject, sep="")#row.names(edge_data_test)[i]
+    curlabel <- paste(edge_data_test$object[i],"__",edge_data_test$subject[i], sep="")#row.names(edge_data_test)[i]
     
     #print(curlabel %in% virus_host__subtract_label__TEST)
     #not in positive and not in negative and not yet in test
