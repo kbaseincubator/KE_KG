@@ -29,7 +29,7 @@ edge_data_test <-
   read.csv(
     "/global/scratch/marcin/N2V/KE_KG/data/merged_imgvr_mg_edges_good__test20.tsv",
     sep = "\t",
-    header = T
+    header = T#, row.names=1
   )
 dim(edge_data_test)
 head(edge_data_test)
@@ -125,19 +125,20 @@ if (!done) {
     if (i %% 100 == 0) {
       print(paste("t", i))
     }
-    curlabel <- row.names(edge_data_test)[i]
+    curlabel <- paste(edge_data_test$object,"__",edge_data_test$subject, sep="")#row.names(edge_data_test)[i]
     
     #print(curlabel %in% virus_host__subtract_label__TEST)
     #not in positive and not in negative and not yet in test
     if (!(curlabel %in% virus_host__subtract_label__TEST)) {
-      curlabels <- strsplit(curlabel, "__")
+      #curlabels <- strsplit(curlabel, "__")
       
-      curvir <- curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
+      curvir <- edge_data_test$object#curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
       curvir_tab <- gregexpr(pattern ='\t',curvir)
       if(curvir_tab[[1]][1] > -1) {
         curvir <- substr(curvir, curvir_tab[[1]][1]+1, nchar(curvir))
+        print("trimmed curvir by \t")
       }
-      curhost <- curlabels[[1]][2]
+      curhost <- edge_data_test$subject#curlabels[[1]][2]
       #print(paste(curvir, curhost))
       
       vindex <- match(curvir, node_labels)
