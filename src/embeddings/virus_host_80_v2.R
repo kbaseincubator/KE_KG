@@ -132,13 +132,13 @@ if (!done) {
     if (!(curlabel %in% virus_host__subtract_label__TEST)) {
       #curlabels <- strsplit(curlabel, "__")
       
-      curvir <- edge_data_test$object#curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
+      curvir <- edge_data_test$object[i]#curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
       curvir_tab <- gregexpr(pattern ='\t',curvir)
       if(curvir_tab[[1]][1] > -1) {
         curvir <- substr(curvir, curvir_tab[[1]][1]+1, nchar(curvir))
         print("trimmed curvir by \t")
       }
-      curhost <- edge_data_test$subject#curlabels[[1]][2]
+      curhost <- edge_data_test$subject[i]#curlabels[[1]][2]
       #print(paste(curvir, curhost))
       
       vindex <- match(curvir, node_labels)
