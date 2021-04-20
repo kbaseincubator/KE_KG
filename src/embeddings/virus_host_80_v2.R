@@ -6,7 +6,7 @@ setwd("/global/scratch/marcin/N2V/KE_KG")
 embeddings <-
   read.csv(
     "/global/scratch/marcin/N2V/KE_KG/data/SkipGram_embedding_merged_imgvr_mg_good_train80.tsv",
-    sep = ",",
+    sep = "\t",
     header = TRUE,
     row.names = 1
   )
@@ -113,6 +113,8 @@ host_curie <-
 
 edge_data_test_labels <-
   row.names(edge_data_test)#paste(edge_data_test[, 'subject'],"__",edge_data_test[, 'object'], sep="")
+
+
 
 virus_host__subtract__TEST <- data.frame()
 virus_host__subtract_label__TEST <- c()
