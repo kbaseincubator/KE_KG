@@ -1,40 +1,25 @@
 rm(list=ls())
 set.seed(12345)
 
-#setwd("/global/scratch/marcin/N2V/KE_KG/")
 
-#embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/SkipGram_embedding_link_predict_kgmicrobe_shape_80.csv", sep="\t", header=TRUE, row.names=1)
-#head(embeddings)
-#dim(embeddings)
-#node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape/kgmicrobe_nodes__positive80.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
-#dim(node_data)
-#head(node_data) 
-#node_labels <- as.character(node_data$id)
-
-#train_edges <- read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/kgmicrobe_edges__positive80.tsv",sep="\t",header=T)
-#dim(train_edges)
-#head(train_edges) 
-
-#all_objects <-  read.csv("/global/homes/m/marcinj/graphs/KE_KG/kg_microbe/merged-kg_nodes_NCBITaxon_whead.tsv",sep="\t",header=T)
-#dim(all_objects)
-#head(all_objects) 
-
-
-
-embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/SkipGram_embedding_kgmicrobe_80.csv", sep=",", header=TRUE, row.names=1)
+embeddings <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/SkipGram_embedding_kgmicrobe_train80shape.tsv", sep="\t", header=TRUE, row.names=1)
 head(embeddings)
 dim(embeddings)
 #node_data <- read.csv("../KE_KG/data/merged_last/IMGVR_merged_final_KGX_nodes.tsv", sep="\t",header=T)
-node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/kgmicrobe_nodes__positive80.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
+node_data <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/merged-kg_nodes.tsv", sep="\t",header=T, quote="", stringsAsFactors = FALSE)
 dim(node_data)
 head(node_data) 
 node_labels <- as.character(node_data$id)
 
-train_edges <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/kgmicrobe_edges__positive80_Shape_whead.tsv",sep="\t",header=T)
+train_edges <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/merged-kg_edges__shape__train80.tsv",sep="\t",header=T)
 dim(train_edges)
 head(train_edges) 
 
-all_objects <-  read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/kgmicrobe_nodes__positive80_NCBITaxon_whead.tsv",sep="\t",header=T)
+test_edges <- read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/merged-kg_edges__shape__test20.tsv",sep="\t",header=T)
+dim(test_edges)
+head(test_edges) 
+
+all_objects <-  read.csv("/global/scratch/marcin/N2V/KE_KG/link_predict_kgmicrobe_shape_80/merged-kg_nodes_NCBITaxon_whead.tsv",sep="\t",header=T)
 dim(all_objects)
 head(all_objects) 
 
@@ -84,6 +69,88 @@ sum(is.na(objects_full_index))
 objects[is.na(objects_full_index)][1:10]
 
 
+
+
+taxa_trait__subtract__TEST <- data.frame()
+taxa_trait__subtract_label__TEST <- c()
+
+#create new subtractions based on test sample subtraction from 100% graph emebeddings
+done <- FALSE#FALSE#TRUE
+if (!done) {
+  ###for all test samples
+  for (i in 1:dim(test_edges)[1]) {
+    if (i %% 100 == 0) {
+      print(paste("t", i))
+    }
+    curlabel <- paste(test_edges$object[i],"__",test_edges$subject[i], sep="")#row.names(edge_data_test)[i]
+    
+    #print(curlabel %in% taxa_trait__subtract_label__TEST)
+    #not in positive and not in negative and not yet in test
+    if (!(curlabel %in% taxa_trait__subtract_label__TEST)) {
+      #curlabels <- strsplit(curlabel, "__")
+      
+      curvir <- test_edges$object[i]#curlabels[[1]][1]#strsplit(curlabels[0], "\t")[2]
+      curvir_tab <- gregexpr(pattern ='\t',curvir)
+      if(curvir_tab[[1]][1] > -1) {
+        curvir <- substr(curvir, curvir_tab[[1]][1]+1, nchar(curvir))
+        print("trimmed curvir by \t")
+      }
+      curhost <- test_edges$subject[i]#curlabels[[1]][2]
+      #print(paste(curvir, curhost))
+      
+      vindex <- match(curvir, node_labels)
+      hindex <- match(curhost, node_labels)
+      
+      #print(hindex)
+      #print(node_labels[hindex])
+      
+      v_embed <- embeddings[vindex,]
+      #for(j in 1:length(hosts_index)){
+      h_embed <- embeddings[hindex,]
+      
+      vh_embed <- v_embed - h_embed
+      if (sum(is.na(vh_embed)) > 0) {
+        print(curlabel)
+        print(paste(vindex, hindex))
+        print(paste("NA", curlabel, curhost, hindex, curvir, vindex))
+      }
+      else {
+        #print("adding")
+        taxa_trait__subtract__TEST <-
+          rbind(taxa_trait__subtract__TEST, vh_embed)
+        taxa_trait__subtract_label__TEST <-
+          c(taxa_trait__subtract_label__TEST, curlabel)
+      }
+    }
+  }
+} else {
+  taxa_trait__subtract__TEST <-
+    read.csv(
+      "taxa_trait_TEST__subtract.tsv",
+      row.names = 1,
+      header = TRUE,
+      sep = ","
+    )
+  taxa_trait__subtract_label__TEST <-
+    read.csv("taxa_trait_TEST__subtract_labels.tsv", sep = "\t")[, 1]
+}
+row.names(taxa_trait__subtract__TEST) <-
+  taxa_trait__subtract_label__TEST
+dim(taxa_trait__subtract__TEST)
+
+
+outfile <- "./taxa_trait_TEST__subtract.tsv"
+outfile_nodes <- "taxa_trait_TEST__subtract_labels.tsv"
+print(outfile)
+print(outfile_nodes)
+write.csv(taxa_trait__subtract__TEST, file = outfile)
+write.table(taxa_trait__subtract_label__TEST,
+            file = outfile_nodes,
+            sep = "\t")
+
+
+
+
 train_edges__subtract <- data.frame()
 train_edges__subtract_label <- c()
 
@@ -98,7 +165,7 @@ if(!done) {
     if(!is.na(objects_full_index[i])){
       curlabel <- paste(node_labels[subjects_index[i]],"__",node_labels[objects_full_index[i]],sep="")
       #print(curlabel)
-      if(length(curlabel) > 0 && !(curlabel %in% train_edges__subtract_label)) {
+      if(length(curlabel) > 0 && !(curlabel %in% train_edges__subtract_label) && !(curlabel %in% taxa_trait__subtract_label__TEST)) {
         #print(curlabel)
         #objindex <- which(hashost)
         subj_embed <- embeddings[subjects_index[i],]
@@ -213,7 +280,7 @@ for(i in 1:length(training_index)){
     #print(cursubject)
     #print(vOTUs[cursubject])
     #not in positive and not yet in negative
-    if(!(curlabel %in% train_edges__subtract_label) && !(curlabel %in% train_edges__subtract_label__NEG) && !(curlabel %in% train_edges__subtract_label__NEG)) {
+    if(!(curlabel %in% train_edges__subtract_label) && !(curlabel %in% taxa_trait__subtract_label__TEST) && !(curlabel %in% train_edges__subtract_label__NEG) ) {
       
       objindex <- objects_index[curobject]
       subjindex <- subjects_index[cursubject]
@@ -276,7 +343,7 @@ for(i in 1:length(random_new_viruses_sample)){
     
     curlabel <- paste(node_labels[subjects_index[random_new_viruses_sample[i]]],"__",node_labels[objects_index[j]],sep="")
     
-    if(!(curlabel %in% new_train_edges__subtract_label)) {
+    if(!(curlabel %in% new_train_edges__subtract_label) && !(curlabel %in% train_edges__subtract_label) && !(curlabel %in% taxa_trait__subtract_label__TEST) ) {
       if(j %% 100) {
         print(j)
       }
