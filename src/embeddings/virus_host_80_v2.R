@@ -120,7 +120,7 @@ virus_host__subtract__TEST <- data.frame()
 virus_host__subtract_label__TEST <- c()
 
 #create new subtractions based on test sample subtraction from 100% graph emebeddings
-done <- FALSE#FALSE#TRUE
+done <- TRUE#FALSE#TRUE
 if (!done) {
   ###for all test samples
   for (i in 1:dim(edge_data_test)[1]) {
@@ -198,7 +198,7 @@ write.table(virus_host__subtract_label__TEST,
 virus_host__subtract <- data.frame()
 virus_host__subtract_label <- c()
 
-done <- FALSE#FALSE#TRUE
+done <- TRUE#FALSE#TRUE
 if (!done) {
   for (i in 1:length(vOTUs_index)) {
     #curhost <- host_curie[i]
@@ -292,7 +292,7 @@ training_index_all_rev <-
 length(training_index_all)
 length(training_index_all_rev)
 
-done <- FALSE#FALSE#TRUE
+done <- TRUE#FALSE#TRUE
 if (!done) {
   training_index <- c()
   negative_index <- c()
@@ -358,6 +358,9 @@ length(unique(hosts))
 length(unique(vOTUs[training_index]))
 
 host_samples <- 1
+
+done <- TRUE
+if(!done) {
 ###for all negative samples
 for (i in 1:length(training_index)) {
   if (i %% 100 == 0) {
@@ -418,25 +421,39 @@ for (i in 1:length(training_index)) {
     }
   }
 }
-row.names(virus_host__subtract__NEG) <-
-  virus_host__subtract_label__NEG
-dim(virus_host__subtract__NEG)
-
-outfile <- "./virus_host_NEGATIVE__subtract.tsv"
-outfile_nodes <- "virus_host_NEGATIVE__subtract_labels.tsv"
-print(outfile)
-print(outfile_nodes)
-write.csv(virus_host__subtract__NEG, file = outfile)
-write.table(virus_host__subtract_label__NEG,
-            file = outfile_nodes,
-            sep = "\t")
+  row.names(virus_host__subtract__NEG) <-
+    virus_host__subtract_label__NEG
+  dim(virus_host__subtract__NEG)
+  
+  outfile <- "./virus_host_NEGATIVE__subtract.tsv"
+  outfile_nodes <- "virus_host_NEGATIVE__subtract_labels.tsv"
+  print(outfile)
+  print(outfile_nodes)
+  write.csv(virus_host__subtract__NEG, file = outfile)
+  write.table(virus_host__subtract_label__NEG,
+              file = outfile_nodes,
+              sep = "\t")
+}
 
 
 
 
 random_new_viruses_sample <-
-  sample(1:length(vOTUs), 20)#runif(10, 0,  length(vOTUs))
-match(random_new_viruses_sample, hosts_index)
+  sample(1:length(vOTUs), 3)#runif(10, 0,  length(vOTUs))
+#match(random_new_viruses_sample, hosts_index)
+
+random_new_viruses_sample <- c()
+max_new_viruses <- 5
+for( i in 1:5) {
+  newvir <- sample(1:length(vOTUs), 1)
+  
+    search1 <- grep(vOTUs[newvir], virus_host__subtract_label)
+    search2 <- grep(vOTUs[newvir], virus_host__subtract_label__TEST)
+    if(length(search1) == 0 && length(search2) == 0) {
+      random_new_viruses_sample <- c(random_new_viruses_sample, newvir)
+  }
+}
+
 
 #random_new_viruses2 <- sample(1:length(vOTUs), 100000)#runif(10, 0,  length(vOTUs))
 new_virus_host__subtract <- c()
@@ -450,10 +467,11 @@ for (i in 1:length(random_new_viruses_sample)) {
     curlabel <-
       paste(node_labels[vOTUs_index[random_new_viruses_sample[i]]], "__", node_labels[hosts_index[j]], sep =
               "")
-    if (!(curlabel %in% new_virus_host__subtract_label) &&
-        !(curlabel %in% virus_host__subtract_label) &&
-        !(curlabel %in% virus_host__subtract__NEG) &&
-        !(curlabel %in% virus_host__subtract_label__TEST)) {
+    #if (
+      #!(curlabel %in% new_virus_host__subtract_label) &&
+        #!(curlabel %in% virus_host__subtract_label) &&
+        #!(curlabel %in% virus_host__subtract__NEG) &&
+        #!(curlabel %in% virus_host__subtract_label__TEST)) {
       if (j %% 100 == 0) {
         print(paste("j ",j))
       }
@@ -464,7 +482,7 @@ for (i in 1:length(random_new_viruses_sample)) {
         rbind(new_virus_host__subtract, vh_embed)
       new_virus_host__subtract_label <-
         c(new_virus_host__subtract_label, curlabel)
-    }
+    #}
   }
 }
 row.names(new_virus_host__subtract) <-
