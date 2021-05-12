@@ -14,7 +14,7 @@ df_taxa_colsums = df_taxa.sum(axis=0)
 
 df_taxa_colsums.to_csv("df_taxa_colsums.tsv", sep="\t")
 
-df_taxa_colsums[df_taxa_colsums > 0]
+#df_taxa_colsums[df_taxa_colsums > 0]
 
 #new_df = pd.DataFrame(df_taxa_colsums[df_taxa_colsums > 0], columns=["X"])
 new_df = pd.DataFrame(df_taxa_colsums, columns=["X"])
@@ -25,5 +25,5 @@ new_df.shape
 histplot = sns.histplot(data=new_df,x='X', log_scale=True)
 fig = histplot.get_figure()
 fig.savefig("histplot.png")
-histplot
+#histplot
 
