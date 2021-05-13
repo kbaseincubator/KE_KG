@@ -19,6 +19,9 @@ last = start
 limit = 100
 count = 0
 for col in df_taxa.columns:
+
+    if(count % 100 == 0):
+        print(count)
     #print(col)
     stat, p = shapiro(df_taxa[col])
     #print(df_taxa[col])
@@ -27,7 +30,7 @@ for col in df_taxa.columns:
     #curtime = time.process_time()
     #print(curtime - last)
     #last = curtime
-    #count = count +1
+    count = count +1
     #if(count > limit):
     #    break
 
