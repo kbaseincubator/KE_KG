@@ -31,8 +31,6 @@ for col in df_taxa.columns:
     #if(count > limit):
     #    break
 
-
-types_dict = {'stat': int, 'p': int}
 shapiro_out_df = pd.DataFrame(shapiro_out, columns=["stat", "p"], dtype=np.float64)
 shapiro_out_df.shape
 
