@@ -2,9 +2,11 @@
 rm(list=ls())
 
 library("plyr")
+library("gplots")
 
-setwd("~/Documents/KBase/KE/embedding_searches/embedding-search-Feb18-run2")
+#setwd("~/Documents/KBase/KE/embedding_searches/embedding-search-Feb18-run2")
 
+setwd("/global/cfs/cdirs/kbase/ke_prototype/sean/cosine_sim_20210513")
 
 files <- list.files("./")
 
@@ -18,10 +20,11 @@ for(i in 1:length(files)) {
   dimd1 <- dim(datanow)
   print(dimd1[1])
   print(head(datanow))
-  datanow <- datanow[which(datanow[,2] > 0.9),]
+  datanow <- datanow[which(datanow[,2] > 0.8),]
   dimd2 <- dim(datanow)
   print(dimd2[1])
   
+  #cosine__NCBItaxon:;;;;;alphasatellitidae;;_top10000_cutoff0.1.txt
   start <- gregexpr(pattern ='__',files[i])[[1]][1]
   end <- gregexpr(pattern ='_top10',files[i])[[1]][1]
   name <- substr(files[i], start+2, end-1)
@@ -51,8 +54,8 @@ dim(df)
 
 head(df)
 
-dfna <- apply(df, 1, function(x) { sum(is.na(x))})
-which(dfna == 998)
+#dfna <- apply(df, 1, function(x) { sum(is.na(x))})
+#which(dfna == 998)
 
 #df <- do.call(rbind.fill, data)
 #df <- data.frame(matrix(unlist(data), nrow=length(data), byrow=T),stringsAsFactors=FALSE)
@@ -70,18 +73,21 @@ head(df)
 dim_df <- dim(df)
 pairwise_jaccard<- data.frame(matrix(NA, nrow = dim_df[1], ncol=dim_df[1]))
 for(i in 1:dim_df[1]) {
+  if(i %% 10000 == 0) {
+    print(i)
+  }
   dfi <- df[i,][which(!is.na(df[i,]))]
   for(j in i:dim_df[1]) {
     dfj <- df[j,][which(!is.na(df[j,]))]
     if(i != j) {
       pairwise_jaccard[i, j] <- jaccard(dfi, dfj)
       pairwise_jaccard[j, i] <- pairwise_jaccard[i, j]
-      intersect <- intersect(dfi, dfj)
-      if(length(intersect) > 0) {
-        outf <- paste(names[i], "_", names[j],"_common.txt",sep="")
-        print(outf)
-        write.table(intersect, file=outf,sep="\t")
-      }
+      #intersect <- intersect(dfi, dfj)
+      #if(length(intersect) > 0) {
+      #  outf <- paste(names[i], "_", names[j],"_common.txt",sep="")
+      #  print(outf)
+      #  write.table(intersect, file=outf,sep="\t")
+      #}
     }
     else {
       pairwise_jaccard[i, j] <- 0
@@ -121,7 +127,7 @@ heatmap.2(as.matrix(pairwise_jaccard), trace="none")#log(pairwise_jaccard + 0.00
 
 
 
-png(filename=paste("clustering_cosine_jaccard.png",sep=""),width=1200, height=800)
+png(filename=paste("clustering_cosine_jaccard_0.8.png",sep=""),width=1200, height=800)
 pheatmap(as.matrix(virus_host_positive),scale = "none", cluster_rows = TRUE,
          cluster_cols = TRUE, clustering_distance_rows = "euclidean",
          clustering_distance_cols = "euclidean", clustering_method = "complete",cellwidth=cellwidth,cellheight=cellheight,breaks=breaks,color=mypalette,show_rownames=F,show_colnames=F,legend=F)#
