@@ -101,6 +101,8 @@ for(i in 1:dim_df[1]) {
 row.names(pairwise_jaccard) <- names
 colnames(pairwise_jaccard) <- names
 
+write.table(pairwise_jaccard, file="pairwise_jaccard.tsv",sep="\t", row.names=F, col.names=F)
+print("wrote tsv")
 #write.table(names, file="GOLD_names.txt",row.names=F, col.names=F)
 #write.table(names_all, file="GOLD_names_all.txt",row.names=F, col.names=F)
 
@@ -125,7 +127,7 @@ mypalette <- c(mypalette, brewer.pal(4, "YlOrBr"))
 breaks <- seq(0, range[2],range[2]/8)
 
 
-heatmap.2(as.matrix(pairwise_jaccard), trace="none")#log(pairwise_jaccard + 0.001, 10))
+#heatmap.2(as.matrix(pairwise_jaccard), trace="none")#log(pairwise_jaccard + 0.001, 10))
 
 
 
