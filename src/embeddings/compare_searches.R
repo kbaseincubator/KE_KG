@@ -16,13 +16,16 @@ data <- list()#data.frame(matrix(NA, nrow = length(files)))
 count <- 1
 lastgood <- data.frame()
 for(i in 1:length(files)) {
+  if(i %% 1000 == 0) {
+    print(i)
+  }
   datanow <- read.csv(files[i], sep="\t")
   dimd1 <- dim(datanow)
-  print(dimd1[1])
-  print(head(datanow))
+  #print(dimd1[1])
+  #print(head(datanow))
   datanow <- datanow[which(datanow[,2] > 0.8),]
   dimd2 <- dim(datanow)
-  print(dimd2[1])
+  #print(dimd2[1])
   
   #cosine__NCBItaxon:;;;;;alphasatellitidae;;_top10000_cutoff0.1.txt
   start <- gregexpr(pattern ='__',files[i])[[1]][1]
@@ -31,8 +34,8 @@ for(i in 1:length(files)) {
   #print(name)
   
   if(dimd2[1] > 0) {
-    print("adding")
-    print(dimd1[1] - dimd2[1])
+    #print("adding")
+    #print(dimd1[1] - dimd2[1])
     #data <- rbind(data, as.character(datanow[,1]))
     data[[count]] <- as.character(datanow[,1])
     #print(data[[count]])
