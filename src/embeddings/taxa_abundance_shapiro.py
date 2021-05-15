@@ -12,7 +12,7 @@ print("read input")
 
 cols = [col for col in df_taxa_orig.columns if col not in ['id', 'study_id', 'sample_id', 'biome', 'exptype']]
 df_taxa = df_taxa_orig[cols]
-df_taxa.shape
+print(df_taxa.shape)
 
 
 shapiro_out = []
@@ -23,7 +23,7 @@ count = 0
 for col in df_taxa.columns:
 
     if(count % 100 == 0):
-        print(count)
+        print("count "+count)
     #print(col)
     stat, p = shapiro(df_taxa[col])
     #print(df_taxa[col])
