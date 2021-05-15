@@ -1,6 +1,5 @@
-import modin.pandas as pd
+import pandas as pd
 import numpy as np
-import seaborn as sns
 from scipy.stats import shapiro
 
 import time
@@ -10,15 +9,16 @@ df_taxa_orig = pd.read_csv("../../../MGnify/taxonomy_aggregated_full_removed_dup
 
 print("read input")
 
+#exclude categorical
 cols = [col for col in df_taxa_orig.columns if col not in ['id', 'study_id', 'sample_id', 'biome', 'exptype']]
 df_taxa = df_taxa_orig[cols]
 print(df_taxa.shape)
 
 
 shapiro_out = []
-start = time.process_time()
-last = start
-limit = 100
+#start = time.process_time()
+#last = start
+#limit = 100
 count = 0
 for col in df_taxa.columns:
 
@@ -39,7 +39,7 @@ for col in df_taxa.columns:
 print("done shapiro")
 shapiro_out_df = pd.DataFrame(shapiro_out, columns=["stat", "p"], dtype=np.float64)
 print("done shapiro df")
-shapiro_out_df.shape
+print(shapiro_out_df.shape)
 
 shapiro_out_df.to_csv("df_taxa_col_shapiro.tsv", sep="\t")
 print("done tsv")
