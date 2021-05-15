@@ -1,5 +1,3 @@
-
-
 rm(list = ls())
 
 library("plyr")
@@ -7,9 +5,11 @@ library("gplots")
 
 #setwd("~/Documents/KBase/KE/embedding_searches/embedding-search-Feb18-run2")
 
-setwd("/global/cfs/cdirs/kbase/ke_prototype/sean/cosine_sim_20210513")
+setwd("/global/cfs/cdirs/kbase/ke_prototype/KE_KG")
 
-files <- list.files("./")
+files <- list.files("../sean/cosine_sim_20210513")
+
+print(paste("files", length(files)))
 
 names <- c()
 all_names <- c()
@@ -22,30 +22,35 @@ for (i in 1:length(files)) {
   }
   datanow <- read.csv(files[i], sep = "\t")
   dimd1 <- dim(datanow)
-  #print(dimd1[1])
-  #print(head(datanow))
-  datanow <- datanow[which(datanow[, 2] > 0.8), ]
-  dimd2 <- dim(datanow)
-  #print(dimd2[1])
   
-  #cosine__NCBItaxon:;;;;;alphasatellitidae;;_top10000_cutoff0.1.txt
-  start <- gregexpr(pattern = '__', files[i])[[1]][1]
-  end <- gregexpr(pattern = '_top10', files[i])[[1]][1]
-  name <- substr(files[i], start + 2, end - 1)
-  #print(name)
-  
-  if (dimd2[1] > 0) {
-    #print("adding")
-    #print(dimd1[1] - dimd2[1])
-    #data <- rbind(data, as.character(datanow[,1]))
-    data[[count]] <- as.character(datanow[, 1])
-    #print(data[[count]])
-    #data[i,] <- datanow[,1]
-    names <- c(names, name)
-    count <- count + 1
-    lastgood <- datanow
+  if (dimd1[1] > 0) {
+    #print(dimd1[1])
+    #print(head(datanow))
+    datanow <- datanow[which(datanow[, 2] > 0.7), ]
+    dimd2 <- dim(datanow)
+    
+    #print(dimd2[1])
+    
+    #cosine__NCBItaxon:;;;;;alphasatellitidae;;_top10000_cutoff0.1.txt
+    start <- gregexpr(pattern = '__', files[i])[[1]][1]
+    end <- gregexpr(pattern = '_top10', files[i])[[1]][1]
+    name <- substr(files[i], start + 2, end - 1)
+    #print(name)
+    
+    if (dimd2[1] > 0) {
+      #print("adding")
+      #print(dimd1[1] - dimd2[1])
+      #data <- rbind(data, as.character(datanow[,1]))
+      data[[count]] <- as.character(datanow[, 1])
+      #print(data[[count]])
+      #data[i,] <- datanow[,1]
+      names <- c(names, name)
+      count <- count + 1
+      lastgood <- datanow
+      
+      all_names <- c(all_names, name)
+    }
   }
-  all_names <- c(all_names, name)
 }
 
 length(data)
@@ -89,16 +94,14 @@ for (i in 1:dim_df[1]) {
   for (j in i:dim_df[1]) {
     dfj <- df[j, ][which(!is.na(df[j, ]))]
     if (i != j) {
-      if (i > j) {
-        pairwise_jaccard[i, j] <- jaccard(dfi, dfj)
-        pairwise_jaccard[j, i] <- pairwise_jaccard[i, j]
-        #intersect <- intersect(dfi, dfj)
-        #if(length(intersect) > 0) {
-        #  outf <- paste(names[i], "_", names[j],"_common.txt",sep="")
-        #  print(outf)
-        #  write.table(intersect, file=outf,sep="\t")
-        #}
-      }
+      pairwise_jaccard[i, j] <- jaccard(dfi, dfj)
+      pairwise_jaccard[j, i] <- pairwise_jaccard[i, j]
+      #intersect <- intersect(dfi, dfj)
+      #if(length(intersect) > 0) {
+      #  outf <- paste(names[i], "_", names[j],"_common.txt",sep="")
+      #  print(outf)
+      #  write.table(intersect, file=outf,sep="\t")
+      #}
     }
     else {
       pairwise_jaccard[i, j] <- 0
@@ -111,7 +114,7 @@ colnames(pairwise_jaccard) <- names
 
 write.table(
   pairwise_jaccard,
-  file = "pairwise_jaccard.tsv",
+  file = "pairwise_jaccard_v2.tsv",
   sep = "\t",
   row.names = F,
   col.names = F
@@ -123,7 +126,7 @@ print("wrote tsv")
 library(RColorBrewer)
 library(ggplot2)
 library(pheatmap)
-library(amap)
+#library(amap)
 library(gplots)
 
 
