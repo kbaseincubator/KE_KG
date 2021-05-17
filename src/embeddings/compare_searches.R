@@ -22,7 +22,7 @@ for (i in 1:length(files)) {
   if (i %% 1000 == 0) {
     print(i)
   }
-  datanow <- read.csv(paste("\"", results_path, "/", files[i], "\"", sep=""), sep = "\t")
+  datanow <- read.table(paste(results_path, "/", files[i], sep=""), sep = "\t")
   dimd1 <- dim(datanow)
   
   if (dimd1[1] > 0) {
