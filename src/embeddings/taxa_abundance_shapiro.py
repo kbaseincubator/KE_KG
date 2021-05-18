@@ -5,7 +5,7 @@ from scipy.stats import shapiro
 import time
 import os
 
-df_taxa_orig = pd.read_csv("./taxonomy_aggregated_full_removed_duplicates_col100.tsv", sep="\t")
+df_taxa_orig = pd.read_csv("./MGnify/taxonomy_aggregated_full_removed_duplicates_col100.tsv", sep="\t")
 
 print("read input")
 
