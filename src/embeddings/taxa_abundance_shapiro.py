@@ -5,7 +5,7 @@ from scipy.stats import shapiro
 import time
 import os
 
-df_taxa_orig = pd.read_csv("../../KE-Catboost/ziming/data/taxonomy_aggregated_full_removed_duplicates_col100.tsv", sep="\t")
+df_taxa_orig = pd.read_csv("./taxonomy_aggregated_full_removed_duplicates_col100.tsv", sep="\t")
 
 print("read input")
 
@@ -22,11 +22,16 @@ shapiro_out = []
 count = 0
 for col in df_taxa.columns:
 
-    if(count % 100 == 0):
-        print("count "+count)
-        print(df_taxa[col])
+
     #print(col)
     stat, p = shapiro(df_taxa[col])
+
+    if (count % 100 == 0):
+        print("count " + count)
+        print("stat, p %s %s" % (stat, p))
+        print(df_taxa[col])
+
+
     #print(df_taxa[col])
     shapiro_out.append([stat,p])
     #print("%s %s" % (stat,p))
