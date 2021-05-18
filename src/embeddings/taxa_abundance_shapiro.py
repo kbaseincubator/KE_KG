@@ -27,7 +27,7 @@ for col in df_taxa.columns:
     stat, p = shapiro(df_taxa[col])
 
     if (count % 100 == 0):
-        print("count " + count)
+        print("count " + str(count))
         print("stat, p %s %s" % (stat, p))
         print(df_taxa[col])
 
