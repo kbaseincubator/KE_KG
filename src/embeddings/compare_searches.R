@@ -28,7 +28,7 @@ for (i in 1:length(files)) {
   if (dimd1[1] > 0) {
     #print(dimd1[1])
     #print(head(datanow))
-    datanow <- datanow[which(datanow[, 2] > 0.7), ]
+    datanow <- datanow[which(datanow[, 2] > 0.5), ]
     dimd2 <- dim(datanow)
     
     #print(dimd2[1])
@@ -67,7 +67,7 @@ df <-
     )))))
 dim(df)
 
-head(df)
+#head(df)
 
 #dfna <- apply(df, 1, function(x) { sum(is.na(x))})
 #which(dfna == 998)
@@ -84,7 +84,7 @@ jaccard <- function(a, b) {
 }
 
 
-head(df)
+#head(df)
 dim_df <- dim(df)
 pairwise_jaccard <-
   data.frame(matrix(NA, nrow = dim_df[1], ncol = dim_df[1]))
