@@ -95,7 +95,7 @@ for (i in 1:dim_df[1]) {
   dfi <- df[i, ][which(!is.na(df[i, ]))]
   for (j in i:dim_df[1]) {
     dfj <- df[j, ][which(!is.na(df[j, ]))]
-    if (i != j) {
+    if (i != j) { # && length(dfi) > 1 && length(dfj) > 1) {
       pairwise_jaccard[i, j] <- jaccard(dfi, dfj)
       pairwise_jaccard[j, i] <- pairwise_jaccard[i, j]
       #intersect <- intersect(dfi, dfj)
@@ -105,9 +105,12 @@ for (i in 1:dim_df[1]) {
       #  write.table(intersect, file=outf,sep="\t")
       #}
     }
-    else {
+    else if (i == j) {
       pairwise_jaccard[i, j] <- 0
     }
+    #else if (i != j) {
+    #  pairwise_jaccard[i, j] <- NA
+    #}
   }
 }
 
