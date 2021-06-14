@@ -26,7 +26,7 @@ for i in range(0, df_taxa.columns.size):
 
     for j in range(i+1, df_taxa.columns.size):
         # for col2 in df_taxa.columns:
-        col = df_taxa.columns[j]
+        col2 = df_taxa.columns[j]
         #col2ind = df_taxa.columns.index(col2)
         #print(col)
         stat, p = pearsonr(df_taxa[col], df_taxa[col2])
@@ -34,7 +34,7 @@ for i in range(0, df_taxa.columns.size):
         if (count % 100 == 0):
             print("count " + str(count))
             print("stat, p %s %s" % (stat, p))
-            print(df_taxa[col])
+            print(df_taxa[col]+"\t"+df_taxa[col2])
 
 
         #print(df_taxa[col])
