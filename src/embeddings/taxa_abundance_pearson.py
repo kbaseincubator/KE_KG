@@ -23,13 +23,13 @@ for i in range(0, df_taxa.columns.size):
 #for col in df_taxa.columns:
     col = df_taxa.columns[i]
     #colind = df_taxa.columns.index(col)
-    if(df_taxa[col][df_taxa[col] > 0]):
+    if(len(df_taxa[col][df_taxa[col] > 0]) > 0):
         for j in range(i+1, df_taxa.columns.size):
             # for col2 in df_taxa.columns:
             col2 = df_taxa.columns[j]
             # col2ind = df_taxa.columns.index(col2)
             # print(col2)
-            if (df_taxa[col2][df_taxa[col2] > 0]):
+            if (len(df_taxa[col2][df_taxa[col2] > 0]) > 0):
 
                 stat, p = pearsonr(df_taxa[col], df_taxa[col2])
 
