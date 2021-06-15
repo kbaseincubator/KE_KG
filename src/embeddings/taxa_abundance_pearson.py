@@ -5,10 +5,11 @@ from scipy.stats import pearsonr
 import time
 import os
 
-df_taxa_orig = pd.read_csv("./MGnify/taxonomy_aggregated_full_removed_duplicates_col100.tsv", sep="\t")
+#df_taxa_orig = pd.read_csv("./MGnify/taxonomy_aggregated_full_removed_duplicates.tsv", sep="\t")
+df_taxa_orig = pd.read_csv("./MGnify/go_aggregated_with_version.tsv", sep="\t")
 
 print("read input")
-
+print(df_taxa_orig.shape)
 #exclude categorical
 cols = [col for col in df_taxa_orig.columns if col not in ['id', 'study_id', 'sample_id', 'biome', 'exptype']]
 df_taxa = df_taxa_orig[cols]
@@ -40,8 +41,8 @@ for i in range(0, df_taxa.columns.size):
 
 
                 #print(df_taxa[col])
-                pearson_out.append([i, j, stat, p])
-                pearson_out.append([j, i, stat, p])
+                pearson_out.append([col, col2, stat, p])
+                pearson_out.append([col2, col, stat, p])
 
                 #print("%s %s" % (stat,p))
                 #curtime = time.process_time()
@@ -52,7 +53,7 @@ for i in range(0, df_taxa.columns.size):
                 #    break
 
 print("done pearson")
-pearson_out_df = pd.DataFrame(pearson_out, columns=["col1", "col2", "pearson_stat", "pearson_p"], dtype=np.float64)
+pearson_out_df = pd.DataFrame(pearson_out, columns=["col1", "col2", "pearson_stat", "pearson_pval"], dtype=np.float64)
 print("done pearson df")
 print(pearson_out_df.shape)
 
