@@ -36,7 +36,7 @@ for i in range(0, df_taxa.columns.size):
                 if (count % 100 == 0):
                     print("count " + str(count))
                     print("stat, p %s %s" % (stat, p))
-                    print(df_taxa[col]+"\t"+df_taxa[col2])
+                    #print(df_taxa[col]+"\t"+df_taxa[col2])
 
 
                 #print(df_taxa[col])
