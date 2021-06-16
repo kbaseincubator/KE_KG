@@ -6,12 +6,14 @@ import time
 import os
 
 #df_taxa_orig = pd.read_csv("./MGnify/taxonomy_aggregated_full_removed_duplicates.tsv", sep="\t")
-df_taxa_orig = pd.read_csv("./MGnify/go_aggregated_with_version.tsv", sep="\t")
+df_taxa_orig = pd.read_csv("./MGnify/go_aggregated_4.1.tsv", sep="\t")
 
 print("read input")
 print(df_taxa_orig.shape)
 #exclude categorical
-cols = [col for col in df_taxa_orig.columns if col not in ['id', 'study_id', 'sample_id', 'biome', 'exptype']]
+
+cols = [col for col in df_taxa_orig.columns if col not in ['id', 'study_id', 'sample_id', 'biome', 'exptype', 'version']]
+
 df_taxa = df_taxa_orig[cols]
 print(df_taxa.shape)
 
