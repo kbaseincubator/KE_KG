@@ -1,4 +1,4 @@
-from fastdist import fastdist
+#from fastdist import fastdist
 import numpy as np
 from numpy import genfromtxt
 
