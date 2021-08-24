@@ -2,9 +2,8 @@
 library(RColorBrewer)
 library(ggplot2)
 library(pheatmap)
-library(amap)
 
-setwd("~/global/cfs/cdirs/kbase/ke_prototype/KE_KG/")
+setwd("/global/cfs/cdirs/kbase/ke_prototype/KE_KG/")
 
 
 data <- read.csv("./SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv",header=T,sep="\t")
@@ -27,6 +26,6 @@ breaks <- seq(range[1],range[2],(range[2]-range[1])/10)
 
 
 png("cluster_giant.png",height=6000, width=1000)
-pheatmap(as.matrix(data_new), cluster_rows=T, cluster_cols=T, cellwidth=cellwidth,cellheight=cellheight,breaks=breaks,color=mypalette,show_rownames=T,show_colnames=T,legend=F,
+pheatmap(as.matrix(data), cluster_rows=T, cluster_cols=T, cellwidth=cellwidth,cellheight=cellheight,breaks=breaks,color=mypalette,show_rownames=T,show_colnames=T,legend=T,
          fontsize_row=fontsize_row,fontsize_col=fontsize_col)
 dev.off(2)
