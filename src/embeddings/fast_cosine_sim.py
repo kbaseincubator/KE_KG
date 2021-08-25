@@ -29,7 +29,7 @@ end = timer()
 print("dot "+str(timedelta(seconds=end-start)))
 print("shape "+str(similarity.shape))
 
-np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__similarity_1.tsv', similarity, delimiter='\t')
+#np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__similarity_1.tsv', similarity, delimiter='\t')
 
 #  magnitude of preference vectors (number of occurrences)
 start = timer()
@@ -37,7 +37,7 @@ square_mag = np.diag(similarity)
 end = timer()
 print("diag "+str(timedelta(seconds=end-start)))
 print("shape "+str(square_mag.shape))
-np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__sq_mag_2.tsv', square_mag, delimiter='\t')
+#np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__sq_mag_2.tsv', square_mag, delimiter='\t')
 
 # inverse magnitude
 start = timer()
@@ -51,7 +51,7 @@ start = timer()
 inv_square_mag[np.isinf(inv_square_mag)] = 0
 end = timer()
 print("isinf "+str(timedelta(seconds=end-start)))
-np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__inv_sq_mag_3.tsv', inv_square_mag, delimiter='\t')
+#np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__inv_sq_mag_3.tsv', inv_square_mag, delimiter='\t')
 
 # square of the inverse magnitudestart
 start = timer()
@@ -59,7 +59,7 @@ inv_mag = np.sqrt(inv_square_mag)
 end = timer()
 print("sqrt "+str(timedelta(seconds=end-start)))
 print("shape "+str(inv_mag.shape))
-np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__inv_mag_4.tsv', inv_mag, delimiter='\t')
+#np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__inv_mag_4.tsv', inv_mag, delimiter='\t')
 
 # cosine similarity (elementwise multiply by inverse magnitudes)
 start = timer()
@@ -68,7 +68,7 @@ end = timer()
 print("sim * inv_mag "+str(timedelta(seconds=end-start)))
 print("shape "+str(cosine.shape))
 
-np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__sim__inv_mag_5.tsv', cosine, delimiter='\t')
+#np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__sim__inv_mag_5.tsv', cosine, delimiter='\t')
 
 start = timer()
 cosine = cosine.T * inv_mag
@@ -77,7 +77,7 @@ print("cosine.T * inv_mag "+str(timedelta(seconds=end-start)))
 print("shape "+str(cosine.shape))
 
 start = timer()
-np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv', cosine, delimiter='\t')
+np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv', cosine, fmt='%1.3f', delimiter='\t')
 #labels_ar = np.asarray(labels)
 labels.tofile('SkipGram_embedding_merged_imgvr_mg_good__cosine_labels.tsv',sep='\t',format='%s')
 #np.savetxt('SkipGram_embedding_merged_imgvr_mg_good__cosine_labels.tsv', labels_ar, delimiter='\t')
