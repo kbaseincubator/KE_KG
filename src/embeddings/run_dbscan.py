@@ -22,7 +22,15 @@ data.shape
 clustering = DBSCAN(eps=3, min_samples=2).fit(data.astype(float))
 
 
-np.savetxt('dbscan.txt', clustering, delimiter='\t')
-np.savetxt('dbscan_cluster_labels.txt', clustering.labels_, delimiter='\t')
+pickle.dump( clustering, open( "dbscan_clustering.p", "wb" ) )
+
+
+with open('agglomerative.txt', 'w') as f:
+    f.write(clustering)
+with open('agglomerative_cluster_labels.txt', 'w') as f:
+    f.write(clustering.labels_)
+
+#np.savetxt('dbscan.txt', clustering, delimiter='\t')
+#np.savetxt('dbscan_cluster_labels.txt', clustering.labels_, delimiter='\t')
 
 clustering.labels_

@@ -1,7 +1,7 @@
 import os
+import pickle
 
 os.getcwd()
-
 os.chdir('/global/cfs/cdirs/kbase/ke_prototype/KE_KG')
 
 from sklearn.cluster import AgglomerativeClustering
@@ -21,10 +21,18 @@ data.shape
 model = AgglomerativeClustering(distance_threshold=0, n_clusters=None)
 clustering = model.fit(data)
 
-np.savetxt('agglomerative.txt', clustering, delimiter='\t')
-np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_, delimiter='\t')
 
-clustering.labels_
+pickle.dump( model, open( "agglomerative_model.p", "wb" ) )
+pickle.dump( clustering, open( "agglomerative_clustering.p", "wb" ) )
+
+
+with open('agglomerative.txt', 'w') as f:
+    f.write(clustering)
+with open('agglomerative_cluster_labels.txt', 'w') as f:
+    f.write(clustering.labels_)
+
+#np.savetxt('agglomerative.txt', clustering, delimiter='\t')
+#np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_, delimiter='\t')
 
 
 
