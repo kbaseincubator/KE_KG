@@ -1,5 +1,5 @@
 import os
-
+import pickle
 os.getcwd()
 
 os.chdir('/global/cfs/cdirs/kbase/ke_prototype/KE_KG')
@@ -26,9 +26,9 @@ pickle.dump( clustering, open( "dbscan_clustering.p", "wb" ) )
 
 
 with open('agglomerative.txt', 'w') as f:
-    f.write(clustering)
+    f.write(str(clustering))
 with open('agglomerative_cluster_labels.txt', 'w') as f:
-    f.write(clustering.labels_)
+    f.write(str(clustering.labels_))
 
 #np.savetxt('dbscan.txt', clustering, delimiter='\t')
 #np.savetxt('dbscan_cluster_labels.txt', clustering.labels_, delimiter='\t')
