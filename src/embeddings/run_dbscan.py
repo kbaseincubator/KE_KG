@@ -25,9 +25,9 @@ clustering = DBSCAN(eps=3, min_samples=2).fit(data.astype(float))
 pickle.dump( clustering, open( "dbscan_clustering.p", "wb" ) )
 
 
-with open('agglomerative.txt', 'w') as f:
+with open('dbscan.txt', 'w') as f:
     f.write(str(clustering))
-with open('agglomerative_cluster_labels.txt', 'w') as f:
+with open('dbscan_cluster_labels.txt', 'w') as f:
     f.write(str(clustering.labels_))
 
 #np.savetxt('dbscan.txt', clustering, delimiter='\t')
