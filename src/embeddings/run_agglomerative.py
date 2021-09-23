@@ -25,6 +25,7 @@ clustering = model.fit(data)
 pickle.dump( model, open( "agglomerative_model.p", "wb" ) )
 pickle.dump( clustering, open( "agglomerative_clustering.p", "wb" ) )
 
+np.set_printoptions(threshold=np.inf)
 
 with open('agglomerative.txt', 'w') as f:
     f.write(str(clustering))
@@ -32,7 +33,7 @@ with open('agglomerative_cluster_labels.txt', 'w') as f:
     f.write(str(clustering.labels_))
 
 #np.savetxt('agglomerative.txt', clustering, delimiter='\t')
-#np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_, delimiter='\t')
+np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_, delimiter='\t')
 
 
 

@@ -24,6 +24,7 @@ clustering = DBSCAN(eps=3, min_samples=2).fit(data.astype(float))
 
 pickle.dump( clustering, open( "dbscan_clustering.p", "wb" ) )
 
+np.set_printoptions(threshold=np.inf)
 
 with open('dbscan.txt', 'w') as f:
     f.write(str(clustering))
@@ -31,6 +32,6 @@ with open('dbscan_cluster_labels.txt', 'w') as f:
     f.write(str(clustering.labels_))
 
 #np.savetxt('dbscan.txt', clustering, delimiter='\t')
-#np.savetxt('dbscan_cluster_labels.txt', clustering.labels_, delimiter='\t')
+np.savetxt('dbscan_cluster_labels.txt', clustering.labels_, delimiter='\t')
 
 clustering.labels_
