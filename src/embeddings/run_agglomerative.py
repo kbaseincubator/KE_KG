@@ -10,7 +10,7 @@ from numpy import genfromtxt
 from matplotlib import pyplot as plt
 
 #skip column names
-data = genfromtxt('../embeddings/SkipGram_embedding_merged_imgvr_mg_good.csv', delimiter=',',skip_header=1)#,names=True
+data = genfromtxt('./SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv', delimiter='\t')#,names=True
 
 data.shape
 #remove row names from numpy array
@@ -18,19 +18,19 @@ data = data[:,1:]
 data.shape
 
 
-model = AgglomerativeClustering(distance_threshold=0, n_clusters=None)
-clustering = model.fit(data)
+model = AgglomerativeClustering(distance_threshold=0, n_clusters=None)#, affinity="euclidean", linkage="ward")
+
+clustering = model.fit(1.0 - data)
 
 
 pickle.dump( model, open( "agglomerative_model.p", "wb" ) )
 pickle.dump( clustering, open( "agglomerative_clustering.p", "wb" ) )
-
 np.set_printoptions(threshold=np.inf)
 
 with open('agglomerative.txt', 'w') as f:
     f.write(str(clustering))
 with open('agglomerative_cluster_labels.txt', 'w') as f:
-    f.write(str(clustering.labels_))
+    f.write(clustering.labels_)
 
 #np.savetxt('agglomerative.txt', clustering, delimiter='\t')
 np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_, delimiter='\t')
