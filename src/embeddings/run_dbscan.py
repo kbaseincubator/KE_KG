@@ -32,6 +32,6 @@ with open('dbscan_cluster_labels.txt', 'w') as f:
     f.write(clustering.labels_)
 
 #np.savetxt('dbscan.txt', clustering, delimiter='\t')
-np.savetxt('dbscan_cluster_labels.txt', clustering.labels_, delimiter='\t')
+np.savetxt('dbscan_cluster_labels.txt', clustering.labels_.astype(int), delimiter='\t', fmt='%i)
 
 clustering.labels_

@@ -33,7 +33,7 @@ with open('agglomerative_cluster_labels.txt', 'w') as f:
     f.write(clustering.labels_)
 
 #np.savetxt('agglomerative.txt', clustering, delimiter='\t')
-np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_, delimiter='\t')
+np.savetxt('agglomerative_cluster_labels.txt', clustering.labels_.astype(int), delimiter='\t', fmt='%i')
 
 
 
