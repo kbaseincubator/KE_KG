@@ -10,15 +10,18 @@ from numpy import genfromtxt
 from matplotlib import pyplot as plt
 
 #skip column names
-data = genfromtxt('./SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv', delimiter='\t')#,names=True
+#data = genfromtxt('./SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv', delimiter='\t')#,names=True
+data = genfromtxt('../embeddings/SkipGram_embedding_merged_imgvr_mg_good.csv', delimiter=',')#,names=True
 
 data.shape
+
 #remove row names from numpy array
 data = data[:,1:]
 data.shape
 
 
-model = AgglomerativeClustering(distance_threshold=0, n_clusters=None)#, affinity="euclidean", linkage="ward")
+model = AgglomerativeClustering(distance_threshold=0, n_clusters=None, affinity="euclidean", linkage="ward")
+
 
 clustering = model.fit(1.0 - data)
 
