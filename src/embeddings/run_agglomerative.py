@@ -19,12 +19,10 @@ data.shape
 data = data[:,1:]
 data.shape
 
-
 model = AgglomerativeClustering(distance_threshold=0, n_clusters=None, affinity="euclidean", linkage="ward")
 
-
+#clustering = model.fit(1.0 - data)
 clustering = model.fit(1.0 - data)
-
 
 pickle.dump( model, open( "agglomerative_model.p", "wb" ) )
 pickle.dump( clustering, open( "agglomerative_clustering.p", "wb" ) )
