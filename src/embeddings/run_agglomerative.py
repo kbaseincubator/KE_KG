@@ -21,7 +21,7 @@ data.shape
 data = data[:,1:]
 data.shape
 
-model = AgglomerativeClustering(distance_threshold=0, n_clusters=None, affinity="euclidean", linkage="ward")
+model = AgglomerativeClustering(affinity="euclidean", linkage="ward")#distance_threshold=0, n_clusters=None, 
 
 #clustering = model.fit(1.0 - data)
 clustering = model.fit(1.0 - data)
