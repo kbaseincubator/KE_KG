@@ -8,6 +8,8 @@ from sklearn.cluster import AgglomerativeClustering
 import numpy as np
 from numpy import genfromtxt
 from matplotlib import pyplot as plt
+from scipy.cluster.hierarchy import dendrogram
+
 
 #skip column names
 #data = genfromtxt('./SkipGram_embedding_merged_imgvr_mg_good__cosine.tsv', delimiter='\t')#,names=True
