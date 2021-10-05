@@ -13,7 +13,7 @@ data = genfromtxt('../../KE-Catboost/ziming/taxonomy/data/taxonomy_v4.1/taxonomy
 
 data.shape
 #remove row labels
-data = data[:,4:]#taxonomy
+data = data[:,5:]#taxonomy
 #data = data[:,8:]#GO
 data.shape
 
