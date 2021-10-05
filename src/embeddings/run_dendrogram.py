@@ -14,6 +14,7 @@ data = genfromtxt('../../KE-Catboost/ziming/taxonomy/data/taxonomy_v4.1/taxonomy
 data.shape
 #remove row labels
 data = data[:,5:]#taxonomy
+data = data.transpose()
 #data = data[:,8:]#GO
 data.shape
 
@@ -21,4 +22,4 @@ pyplot.figure(figsize=(10, 7))
 pyplot.title("Dendrogram")
 dend = shc.dendrogram(shc.linkage(data, method='ward'))
 
-pyplot.savefig('dendrogram.png')
+pyplot.savefig('dendrogram_T.png')
