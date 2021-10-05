@@ -6,13 +6,15 @@ from numpy import genfromtxt
 
 #data = genfromtxt('../embeddings/SkipGram_embedding_merged_imgvr_mg_good.csv', delimiter=',', skip_header=1)
 
-data = genfromtxt('../../KE-Catboost/ziming/GO/data/go_aggregated_4.1/go_aggregated_4.1_mixed_updated_normalized_removed_zeros.tsv', delimiter='\t', skip_header=1)
+#data = genfromtxt('../../KE-Catboost/ziming/GO/data/go_aggregated_4.1/go_aggregated_4.1_mixed_updated_normalized_removed_zeros.tsv', delimiter='\t', skip_header=1)
 
+data = genfromtxt('../../KE-Catboost/ziming/taxonomy/data/taxonomy_v4.1/taxonomy_aggregated_4.1_row_filtered_feature_selected_filtered_row_and_col.tsv', delimiter='\t', skip_header=1)
 
 
 data.shape
 #remove row labels
-data = data[:,8:]
+data = data[:,4:]#taxonomy
+#data = data[:,8:]#GO
 data.shape
 
 pyplot.figure(figsize=(10, 7))  
