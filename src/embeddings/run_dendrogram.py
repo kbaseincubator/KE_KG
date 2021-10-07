@@ -1,4 +1,6 @@
-# Dendogram for Heirarchical Clustering
+import sys
+sys.setrecursionlimit(1000000)
+
 import scipy.cluster.hierarchy as shc
 
 from matplotlib import pyplot
