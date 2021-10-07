@@ -20,7 +20,7 @@ data = data.transpose()
 #data = data[:,8:]#GO
 data.shape
 
-pyplot.figure(figsize=(10, 7))  
+pyplot.figure(figsize=(20, 14))
 pyplot.title("Dendrogram")
 dend = shc.dendrogram(shc.linkage(data, method='ward'))
 
