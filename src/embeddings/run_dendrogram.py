@@ -27,4 +27,4 @@ pyplot.figure(figsize=(20, 14))
 pyplot.title("Dendrogram")
 dend = shc.dendrogram(shc.linkage(data, method='ward'))
 
-pyplot.savefig('dendrogram_T.png', bbox_inches='tight')
+pyplot.savefig('dendrogram.png', bbox_inches='tight')
