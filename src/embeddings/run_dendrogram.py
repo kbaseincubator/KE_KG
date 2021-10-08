@@ -10,12 +10,15 @@ from numpy import genfromtxt
 
 #data = genfromtxt('../../KE-Catboost/ziming/GO/data/go_aggregated_4.1/go_aggregated_4.1_mixed_updated_normalized_removed_zeros.tsv', delimiter='\t', skip_header=1)
 
-data = genfromtxt('../../KE-Catboost/ziming/taxonomy/data/taxonomy_v4.1/taxonomy_aggregated_4.1_row_filtered_feature_selected_filtered_row_and_col.tsv', delimiter='\t', skip_header=1)
+#data = genfromtxt('../../KE-Catboost/ziming/taxonomy/data/taxonomy_v4.1/taxonomy_aggregated_4.1_row_filtered_feature_selected_filtered_row_and_col.tsv', delimiter='\t', skip_header=1)
+
+data = genfromtxt('./GO_abundance_all_vs_all_logratio.tsv', delimiter='\t', skip_header=1)
 
 
 data.shape
 #remove row labels
-data = data[:,5:]#taxonomy
+#data = data[:,5:]#taxonomy
+data = data[:,1:]#GO log ratio
 data = data.transpose()
 #data = data[:,8:]#GO
 data.shape
